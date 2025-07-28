@@ -226,7 +226,7 @@
                         <td>{{ $job->durasi_waktu }}</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="#" class="btn-table btn-edit">Edit</a>
+                                <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                 <button type="button" class="btn-table btn-delete"
                                     onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
                                 <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"

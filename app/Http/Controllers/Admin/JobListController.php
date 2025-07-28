@@ -49,6 +49,38 @@ class JobListController extends Controller
     }
 
     /**
+     * [BARU] Menampilkan form untuk mengedit item pekerjaan.
+     */
+    public function edit(JobList $joblist)
+    {
+        // Mengambil data karyawan terkait untuk ditampilkan di header
+        $karyawan = $joblist->karyawan;
+        return view('admin.joblist.edit', compact('joblist', 'karyawan'));
+    }
+
+    /**
+     * [BARU] Memperbarui item pekerjaan di database.
+     */
+    public function update(Request $request, JobList $joblist)
+    {
+        $request->validate([
+            'nama_pekerjaan' => 'required|string|max:255',
+            'bobot' => 'required|integer|min:0',
+            'durasi_waktu' => 'required|integer|min:1',
+        ]);
+
+        $joblist->update($request->all());
+
+        // Tentukan ke halaman mana harus kembali (tetap atau opsional)
+        $redirectRoute = $joblist->tipe_job == 'Tetap' ? 'job.tetap' : 'job.opsional';
+
+        return redirect()->route($redirectRoute, $joblist->karyawan_id)
+                         ->with('success', 'Pekerjaan berhasil diperbarui.');
+    }
+
+
+
+    /**
      * Menghapus satu item pekerjaan.
      */
     public function destroy(JobList $joblist)

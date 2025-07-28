@@ -53,5 +53,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/job/{joblist}', [JobListController::class, 'destroy'])->name('job.destroy');
     // --- AKHIR JOB ROUTES ---
 
+
+     // ROUTE BARU UNTUK EDIT & UPDATE
+    Route::get('/job/{joblist}/edit', [JobListController::class, 'edit'])->name('job.edit');
+    Route::patch('/job/{joblist}', [JobListController::class, 'update'])->name('job.update');
+
 });
 
