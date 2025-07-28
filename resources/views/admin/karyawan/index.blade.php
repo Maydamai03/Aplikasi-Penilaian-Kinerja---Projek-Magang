@@ -159,6 +159,36 @@
         .btn-success:hover {
             background-color: #16A34A;
         }
+
+        .btn-job {
+            padding: 6px 15px;
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .btn-job-tetap {
+            background-color: #22C55E;
+            /* Hijau */
+        }
+
+        .btn-job-opsional {
+            background-color: #3B82F6;
+            /* Biru */
+        }
+
+        .btn-job-tetap:hover {
+            background-color: #16A34A;
+        }
+
+        .btn-job-opsional:hover {
+            background-color: #2563EB;
+        }
     </style>
 
     <div class="page-header">
@@ -224,10 +254,9 @@
                         </td>
                         <td class="text-center">
                             <div class="action-buttons">
-                                <a href="{{ route('job.tetap', $k->id) }}" class="btn-action btn-success"
-                                    style="width: auto; padding: 0 10px;">Job Tetap</a>
-                                <a href="{{ route('job.opsional', $k->id) }}" class="btn-action btn-info"
-                                    style="width: auto; padding: 0 10px;">Job Opsional</a>
+                                <a href="{{ route('job.tetap', $k->id) }}" class="btn-job btn-job-tetap">Job Tetap</a>
+                                <a href="{{ route('job.opsional', $k->id) }}" class="btn-job btn-job-opsional">Job
+                                    Opsional</a>
                             </div>
                         </td>
                     </tr>
