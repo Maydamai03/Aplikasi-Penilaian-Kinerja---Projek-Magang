@@ -58,8 +58,8 @@
 </style>
 
 <div class="dashboard-header">
-    <h1>Ringkasan Aktivitas Minggu ini</h1>
-    <p>(Minggu ke-{{ $mingguSekarang }}, {{ $tahunSekarang }})</p>
+    <h1>Dashboard Admin</h1>
+    <p>Ringkasan umum aktivitas dan data karyawan.</p>
 </div>
 
 <div class="stats-grid">
@@ -69,19 +69,19 @@
         <p class="description">Total Karyawan Aktif</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-user-plus"></i>
-        <p class="number">{{ $belumDiberiJoblist }}</p>
-        <p class="description">Belum diberi Joblist</p>
+        <i class="fas fa-briefcase"></i>
+        <p class="number">{{ $totalJobTetap }}</p>
+        <p class="description">Total Job Tetap</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-user-times"></i>
-        <p class="number">{{ $belumDinilai }}</p>
-        <p class="description">Karyawan Belum Dinilai</p>
+        <i class="fas fa-tasks"></i>
+        <p class="number">{{ $totalJobOpsional }}</p>
+        <p class="description">Total Job Opsional</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-user-check"></i>
-        <p class="number">{{ $sudahDinilai }}</p>
-        <p class="description">Sudah Dinilai</p>
+        <i class="fas fa-clock"></i>
+        <p class="number">{{ $totalJamBulanIni }} <span style="font-size: 1.5rem;">Jam</span></p>
+        <p class="description">Total Durasi Kerja Bulan Ini</p>
     </div>
 </div>
 

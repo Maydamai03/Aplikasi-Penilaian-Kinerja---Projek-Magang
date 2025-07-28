@@ -37,13 +37,21 @@ Route::middleware(['auth'])->group(function () {
     // Route BARU untuk update status karyawan langsung di detail info karyawan
     Route::patch('/karyawan/{karyawan}/status', [KaryawanController::class, 'updateStatus'])->name('karyawan.updateStatus');
 
-   
 
-    // JOB LIST ROUTES
-    Route::get('/karyawan/{karyawan}/joblist', [JobListController::class, 'index'])->name('joblist.index');
-    Route::post('/karyawan/{karyawan}/joblist', [JobListController::class, 'store'])->name('joblist.store');
-    Route::get('/karyawan/{karyawan}/joblist/{week}/{year}', [JobListController::class, 'show'])->name('joblist.show');
-    Route::delete('/karyawan/{karyawan}/joblist/{week}/{year}', [JobListController::class, 'destroy'])->name('joblist.destroy');
+
+    // --- JOB ROUTES ---
+    // Menampilkan halaman CRUD untuk Job Tetap
+    Route::get('/karyawan/{karyawan}/job/tetap', [JobListController::class, 'showTetap'])->name('job.tetap');
+
+    // Menampilkan halaman CRUD untuk Job Opsional
+    Route::get('/karyawan/{karyawan}/job/opsional', [JobListController::class, 'showOpsional'])->name('job.opsional');
+
+    // Menyimpan job baru (bisa Tetap atau Opsional)
+    Route::post('/karyawan/{karyawan}/job', [JobListController::class, 'store'])->name('job.store');
+
+    // Menghapus item job
+    Route::delete('/job/{joblist}', [JobListController::class, 'destroy'])->name('job.destroy');
+    // --- AKHIR JOB ROUTES ---
 
 });
 

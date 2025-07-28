@@ -223,7 +223,12 @@
                             </div>
                         </td>
                         <td class="text-center">
-                            <a href="{{ route('joblist.index', $k->id) }}" class="btn-action btn-success">Tinjau</a>
+                            <div class="action-buttons">
+                                <a href="{{ route('job.tetap', $k->id) }}" class="btn-action btn-success"
+                                    style="width: auto; padding: 0 10px;">Job Tetap</a>
+                                <a href="{{ route('job.opsional', $k->id) }}" class="btn-action btn-info"
+                                    style="width: auto; padding: 0 10px;">Job Opsional</a>
+                            </div>
                         </td>
                     </tr>
                 @empty

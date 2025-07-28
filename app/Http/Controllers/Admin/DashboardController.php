@@ -3,48 +3,34 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Karyawan;
+use App\Models\JobList; // <-- Tambahkan ini
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Mendapatkan minggu dan tahun saat ini
-        $mingguSekarang = Carbon::now()->weekOfYear;
-        $tahunSekarang = Carbon::now()->year;
-
-        // 1. Total Karyawan Aktif
+        // Statistik yang masih relevan
         $totalKaryawanAktif = Karyawan::where('status_karyawan', 'Aktif')->count();
 
-        // 2. Karyawan yang sudah punya joblist minggu ini
-        $karyawanDenganJoblist = Karyawan::where('status_karyawan', 'Aktif')
-            ->whereHas('jobLists', function ($query) use ($mingguSekarang, $tahunSekarang) {
-                $query->where('minggu_ke', $mingguSekarang)->where('tahun', $tahunSekarang);
-            })->count();
+        // Statistik BARU yang relevan dengan sistem sekarang
+        $totalJobTetap = JobList::where('tipe_job', 'Tetap')->count();
+        $totalJobOpsional = JobList::where('tipe_job', 'Opsional')->count();
 
-        // 3. Karyawan belum diberi joblist
-        $belumDiberiJoblist = $totalKaryawanAktif - $karyawanDenganJoblist;
+        // Menghitung total durasi kerja bulan ini dalam jam
+        $totalMenitBulanIni = JobList::whereMonth('created_at', Carbon::now()->month)
+                                     ->whereYear('created_at', Carbon::now()->year)
+                                     ->sum('durasi_waktu');
+        $totalJamBulanIni = round($totalMenitBulanIni / 60, 1);
 
-        // 4. Karyawan yang sudah dinilai minggu ini
-        $sudahDinilai = Karyawan::where('status_karyawan', 'Aktif')
-            ->whereHas('jobLists', function ($query) use ($mingguSekarang, $tahunSekarang) {
-                $query->where('minggu_ke', $mingguSekarang)
-                      ->where('tahun', $tahunSekarang)
-                      ->whereHas('penilaian'); // Cek jika joblist punya relasi penilaian
-            })->count();
-
-        // 5. Karyawan belum dinilai
-        $belumDinilai = $karyawanDenganJoblist - $sudahDinilai;
 
         return view('admin.dashboard', [
             'totalKaryawanAktif' => $totalKaryawanAktif,
-            'belumDiberiJoblist' => $belumDiberiJoblist,
-            'belumDinilai' => $belumDinilai,
-            'sudahDinilai' => $sudahDinilai,
-            'mingguSekarang' => $mingguSekarang,
-            'tahunSekarang' => $tahunSekarang,
+            'totalJobTetap' => $totalJobTetap,
+            'totalJobOpsional' => $totalJobOpsional,
+            'totalJamBulanIni' => $totalJamBulanIni,
         ]);
     }
 }
