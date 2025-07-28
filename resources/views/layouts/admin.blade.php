@@ -181,8 +181,7 @@
         <li><a href="{{ route('home') }}" class="{{ request()->is('home') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
         {{-- Mengubah href="#" menjadi route ke halaman index karyawan --}}
         <li><a href="{{ route('karyawan.index') }}" class="{{ request()->is('karyawan*') ? 'active' : '' }}"><i class="fas fa-users"></i> Karyawan</a></li>
-        <li><a href="#" class="{{ request()->is('penilaian*') ? 'active' : '' }}"><i class="fas fa-chart-line"></i> Penilaian</a></li>
-    </ul>
+<li><a href="{{ route('laporan.index') }}" class="{{ request()->is('laporan*') ? 'active' : '' }}"><i class="fas fa-chart-line"></i> Kinerja</a></li>    </ul>
 </nav>
     </aside>
 

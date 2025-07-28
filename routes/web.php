@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; // <-- 1. Jangan lupa tambahkan ini di atas
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\KaryawanController; // <-- Tambahkan ini
-use App\Http\Controllers\Admin\JobListController; // <-- Tambahkan ini
+use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\JobListController;
+use App\Http\Controllers\Admin\PenilaianController;
+use App\Http\Controllers\Admin\ReportController;
+
 
 
 /*
@@ -57,6 +60,17 @@ Route::middleware(['auth'])->group(function () {
      // ROUTE BARU UNTUK EDIT & UPDATE
     Route::get('/job/{joblist}/edit', [JobListController::class, 'edit'])->name('job.edit');
     Route::patch('/job/{joblist}', [JobListController::class, 'update'])->name('job.update');
+
+    // --- PENILAIAN ROUTES (BARU) ---
+    // Menampilkan halaman form penilaian
+    Route::get('/karyawan/{karyawan}/penilaian/create', [PenilaianController::class, 'create'])->name('penilaian.create');
+
+    // Menyimpan data dari form penilaian
+    Route::post('/karyawan/{karyawan}/penilaian', [PenilaianController::class, 'store'])->name('penilaian.store');
+
+    // --- REPORT ROUTES (BARU) ---
+    Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export-pdf', [ReportController::class, 'exportPdf'])->name('laporan.exportPdf');
 
 });
 

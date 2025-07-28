@@ -40,6 +40,18 @@
             gap: 8px;
         }
 
+        .btn-penilaian {
+            background-color: #22C55E;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .form-card {
             background-color: var(--card-bg);
             color: var(--text-dark);
@@ -192,6 +204,9 @@
     <div class="joblist-card">
         <div class="joblist-header">
             <h3>Daftar Job Opsional</h3>
+            <a href="{{ route('penilaian.create', $karyawan->id) }}" class="btn-penilaian">
+                <i class="fas fa-check-circle"></i> Penilaian Kinerja
+            </a>
         </div>
         <table class="table">
             <thead>

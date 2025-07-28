@@ -203,7 +203,7 @@
     <div class="joblist-card">
         <div class="joblist-header">
             <h3>Daftar Job Tetap</h3>
-            <a href="#" class="btn-penilaian">
+            <a href="{{ route('penilaian.create', $karyawan->id) }}" class="btn-penilaian">
                 <i class="fas fa-check-circle"></i> Penilaian Kinerja
             </a>
         </div>
