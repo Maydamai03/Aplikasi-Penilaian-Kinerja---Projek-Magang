@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Laporan Kinerja</title>
     <style>
-        body { font-family: sans-serif; }
-        .table { width: 100%; border-collapse: collapse; }
-        .table th, .table td { border: 1px solid #ddd; padding: 8px; font-size: 12px; }
-        .table th { background-color: #f2f2f2; text-align: left; }
-        h1, h2, h3 { text-align: center; }
-        .summary { margin-bottom: 20px; }
+        body {
+            font-family: sans-serif;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+
+        h1,
+        h2,
+        h3 {
+            text-align: center;
+        }
+
+        .summary {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
+
 <body>
     <h3>Laporan Kinerja Karyawan</h3>
     <hr>
@@ -35,16 +61,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($reportData['penilaian'] as $item)
+            {{-- Loop pertama untuk setiap tanggal --}}
+            @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
+                {{-- Baris pembatas tanggal --}}
                 <tr>
-                    <td>{{ $item->jobList->nama_pekerjaan }}</td>
-                    <td>{{ $item->nilai }}</td>
-                    <td>{{ $item->jobList->bobot }}%</td>
-                    <td>{{ $item->jobList->durasi_waktu }} menit</td>
-                    <td>{{ $item->catatan_penilai }}</td>
+                    <td colspan="5" style="background-color: #f2f2f2; font-weight: bold;">
+                        Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
+                    </td>
                 </tr>
+
+                {{-- Loop kedua untuk setiap item pekerjaan di tanggal tersebut --}}
+                @foreach ($penilaianHarian as $item)
+                    <tr>
+                        <td>{{ $item->jobList->nama_pekerjaan }}</td>
+                        <td>{{ $item->nilai }}</td>
+                        <td>{{ $item->jobList->bobot }}%</td>
+                        <td>{{ $item->jobList->durasi_waktu }} menit</td>
+                        <td>{{ $item->catatan_penilai }}</td>
+                    </tr>
+                @endforeach
             @endforeach
         </tbody>
     </table>
 </body>
+
 </html>
