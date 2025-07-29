@@ -46,6 +46,7 @@
 
     <div class="summary">
         <p><strong>Skor Kinerja Rata-Rata:</strong> {{ $reportData['skor_kinerja'] }}</p>
+        <p><strong>Predikat Kinerja:</strong> {{ $reportData['predikat_kinerja'] }}</p>
         <p><strong>Beban Kerja:</strong> {{ $reportData['beban_kerja'] }}%</p>
     </div>
 
