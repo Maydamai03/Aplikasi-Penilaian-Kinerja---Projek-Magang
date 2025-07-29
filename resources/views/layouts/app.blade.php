@@ -18,6 +18,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    {{-- Penting: Tambahkan SweetAlert CSS jika belum ada di app.css --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"> --}}
 </head>
 <body>
     <div id="app">
@@ -79,5 +82,10 @@
             @yield('content')
         </main>
     </div>
+
+    {{-- PENTING: Tambahkan ini di sini --}}
+    @stack('scripts')
+    {{-- End of PENTING --}}
+
 </body>
 </html>
