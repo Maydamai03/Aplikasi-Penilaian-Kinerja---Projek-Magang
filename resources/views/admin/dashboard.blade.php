@@ -268,7 +268,7 @@
     </div>
 </div>
 
-<a href="#" class="btn-main">
+<a href="{{ route('karyawan.index') }}" class="btn-main">
     <i class="fas fa-chart-line"></i>
     Lihat Data Karyawan
 </a>
