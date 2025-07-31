@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .employee-header {
         display: flex;
@@ -33,18 +31,6 @@
         margin-bottom: 26px;
         border-radius: 8px;
         font-weight: 500;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .btn-penilaian {
-        background-color: #22C55E;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
@@ -114,6 +100,18 @@
 
     .joblist-header h3 {
         margin: 0;
+    }
+
+    .btn-penilaian {
+        background-color: #22C55E;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .table {
@@ -190,43 +188,40 @@
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="{{ route('karyawan.index') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+    <a href="<?php echo e(route('karyawan.index')); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
     <div class="employee-header m-0">
-        <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60' }}"
+        <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60'); ?>"
             alt="Foto">
         <div class="employee-info">
-            <p><span class="label">Nama:</span> {{ $karyawan->nama_lengkap }}</p>
-            <p><span class="label">NIP:</span> {{ $karyawan->nip }}</p>
-            <p><span class="label">Divisi:</span> {{ $karyawan->divisi->nama_divisi }}</p>
+            <p><span class="label">Nama:</span> <?php echo e($karyawan->nama_lengkap); ?></p>
+            <p><span class="label">NIP:</span> <?php echo e($karyawan->nip); ?></p>
+            <p><span class="label">Divisi:</span> <?php echo e($karyawan->divisi->nama_divisi); ?></p>
         </div>
     </div>
 </div>
 
-@if (session('success'))
-<div class="alert alert-success mb-3">{{ session('success') }}</div>
-@endif
+<?php if(session('success')): ?>
+<div class="alert alert-success mb-3"><?php echo e(session('success')); ?></div>
+<?php endif; ?>
 
 <div class="form-card">
-    <h3>Tambah Pekerjaan Opsional</h3>
-    {{-- PASTIKAN ID "addJobForm" ADA DI SINI --}}
-    <form id="addJobForm" action="{{ route('job.store', $karyawan->id) }}" method="POST">
-        @csrf
-        <input type="hidden" name="tipe_job" value="Opsional">
+    <h3>Tambah Pekerjaan Tetap</h3>
+    <form id="addJobForm" action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="tipe_job" value="Tetap">
         <div class="add-job-form">
             <div class="form-group" style="grid-column: 1 / 3;">
                 <label for="nama_pekerjaan">Nama Pekerjaan *</label>
-                <input type="text" id="nama_pekerjaan" name="nama_pekerjaan" class="form-control" value="{{ old('nama_pekerjaan') }}" required>
+                <input type="text" id="nama_pekerjaan" name="nama_pekerjaan" class="form-control" value="<?php echo e(old('nama_pekerjaan')); ?>" required>
             </div>
             <div class="form-group">
                 <label for="bobot">Bobot (1-100%) *</label>
-                <input type="number" id="bobot" name="bobot" class="form-control" placeholder="1-100 %" value="{{ old('bobot') }}" required>
-                {{-- PASTIKAN DIV UNTUK MENAMPILKAN ERROR BOBOT ADA DI SINI --}}
+                <input type="number" id="bobot" name="bobot" class="form-control" placeholder="1-100 %" value="<?php echo e(old('bobot')); ?>" required>
                 <div id="bobot-error" class="text-danger mt-1" style="font-size: 0.875em;"></div>
             </div>
             <div class="form-group">
                 <label for="durasi_waktu">Durasi *</label>
-                <input type="number" id="durasi_waktu" name="durasi_waktu" class="form-control" placeholder="Menit"
-                    value="{{ old('durasi_waktu') }}" required>
+                <input type="number" id="durasi_waktu" name="durasi_waktu" class="form-control" placeholder="Menit" value="<?php echo e(old('durasi_waktu')); ?>" required>
             </div>
             <div class="form-group" style="grid-column: 1 / 3;">
                 <button type="submit" class="btn-add">+ Add</button>
@@ -237,8 +232,8 @@
 
 <div class="joblist-card">
     <div class="joblist-header">
-        <h3>Daftar Job Opsional</h3>
-        <a href="{{ route('penilaian.create', $karyawan->id) }}" class="btn-penilaian">
+        <h3>Daftar Job Tetap</h3>
+        <a href="<?php echo e(route('penilaian.create', $karyawan->id)); ?>" class="btn-penilaian">
             <i class="fas fa-check-circle"></i> Penilaian Kinerja
         </a>
     </div>
@@ -253,41 +248,39 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($jobLists as $job)
+            <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $job->nama_pekerjaan }}</td>
-                {{-- PASTIKAN CLASS job-bobot-item ADA DI SINI UNTUK FUNGSI UPDATE TOTAL BOBOT --}}
-                <td class="job-bobot-item">{{ $job->bobot }}%</td>
-                <td>{{ $job->durasi_waktu }}</td>
+                <td><?php echo e($loop->iteration); ?></td>
+                <td><?php echo e($job->nama_pekerjaan); ?></td>
+                <td class="job-bobot-item"><?php echo e($job->bobot); ?>%</td>
+                <td><?php echo e($job->durasi_waktu); ?></td>
                 <td>
                     <div class="action-buttons">
-                        <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
+                        <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
                         <button type="button" class="btn-table btn-delete"
-                            onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                        <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"
+                            onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
+                        <form id="delete-form-<?php echo e($job->id); ?>" action="<?php echo e(route('job.destroy', $job->id)); ?>"
                             method="POST" style="display: none;">
-                            @csrf
-                            @method('DELETE')
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('DELETE'); ?>
                         </form>
                     </div>
                 </td>
             </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <tr>
-                <td colspan="5" class="text-center">Belum ada job opsional yang ditambahkan.</td>
+                <td colspan="5" class="text-center">Belum ada job tetap yang ditambahkan.</td>
             </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
-    {{-- PASTIKAN DIV UNTUK MENAMPILKAN TOTAL BOBOT ADA DI SINI --}}
     <div class="total-bobot-display">
         Total Bobot Saat Ini: <span id="currentTotalBobotDisplay" class="current-total">0</span>% / 100%
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Fungsi deleteConfirmation (tidak berubah)
@@ -340,7 +333,6 @@
         const addJobForm = document.getElementById('addJobForm');
         const bobotInput = document.getElementById('bobot');
         const bobotErrorDiv = document.getElementById('bobot-error'); // Untuk menampilkan error validasi spesifik bobot
-        const tipeJobInput = document.querySelector('input[name="tipe_job"]'); // Dapatkan input hidden tipe_job
 
         addJobForm.addEventListener('submit', function(e) {
             e.preventDefault(); // Mencegah submit form standar
@@ -368,12 +360,12 @@
                 .then(data => {
                     if (data.status === 'rekomendasi') { // Jika total bobot kurang dari 100%
                         const sisaBobot = data.sisa_bobot;
-                        const jobType = tipeJobInput.value; // Gunakan nilai dari input hidden (PENTING: ini perbaikan)
+                        const jobType = formData.get('tipe_job'); // Ambil tipe_job dari form data
 
                         Swal.fire({
                             title: `Bobot Pekerjaan ${jobType} Belum 100%`,
                             html: `Total bobot setelah pekerjaan ini masih ${data.message}<br><br>
-                                   Anda bisa menambahkan bobot sebesar <b>${sisaBobot}%</b> untuk mencapai 100%.<br>`,
+                                   Anda bisa menambahkan bobot <b>${sisaBobot}%</b> untuk mencapai 100%.<br>`,
                             icon: 'info',
                             showCancelButton: true,
                             showDenyButton: true, // Tampilkan tombol "Lanjutkan Saja"
@@ -478,4 +470,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/joblist/tetap.blade.php ENDPATH**/ ?>

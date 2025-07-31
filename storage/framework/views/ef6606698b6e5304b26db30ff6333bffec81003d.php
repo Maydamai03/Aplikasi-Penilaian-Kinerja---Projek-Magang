@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         /* Page Header */
         .page-header {
@@ -415,7 +413,7 @@
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        @keyframes  fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -492,7 +490,7 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
+        @keyframes  spin {
             0% {
                 transform: rotate(0deg);
             }
@@ -524,26 +522,27 @@
 
     <div class="page-header">
         <h1>Manajemen Job Karyawan</h1>
-        <a href="{{ route('karyawan.create') }}" class="btn-add-karyawan">
+        <a href="<?php echo e(route('karyawan.create')); ?>" class="btn-add-karyawan">
             <i class="fas fa-user-plus"></i>
             Add Karyawan
         </a>
     </div>
 
     <div class="table-container">
-        <form action="{{ route('karyawan.index') }}" method="GET" class="filter-form">
+        <form action="<?php echo e(route('karyawan.index')); ?>" method="GET" class="filter-form">
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" name="search" placeholder="Cari nama atau NIP karyawan..."
-                    value="{{ request('search') }}">
+                    value="<?php echo e(request('search')); ?>">
             </div>
             <select name="divisi_id" class="form-select" onchange="this.form.submit()">
                 <option value="">Semua Divisi</option>
-                @foreach ($divisi as $d)
-                    <option value="{{ $d->id }}" {{ request('divisi_id') == $d->id ? 'selected' : '' }}>
-                        {{ $d->nama_divisi }}
+                <?php $__currentLoopData = $divisi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($d->id); ?>" <?php echo e(request('divisi_id') == $d->id ? 'selected' : ''); ?>>
+                        <?php echo e($d->nama_divisi); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </form>
 
@@ -578,49 +577,52 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($karyawan as $k)
+                    <?php $__empty_1 = true; $__currentLoopData = $karyawan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr>
                             <td>
-                                <strong>{{ $k->nip }}</strong>
+                                <strong><?php echo e($k->nip); ?></strong>
                             </td>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 10px;">
                                     <div
                                         style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ff9500); display: flex; align-items: center; justify-content: center; color: #1f2937; font-weight: bold; font-size: 0.9rem;">
-                                        {{ strtoupper(substr($k->nama_lengkap, 0, 2)) }}
+                                        <?php echo e(strtoupper(substr($k->nama_lengkap, 0, 2))); ?>
+
                                     </div>
-                                    <strong title="{{ $k->nama_lengkap }}">
-                                        <span class="truncate-name">{{ $k->nama_lengkap }}</span>
+                                    <strong title="<?php echo e($k->nama_lengkap); ?>">
+                                        <span class="truncate-name"><?php echo e($k->nama_lengkap); ?></span>
                                     </strong>
                                 </div>
                             </td>
                             <td>
                                 <span
                                     style="background: rgba(255, 215, 0, 0.1); padding: 4px 12px; border-radius: 20px; font-weight: 600; color: #b45309;">
-                                    {{ $k->divisi->nama_divisi }}
+                                    <?php echo e($k->divisi->nama_divisi); ?>
+
                                 </span>
                             </td>
                             <td class="text-center">
                                 <span class="status-badge"
-                                    style="background-color: {{ $k->status_karyawan == 'Aktif' ? '#22C55E' : ($k->status_karyawan == 'Cuti' ? '#F59E0B' : '#EF4444') }};">
+                                    style="background-color: <?php echo e($k->status_karyawan == 'Aktif' ? '#22C55E' : ($k->status_karyawan == 'Cuti' ? '#F59E0B' : '#EF4444')); ?>;">
                                     <i
-                                        class="fas fa-{{ $k->status_karyawan == 'Aktif' ? 'check' : ($k->status_karyawan == 'Cuti' ? 'clock' : 'times') }}"></i>
-                                    {{ $k->status_karyawan }}
+                                        class="fas fa-<?php echo e($k->status_karyawan == 'Aktif' ? 'check' : ($k->status_karyawan == 'Cuti' ? 'clock' : 'times')); ?>"></i>
+                                    <?php echo e($k->status_karyawan); ?>
+
                                 </span>
                             </td>
                             <td class="text-center">
                                 <div class="action-buttons">
-                                    <a href="{{ route('karyawan.show', $k->id) }}" class="btn-action btn-info">
+                                    <a href="<?php echo e(route('karyawan.show', $k->id)); ?>" class="btn-action btn-info">
                                         <i class="fas fa-eye"></i>
                                         Info
                                     </a>
 
-                                    <form id="delete-form-{{ $k->id }}"
-                                        action="{{ route('karyawan.destroy', $k->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form id="delete-form-<?php echo e($k->id); ?>"
+                                        action="<?php echo e(route('karyawan.destroy', $k->id)); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button type="button" class="btn-action btn-danger"
-                                            onclick="deleteConfirmation({{ $k->id }})">
+                                            onclick="deleteConfirmation(<?php echo e($k->id); ?>)">
                                             <i class="fas fa-trash"></i>
                                             Hapus
                                         </button>
@@ -629,18 +631,18 @@
                             </td>
                             <td class="text-center">
                                 <div class="action-buttons">
-                                    <a href="{{ route('job.tetap', $k->id) }}" class="btn-job btn-job-tetap">
+                                    <a href="<?php echo e(route('job.tetap', $k->id)); ?>" class="btn-job btn-job-tetap">
                                         <i class="fas fa-briefcase"></i>
                                         Job Tetap
                                     </a>
-                                    <a href="{{ route('job.opsional', $k->id) }}" class="btn-job btn-job-opsional">
+                                    <a href="<?php echo e(route('job.opsional', $k->id)); ?>" class="btn-job btn-job-opsional">
                                         <i class="fas fa-tasks"></i>
                                         Job Opsional
                                     </a>
                                 </div>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="6" class="empty-state">
                                 <i class="fas fa-users"></i>
@@ -648,18 +650,19 @@
                                 <p>Belum ada karyawan yang terdaftar dalam sistem.</p>
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
         <div class="pagination-wrapper">
-            {{ $karyawan->appends(request()->query())->links() }}
+            <?php echo e($karyawan->appends(request()->query())->links()); ?>
+
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -753,4 +756,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/karyawan/index.blade.php ENDPATH**/ ?>

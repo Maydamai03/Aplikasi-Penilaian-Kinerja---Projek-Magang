@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         /* Page Header */
         .page-header {
@@ -537,7 +535,7 @@
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        @keyframes  fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -601,7 +599,7 @@
             margin-right: 15px;
         }
 
-        @keyframes spin {
+        @keyframes  spin {
             0% {
                 transform: rotate(0deg);
             }
@@ -621,27 +619,27 @@
             <i class="fas fa-filter"></i>
             Filter Laporan
         </h4>
-        <form action="{{ route('laporan.index') }}" method="GET" class="filter-form">
+        <form action="<?php echo e(route('laporan.index')); ?>" method="GET" class="filter-form">
             <div class="filter-group">
                 <label for="karyawan_id">Pilih Karyawan</label>
                 <select name="karyawan_id" id="karyawan_id" class="form-select" required>
                     <option value="">-- Pilih Karyawan --</option>
-                    @foreach ($employees as $employee)
-                        <option value="{{ $employee->id }}" title="{{ $employee->nama_lengkap }}" {{-- Bonus: Tampilkan nama lengkap saat hover --}}
-                            {{ request('karyawan_id') == $employee->id ? 'selected' : '' }}>
-                            {{ Str::limit($employee->nama_lengkap, 30, '...') }} {{-- Potong nama jika lebih dari 30 karakter --}}
+                    <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>" 
+                            <?php echo e(request('karyawan_id') == $employee->id ? 'selected' : ''); ?>>
+                            <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?> 
                         </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
             <div class="filter-group">
                 <label for="start_date">Dari Tanggal</label>
                 <input type="date" name="start_date" id="start_date" class="form-control"
-                    value="{{ request('start_date') }}" required>
+                    value="<?php echo e(request('start_date')); ?>" required>
             </div>
             <div class="filter-group">
                 <label for="end_date">Sampai Tanggal</label>
-                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}"
+                <input type="date" name="end_date" id="end_date" class="form-control" value="<?php echo e(request('end_date')); ?>"
                     required>
             </div>
             <div class="filter-group">
@@ -652,7 +650,7 @@
         </form>
     </div>
 
-    @if ($reportData)
+    <?php if($reportData): ?>
         <div class="report-card">
             <div class="report-header">
                 <div class="report-info">
@@ -661,12 +659,13 @@
                         Hasil Laporan Kinerja
                     </h3>
                     <p>
-                        <strong>{{ $selectedKaryawan->nama_lengkap }}</strong><br>
+                        <strong><?php echo e($selectedKaryawan->nama_lengkap); ?></strong><br>
                         <i class="fas fa-calendar" style="margin-right: 6px;"></i>
-                        Periode: {{ $startDate->format('d M Y') }} - {{ $endDate->format('d M Y') }}
+                        Periode: <?php echo e($startDate->format('d M Y')); ?> - <?php echo e($endDate->format('d M Y')); ?>
+
                     </p>
                 </div>
-                <a href="{{ route('laporan.exportPdf', request()->query()) }}" class="btn-export">
+                <a href="<?php echo e(route('laporan.exportPdf', request()->query())); ?>" class="btn-export">
                     <i class="fas fa-file-pdf"></i>
                     Ekspor ke PDF
                 </a>
@@ -677,15 +676,15 @@
                     <div class="icon-wrapper">
                         <i class="fas fa-star"></i>
                     </div>
-                    <div class="value">{{ $reportData['skor_kinerja'] }}</div>
+                    <div class="value"><?php echo e($reportData['skor_kinerja']); ?></div>
                     <div class="label">Skor Kinerja Rata-Rata</div>
-                    <div class="predicate">{{ $reportData['predikat_kinerja'] }}</div>
+                    <div class="predicate"><?php echo e($reportData['predikat_kinerja']); ?></div>
                 </div>
                 <div class="summary-box">
                     <div class="icon-wrapper">
                         <i class="fas fa-tasks"></i>
                     </div>
-                    <div class="value">{{ $reportData['beban_kerja'] }}%</div>
+                    <div class="value"><?php echo e($reportData['beban_kerja']); ?>%</div>
                     <div class="label">Beban Kerja</div>
                 </div>
             </div>
@@ -725,94 +724,99 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
+                            <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr class="date-separator">
                                     <td colspan="6"> <i class="fas fa-calendar-day"></i>
-                                        Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
+                                        Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
+
                                     </td>
                                 </tr>
 
-                                @php
+                                <?php
                                     $mandatoryJobs = $penilaianHarian->filter(function ($item) {
                                         return $item->jobList->tipe_job === 'Tetap';
                                     });
                                     $optionalJobs = $penilaianHarian->filter(function ($item) {
                                         return $item->jobList->tipe_job === 'Opsional';
                                     });
-                                @endphp
+                                ?>
 
-                                @if ($mandatoryJobs->isNotEmpty())
+                                <?php if($mandatoryJobs->isNotEmpty()): ?>
                                     <tr>
                                         <td colspan="6" class="job-type-header">
                                             <i class="fas fa-thumbtack"></i> Pekerjaan Wajib
                                         </td>
                                     </tr>
-                                    @foreach ($mandatoryJobs as $item)
+                                    <?php $__currentLoopData = $mandatoryJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
-                                                <strong>{{ $item->jobList->nama_pekerjaan }}</strong>
+                                                <strong><?php echo e($item->jobList->nama_pekerjaan); ?></strong>
                                             </td>
                                             <td>
                                                 <span
-                                                    class="nilai-badge {{ $item->nilai >= 90 ? 'excellent' : ($item->nilai >= 80 ? 'good' : ($item->nilai >= 70 ? 'average' : 'poor')) }}">
-                                                    {{ $item->nilai }}
+                                                    class="nilai-badge <?php echo e($item->nilai >= 90 ? 'excellent' : ($item->nilai >= 80 ? 'good' : ($item->nilai >= 70 ? 'average' : 'poor'))); ?>">
+                                                    <?php echo e($item->nilai); ?>
+
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="bobot-badge">{{ $item->jobList->bobot }}%</span>
+                                                <span class="bobot-badge"><?php echo e($item->jobList->bobot); ?>%</span>
                                             </td>
                                             <td>
-                                                <span class="durasi-badge">{{ $item->jobList->durasi_waktu }} menit</span>
+                                                <span class="durasi-badge"><?php echo e($item->jobList->durasi_waktu); ?> menit</span>
                                             </td>
                                             <td>
-                                                <span class="badge bg-primary">{{ $item->jobList->tipe_job }}</span>
+                                                <span class="badge bg-primary"><?php echo e($item->jobList->tipe_job); ?></span>
                                             </td>
                                             <td>
-                                                {{ $item->catatan_penilai ?: 'Tidak ada catatan' }}
+                                                <?php echo e($item->catatan_penilai ?: 'Tidak ada catatan'); ?>
+
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
 
-                                @if ($optionalJobs->isNotEmpty())
+                                <?php if($optionalJobs->isNotEmpty()): ?>
                                     <tr>
                                         <td colspan="6" class="job-type-header">
                                             <i class="fas fa-lightbulb"></i> Pekerjaan Opsional
                                         </td>
                                     </tr>
-                                    @foreach ($optionalJobs as $item)
+                                    <?php $__currentLoopData = $optionalJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
-                                                <strong>{{ $item->jobList->nama_pekerjaan }}</strong>
+                                                <strong><?php echo e($item->jobList->nama_pekerjaan); ?></strong>
                                             </td>
                                             <td>
                                                 <span
-                                                    class="nilai-badge {{ $item->nilai >= 90 ? 'excellent' : ($item->nilai >= 80 ? 'good' : ($item->nilai >= 70 ? 'average' : 'poor')) }}">
-                                                    {{ $item->nilai }}
+                                                    class="nilai-badge <?php echo e($item->nilai >= 90 ? 'excellent' : ($item->nilai >= 80 ? 'good' : ($item->nilai >= 70 ? 'average' : 'poor'))); ?>">
+                                                    <?php echo e($item->nilai); ?>
+
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="bobot-badge">{{ $item->jobList->bobot }}%</span>
+                                                <span class="bobot-badge"><?php echo e($item->jobList->bobot); ?>%</span>
                                             </td>
                                             <td>
-                                                <span class="durasi-badge">{{ $item->jobList->durasi_waktu }} menit</span>
+                                                <span class="durasi-badge"><?php echo e($item->jobList->durasi_waktu); ?> menit</span>
                                             </td>
                                             <td>
-                                                <span class="badge bg-info">{{ $item->jobList->tipe_job }}</span>
+                                                <span class="badge bg-info"><?php echo e($item->jobList->tipe_job); ?></span>
                                             </td>
                                             <td>
-                                                {{ $item->catatan_penilai ?: 'Tidak ada catatan' }}
+                                                <?php echo e($item->catatan_penilai ?: 'Tidak ada catatan'); ?>
+
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    @elseif(request()->filled('karyawan_id'))
+    <?php elseif(request()->filled('karyawan_id')): ?>
         <div class="report-card">
             <div class="no-data-card">
                 <i class="fas fa-chart-line"></i>
@@ -820,5 +824,7 @@
                 <p>Tidak ada data penilaian untuk karyawan dan periode yang dipilih.</p>
             </div>
         </div>
-    @endif
-@endsection
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/laporan/index.blade.php ENDPATH**/ ?>

@@ -19,7 +19,7 @@
     .employee-info p {
         margin: 0;
         line-height: 1.5;
-        color: var(--text-light);
+        color: #292828;
     }
 
     .employee-info p .label {

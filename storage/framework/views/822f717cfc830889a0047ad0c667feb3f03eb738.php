@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
        
         .employee-header {
@@ -83,63 +81,63 @@
     </style>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        {{-- Tombol kembali akan mengarah ke halaman yang sesuai (tetap/opsional) --}}
-        @php
+        
+        <?php
             $backRoute =
                 $joblist->tipe_job == 'Tetap'
                     ? route('job.tetap', $joblist->karyawan_id)
                     : route('job.opsional', $joblist->karyawan_id);
-        @endphp
-        <a href="{{ $backRoute }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+        ?>
+        <a href="<?php echo e($backRoute); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
 
         <div class="employee-header m-0">
-            <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60' }}"
+            <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60'); ?>"
                 alt="Foto">
             <div class="employee-info">
-                <p><span class="label">Nama:</span> {{ $karyawan->nama_lengkap }}</p>
-                <p><span class="label">NIP:</span> {{ $karyawan->nip }}</p>
+                <p><span class="label">Nama:</span> <?php echo e($karyawan->nama_lengkap); ?></p>
+                <p><span class="label">NIP:</span> <?php echo e($karyawan->nip); ?></p>
             </div>
         </div>
     </div>
 
-    {{-- Pesan Sukses dari Laravel (jika ada, bisa juga ditampilkan via SweetAlert di JS) --}}
-    @if (session('success'))
-        <div class="alert alert-success mb-3">{{ session('success') }}</div>
-    @endif
+    
+    <?php if(session('success')): ?>
+        <div class="alert alert-success mb-3"><?php echo e(session('success')); ?></div>
+    <?php endif; ?>
 
     <div class="form-card">
-        <h3>Edit Pekerjaan {{ $joblist->tipe_job }}</h3>
+        <h3>Edit Pekerjaan <?php echo e($joblist->tipe_job); ?></h3>
 
-        {{-- PASTIKAN ID "editJobForm" ADA DI SINI --}}
-        <form id="editJobForm" action="{{ route('job.update', $joblist->id) }}" method="POST">
-            @csrf
-            @method('PATCH') {{-- Method untuk update --}}
+        
+        <form id="editJobForm" action="<?php echo e(route('job.update', $joblist->id)); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PATCH'); ?> 
 
             <div class="row mt-4">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Nama Pekerjaan *</label>
                     <input type="text" name="nama_pekerjaan" class="form-control"
-                        value="{{ old('nama_pekerjaan', $joblist->nama_pekerjaan) }}" required>
+                        value="<?php echo e(old('nama_pekerjaan', $joblist->nama_pekerjaan)); ?>" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Bobot *</label>
-                    <input type="number" name="bobot" class="form-control" id="bobot_edit" value="{{ old('bobot', $joblist->bobot) }}"
+                    <input type="number" name="bobot" class="form-control" id="bobot_edit" value="<?php echo e(old('bobot', $joblist->bobot)); ?>"
                         required>
-                    {{-- PASTIKAN DIV UNTUK MENAMPILKAN ERROR BOBOT ADA DI SINI --}}
+                    
                     <div id="bobot-error-edit" class="text-danger mt-1" style="font-size: 0.875em;"></div>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Durasi (menit) *</label>
                     <input type="number" name="durasi_waktu" class="form-control"
-                        value="{{ old('durasi_waktu', $joblist->durasi_waktu) }}" required>
+                        value="<?php echo e(old('durasi_waktu', $joblist->durasi_waktu)); ?>" required>
                 </div>
             </div>
             <button type="submit" class="btn-update">Update Pekerjaan</button>
         </form>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -174,7 +172,7 @@
                 .then(data => {
                     if (data.status === 'rekomendasi') { // Jika total bobot kurang dari 100%
                         const sisaBobot = data.sisa_bobot;
-                        const jobType = '{{ $joblist->tipe_job }}'; // Untuk halaman edit, $joblist->tipe_job tersedia
+                        const jobType = '<?php echo e($joblist->tipe_job); ?>'; // Untuk halaman edit, $joblist->tipe_job tersedia
 
                         Swal.fire({
                             title: `Bobot Pekerjaan ${jobType} Belum 100%`,
@@ -213,9 +211,9 @@
                                             .then(() => {
                                                 // Redirect ke halaman daftar yang sesuai setelah update
                                                 if (jobType === 'Tetap') {
-                                                    window.location.href = '{{ route('job.tetap', $joblist->karyawan_id) }}';
+                                                    window.location.href = '<?php echo e(route('job.tetap', $joblist->karyawan_id)); ?>';
                                                 } else { // Asumsi jobType hanya 'Tetap' atau 'Opsional'
-                                                    window.location.href = '{{ route('job.opsional', $joblist->karyawan_id) }}';
+                                                    window.location.href = '<?php echo e(route('job.opsional', $joblist->karyawan_id)); ?>';
                                                 }
                                             });
                                     } else {
@@ -250,9 +248,9 @@
                                             .then(() => {
                                                 // Redirect ke halaman daftar yang sesuai setelah update
                                                 if (jobType === 'Tetap') {
-                                                    window.location.href = '{{ route('job.tetap', $joblist->karyawan_id) }}';
+                                                    window.location.href = '<?php echo e(route('job.tetap', $joblist->karyawan_id)); ?>';
                                                 } else {
-                                                    window.location.href = '{{ route('job.opsional', $joblist->karyawan_id) }}';
+                                                    window.location.href = '<?php echo e(route('job.opsional', $joblist->karyawan_id)); ?>';
                                                 }
                                             });
                                     } else {
@@ -284,10 +282,10 @@
                         Swal.fire('Berhasil!', data.message, 'success')
                             .then(() => {
                                 // Redirect ke halaman daftar yang sesuai setelah update
-                                if ('{{ $joblist->tipe_job }}' === 'Tetap') { // Ambil tipe_job dari Blade langsung
-                                    window.location.href = '{{ route('job.tetap', $joblist->karyawan_id) }}';
+                                if ('<?php echo e($joblist->tipe_job); ?>' === 'Tetap') { // Ambil tipe_job dari Blade langsung
+                                    window.location.href = '<?php echo e(route('job.tetap', $joblist->karyawan_id)); ?>';
                                 } else {
-                                    window.location.href = '{{ route('job.opsional', $joblist->karyawan_id) }}';
+                                    window.location.href = '<?php echo e(route('job.opsional', $joblist->karyawan_id)); ?>';
                                 }
                             });
                     }
@@ -299,4 +297,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/joblist/edit.blade.php ENDPATH**/ ?>
