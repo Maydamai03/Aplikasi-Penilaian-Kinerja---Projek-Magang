@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .dashboard-header {
         position: relative;
@@ -181,7 +179,7 @@
         pointer-events: none;
     }
 
-    /* @keyframes float {
+    /* @keyframes  float {
 
         0%,
         100% {
@@ -201,7 +199,7 @@
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    @keyframes pulse {
+    @keyframes  pulse {
 
         0%,
         100% {
@@ -241,36 +239,38 @@
             <div class="icon-wrapper">
                 <i class="fas fa-users"></i>
             </div>
-            <p class="number">{{ $totalKaryawanAktif }}</p>
+            <p class="number"><?php echo e($totalKaryawanAktif); ?></p>
             <p class="description">Total Karyawan Aktif</p>
         </div>
         <div class="stat-card">
             <div class="icon-wrapper">
                 <i class="fas fa-briefcase"></i>
             </div>
-            <p class="number">{{ $totalJobTetap }}</p>
+            <p class="number"><?php echo e($totalJobTetap); ?></p>
             <p class="description">Total Job Tetap</p>
         </div>
         <div class="stat-card">
             <div class="icon-wrapper">
                 <i class="fas fa-tasks"></i>
             </div>
-            <p class="number">{{ $totalJobOpsional }}</p>
+            <p class="number"><?php echo e($totalJobOpsional); ?></p>
             <p class="description">Total Job Opsional</p>
         </div>
         <div class="stat-card">
             <div class="icon-wrapper">
                 <i class="fas fa-clock"></i>
             </div>
-            <p class="number">{{ $totalJamBulanIni }} <span style="font-size: 1.8rem; font-weight: 600;">Jam</span></p>
+            <p class="number"><?php echo e($totalJamBulanIni); ?> <span style="font-size: 1.8rem; font-weight: 600;">Jam</span></p>
             <p class="description">Total Durasi Kerja Bulan Ini</p>
         </div>
     </div>
 </div>
 
-<a href="{{ route('karyawan.index') }}" class="btn-main">
+<a href="<?php echo e(route('karyawan.index')); ?>" class="btn-main">
     <i class="fas fa-chart-line"></i>
     Lihat Data Karyawan
 </a>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

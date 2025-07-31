@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\JobListController;
 use App\Http\Controllers\Admin\PenilaianController;
 use App\Http\Controllers\Admin\ReportController;
-
+use App\Http\Controllers\Superadmin\KelolaAdminController;
 
 
 /*
@@ -72,5 +72,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-pdf', [ReportController::class, 'exportPdf'])->name('laporan.exportPdf');
 
+
+});
+
+// --- ROUTE KHUSUS SUPERADMIN ---
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::resource('kelola-admin', KelolaAdminController::class);
 });
 

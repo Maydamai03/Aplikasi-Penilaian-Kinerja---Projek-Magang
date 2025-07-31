@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .btn-back {
         background-color: var(--accent-color); color: var(--text-light); padding: 8px 15px;
@@ -104,15 +102,16 @@
     }
 </style>
 
-<a href="{{ url()->previous() }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
-<form action="{{ route('penilaian.store', $karyawan->id) }}" method="POST">
-    @csrf
+<a href="<?php echo e(url()->previous()); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+<form action="<?php echo e(route('penilaian.store', $karyawan->id)); ?>" method="POST">
+    <?php echo csrf_field(); ?>
     <div class="appraisal-card mt-3">
         <div class="appraisal-header">
             <h3><i class="fas fa-clipboard-check"></i> Form Penilaian Kinerja</h3>
             <p>
-                <strong>Karyawan:</strong> {{ $karyawan->nama_lengkap }}<br>
-                <strong>Tanggal Penilaian:</strong> {{ \Carbon\Carbon::now()->format('d F Y') }}
+                <strong>Karyawan:</strong> <?php echo e($karyawan->nama_lengkap); ?><br>
+                <strong>Tanggal Penilaian:</strong> <?php echo e(\Carbon\Carbon::now()->format('d F Y')); ?>
+
             </p>
         </div>
 
@@ -128,61 +127,63 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Tampilkan Kelompok Job Tetap --}}
-                    @if(isset($jobLists['Tetap']) && $jobLists['Tetap']->isNotEmpty())
+                    
+                    <?php if(isset($jobLists['Tetap']) && $jobLists['Tetap']->isNotEmpty()): ?>
                         <tr class="job-type-separator">
                             <td colspan="5">Job Tetap</td>
                         </tr>
-                        @foreach ($jobLists['Tetap'] as $job)
+                        <?php $__currentLoopData = $jobLists['Tetap']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $job->nama_pekerjaan }}</td>
-                            <td class="text-center">{{ $job->bobot }}%</td>
-                            <td class="text-center">{{ $job->durasi_waktu }}</td>
+                            <td><?php echo e($job->nama_pekerjaan); ?></td>
+                            <td class="text-center"><?php echo e($job->bobot); ?>%</td>
+                            <td class="text-center"><?php echo e($job->durasi_waktu); ?></td>
                             <td>
-                                <input type="number" name="nilai[{{ $job->id }}]" class="form-control-table text-center" min="0" max="100" required>
+                                <input type="number" name="nilai[<?php echo e($job->id); ?>]" class="form-control-table text-center" min="0" max="100" required>
                             </td>
                             <td>
-                                <input type="text" name="catatan[{{ $job->id }}]" class="form-control-table">
+                                <input type="text" name="catatan[<?php echo e($job->id); ?>]" class="form-control-table">
                             </td>
                         </tr>
-                        @endforeach
-                    @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
 
-                    {{-- Tampilkan Kelompok Job Opsional --}}
-                    @if(isset($jobLists['Opsional']) && $jobLists['Opsional']->isNotEmpty())
+                    
+                    <?php if(isset($jobLists['Opsional']) && $jobLists['Opsional']->isNotEmpty()): ?>
                         <tr class="job-type-separator">
                             <td colspan="5">Job Opsional</td>
                         </tr>
-                        @foreach ($jobLists['Opsional'] as $job)
+                        <?php $__currentLoopData = $jobLists['Opsional']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $job->nama_pekerjaan }}</td>
-                            <td class="text-center">{{ $job->bobot }}%</td>
-                            <td class="text-center">{{ $job->durasi_waktu }}</td>
+                            <td><?php echo e($job->nama_pekerjaan); ?></td>
+                            <td class="text-center"><?php echo e($job->bobot); ?>%</td>
+                            <td class="text-center"><?php echo e($job->durasi_waktu); ?></td>
                             <td>
-                                <input type="number" name="nilai[{{ $job->id }}]" class="form-control-table text-center" min="0" max="100" required>
+                                <input type="number" name="nilai[<?php echo e($job->id); ?>]" class="form-control-table text-center" min="0" max="100" required>
                             </td>
                             <td>
-                                <input type="text" name="catatan[{{ $job->id }}]" class="form-control-table">
+                                <input type="text" name="catatan[<?php echo e($job->id); ?>]" class="form-control-table">
                             </td>
                         </tr>
-                        @endforeach
-                    @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
 
-                    {{-- Pesan jika tidak ada job sama sekali --}}
-                    @if($jobLists->isEmpty())
+                    
+                    <?php if($jobLists->isEmpty()): ?>
                         <tr><td colspan="5" class="text-center p-5">Belum ada pekerjaan yang bisa dinilai.</td></tr>
-                    @endif
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
-        @if($jobLists->isNotEmpty())
+        <?php if($jobLists->isNotEmpty()): ?>
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn-save-appraisal">
                     <i class="fas fa-save"></i> Simpan Penilaian
                 </button>
             </div>
-        @endif
+        <?php endif; ?>
     </div>
 </form>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/penilaian/create.blade.php ENDPATH**/ ?>
