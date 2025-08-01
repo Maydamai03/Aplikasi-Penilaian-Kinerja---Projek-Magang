@@ -42,32 +42,22 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // --- JOB ROUTES ---
-    // Menampilkan halaman CRUD untuk Job Tetap
-    Route::get('/karyawan/{karyawan}/job/tetap', [JobListController::class, 'showTetap'])->name('job.tetap');
-
-    // Menampilkan halaman CRUD untuk Job Opsional
-    Route::get('/karyawan/{karyawan}/job/opsional', [JobListController::class, 'showOpsional'])->name('job.opsional');
-
-    // Menyimpan job baru (bisa Tetap atau Opsional)
+    // --- JOB & PENILAIAN ROUTES ---
+    // Menampilkan halaman kelola joblist (Siang & Malam)
+    Route::get('/karyawan/{karyawan}/job', [JobListController::class, 'showTetap'])->name('job.tetap');
+    // Menyimpan joblist baru (dari form di halaman kelola joblist)
     Route::post('/karyawan/{karyawan}/job', [JobListController::class, 'store'])->name('job.store');
-
-    // Menghapus item job
+    // Menghapus item joblist
     Route::delete('/job/{joblist}', [JobListController::class, 'destroy'])->name('job.destroy');
-    // --- AKHIR JOB ROUTES ---
-
-
-     // ROUTE BARU UNTUK EDIT & UPDATE
+    // Menampilkan form edit item joblist
     Route::get('/job/{joblist}/edit', [JobListController::class, 'edit'])->name('job.edit');
+    // Mengupdate item joblist
     Route::patch('/job/{joblist}', [JobListController::class, 'update'])->name('job.update');
 
-    // --- PENILAIAN ROUTES (BARU) ---
-    // Menampilkan halaman form penilaian
-    Route::get('/karyawan/{karyawan}/penilaian/create', [PenilaianController::class, 'create'])->name('penilaian.create');
-
+    // Menampilkan halaman form penilaian per shift
+    Route::get('/karyawan/{karyawan}/penilaian/create/{shift}', [PenilaianController::class, 'create'])->name('penilaian.create');
     // Menyimpan data dari form penilaian
     Route::post('/karyawan/{karyawan}/penilaian', [PenilaianController::class, 'store'])->name('penilaian.store');
-
     // --- REPORT ROUTES (BARU) ---
     Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-pdf', [ReportController::class, 'exportPdf'])->name('laporan.exportPdf');

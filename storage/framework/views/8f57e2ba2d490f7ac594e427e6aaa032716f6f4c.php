@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
 <style>
     /* Menggunakan style yang mirip dengan karyawan/index.blade.php */

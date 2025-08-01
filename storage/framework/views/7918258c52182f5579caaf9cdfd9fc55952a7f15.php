@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
 <style>
     .dashboard-header {

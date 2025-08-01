@@ -11,18 +11,22 @@ class CreatePenilaianKinerjaTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('penilaian_kinerja', function (Blueprint $table) {
+   public function up()
+{
+    Schema::create('penilaian_kinerja', function (Blueprint $table) {
         $table->id();
         $table->foreignId('job_list_id')->constrained('job_lists')->onDelete('cascade');
         $table->foreignId('penilai_id')->constrained('users')->onDelete('cascade');
+
+        // <-- TAMBAHKAN BARIS INI
+        $table->enum('skala', ['Baik', 'Sedang', 'Cukup'])->nullable();
+
         $table->integer('nilai');
         $table->text('catatan_penilai')->nullable();
         $table->date('tanggal_penilaian');
         $table->timestamps();
     });
-    }
+}
 
     /**
      * Reverse the migrations.

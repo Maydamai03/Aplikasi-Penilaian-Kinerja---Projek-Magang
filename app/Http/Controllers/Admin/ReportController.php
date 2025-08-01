@@ -5,33 +5,64 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Karyawan;
 use App\Models\PenilaianKinerja;
+use App\Models\Divisi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf; // Import facade PDF
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
+    /**
+     * Menampilkan halaman laporan kinerja dengan filter.
+     */
     public function index(Request $request)
     {
-        // Ambil semua karyawan untuk pilihan filter
-        $employees = Karyawan::orderBy('nama_lengkap')->get();
+        // Data untuk filter
+        $divisions = Divisi::orderBy('nama_divisi')->get();
+
+        $employeesQuery = Karyawan::orderBy('nama_lengkap');
+        if ($request->filled('divisi_id')) {
+            $employeesQuery->where('divisi_id', $request->divisi_id);
+        }
+        $employees = $employeesQuery->get();
+
+        // Variabel untuk menampung hasil
         $reportData = null;
         $selectedKaryawan = null;
-        $startDate = null;
-        $endDate = null;
+        $selectedDivisi = null;
+        $startDate = $request->start_date ? Carbon::parse($request->start_date) : null;
+        $endDate = $request->end_date ? Carbon::parse($request->end_date) : null;
 
-        // Jika ada request filter, proses data
-        if ($request->filled('karyawan_id') && $request->filled('start_date') && $request->filled('end_date')) {
-            $startDate = Carbon::parse($request->start_date);
-            $endDate = Carbon::parse($request->end_date);
-            $selectedKaryawan = Karyawan::findOrFail($request->karyawan_id);
+        // Tentukan tab yang aktif berdasarkan input form, defaultnya 'karyawan'
+        $activeTab = $request->input('tab', 'karyawan');
 
-            $reportData = $this->generateReportData($selectedKaryawan, $startDate, $endDate);
+        // Proses data jika form disubmit
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $request->validate([
+                'end_date' => 'after_or_equal:start_date'
+            ], [
+                'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.'
+            ]);
+
+            // Logika untuk Tab "Per Karyawan"
+            if ($activeTab == 'karyawan' && $request->filled('karyawan_id')) {
+                $selectedKaryawan = Karyawan::findOrFail($request->karyawan_id);
+                $reportData = $this->generateReportData($selectedKaryawan, $startDate, $endDate);
+            }
+            // Logika untuk Tab "Per Divisi"
+            elseif ($activeTab == 'divisi' && $request->filled('divisi_id')) {
+                $selectedDivisi = Divisi::findOrFail($request->divisi_id);
+                $reportData = $this->generateDivisionReportData($selectedDivisi, $startDate, $endDate);
+            }
         }
 
-        return view('admin.laporan.index', compact('employees', 'reportData', 'selectedKaryawan', 'startDate', 'endDate'));
+        return view('admin.laporan.index', compact(
+            'divisions', 'employees', 'reportData', 'selectedKaryawan',
+            'selectedDivisi', 'startDate', 'endDate', 'activeTab'
+        ));
     }
 
+    // Method exportPdf tidak perlu diubah
     public function exportPdf(Request $request)
     {
         $request->validate([
@@ -43,10 +74,12 @@ class ReportController extends Controller
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
         $selectedKaryawan = Karyawan::findOrFail($request->karyawan_id);
-
         $reportData = $this->generateReportData($selectedKaryawan, $startDate, $endDate);
 
-        // Buat PDF
+        if (!$reportData) {
+            return redirect()->back()->with('error', 'Tidak ada data untuk diekspor ke PDF.');
+        }
+
         $pdf = Pdf::loadView('admin.laporan.pdf', [
             'reportData' => $reportData,
             'karyawan' => $selectedKaryawan,
@@ -54,73 +87,107 @@ class ReportController extends Controller
             'endDate' => $endDate
         ]);
 
-        // Download PDF
-        return $pdf->download('laporan-kinerja-'.$selectedKaryawan->nama_lengkap.'-'.time().'.pdf');
+        return $pdf->download('laporan-kinerja-' . $selectedKaryawan->nama_lengkap . '-' . time() . '.pdf');
     }
 
     /**
-     * Helper function untuk mengambil dan menghitung data laporan
+     * [BARU] Helper function untuk mengambil data laporan satu divisi penuh.
+     */
+    private function generateDivisionReportData(Divisi $divisi, Carbon $startDate, Carbon $endDate)
+    {
+        $karyawanInDivisi = Karyawan::where('divisi_id', $divisi->id)->get();
+        $karyawanReports = [];
+
+        foreach ($karyawanInDivisi as $karyawan) {
+            $singleReport = $this->generateReportData($karyawan, $startDate, $endDate);
+            if ($singleReport) {
+                $karyawanReports[] = [
+                    'karyawan' => $karyawan,
+                    'data' => $singleReport,
+                ];
+            }
+        }
+        return $karyawanReports;
+    }
+
+    /**
+     * Helper function untuk mengambil dan menghitung data laporan per karyawan (logika lama).
      */
     private function generateReportData(Karyawan $karyawan, Carbon $startDate, Carbon $endDate)
-    {
-        // Ambil semua penilaian dalam rentang tanggal
-        $penilaian = PenilaianKinerja::with('jobList')
-            ->whereHas('jobList', function ($query) use ($karyawan) {
-                $query->where('karyawan_id', $karyawan->id);
-            })
-            ->whereBetween('tanggal_penilaian', [$startDate, $endDate])
-            ->get();
+{
+    $penilaian = PenilaianKinerja::with('jobList')
+        ->whereHas('jobList', function ($query) use ($karyawan) {
+            $query->where('karyawan_id', $karyawan->id);
+        })
+        ->whereBetween('tanggal_penilaian', [$startDate, $endDate])
+        ->get();
 
-        if ($penilaian->isEmpty()) {
-            return null;
-        }
+    if ($penilaian->isEmpty()) {
+        return null;
+    }
 
-        // Hitung Skor Kinerja
-        $totalBobot = $penilaian->sum('jobList.bobot');
-        $totalNilaiBobot = $penilaian->sum(function ($item) {
-            return $item->nilai * $item->jobList->bobot;
-        });
-        $skorKinerja = ($totalBobot > 0) ? round($totalNilaiBobot / $totalBobot, 2) : 0;
+    $jamKerjaMenit = 8 * 60;
 
-        // 1. Menghitung total durasi semua job yang dinilai (dalam menit)
-        $totalDurasiMenit = $penilaian->sum('jobList.durasi_waktu');
-
-        // 2. Menghitung jumlah hari kerja dalam periode (tidak termasuk Sabtu-Minggu)
-        $jumlahHariKerja = $startDate->diffInWeekdays($endDate) + 1; // +1 agar tanggal akhir ikut terhitung
-
-        // 3. Menghitung total waktu kerja ideal (8 jam/hari dikali 60 menit)
-        $waktuKerjaIdealMenit = $jumlahHariKerja * 8 * 60;
-
-        // 4. RUMUS BEBAN KERJA: (Total Durasi Aktual / Total Durasi Ideal) * 100%
-        $bebanKerja = ($waktuKerjaIdealMenit > 0) ? round(($totalDurasiMenit / $waktuKerjaIdealMenit) * 100, 2) : 0;
-
-        // Kelompokkan hasil penilaian berdasarkan tanggalnya
-        $penilaianGroupedByDate = $penilaian->groupBy(function($item) {
-            return Carbon::parse($item->tanggal_penilaian)->format('Y-m-d');
-        });
-
-
-        // --- [BARU] Menentukan Predikat Kinerja ---
-        $predikatKinerja = '';
-        if ($skorKinerja > 90) {
-            $predikatKinerja = 'Handal Cermattzy';
-        } elseif ($skorKinerja >= 80) {
-            $predikatKinerja = 'Baik';
-        } elseif ($skorKinerja >= 70) {
-            $predikatKinerja = 'Cukup';
-        } elseif ($skorKinerja >= 60) {
-            $predikatKinerja = 'Kurang Memuaskan';
+    // Hitung bobot untuk setiap item penilaian secara dinamis (ini sudah benar)
+    foreach ($penilaian as $item) {
+        if ($item->jobList) {
+            $item->jobList->bobot = ($item->jobList->durasi_waktu / $jamKerjaMenit) * 100;
         } else {
-            $predikatKinerja = 'KIRIM SP 1 WAKAKAKA';
+            $item->jobList = (object)['bobot' => 0, 'durasi_waktu' => 0, 'nama_pekerjaan' => 'Pekerjaan Dihapus', 'tipe_job' => 'N/A'];
         }
+    }
 
-        return [
-            'penilaian' => $penilaianGroupedByDate,
-            'predikat_kinerja' => $predikatKinerja,
-            'skor_kinerja' => $skorKinerja,
-            'beban_kerja' => $bebanKerja,
-            'total_durasi_jam' => round($totalDurasiMenit / 60, 2),
-            'jumlah_hari_kerja' => $jumlahHariKerja,
-        ];
+    // --- RUMUS SKOR KINERJA YANG DIPERBAIKI ---
+    // 1. Hitung total bobot dari semua pekerjaan yang dinilai (ini adalah skor maksimal yang mungkin didapat)
+    $totalBobotMaksimal = $penilaian->sum('jobList.bobot');
+
+    // 2. Hitung total nilai yang berhasil dicapai (langsung dari kolom 'nilai' di database)
+    $totalNilaiTercapai = $penilaian->sum('nilai');
+
+    // 3. Rumus baru: (Total Nilai Tercapai / Total Bobot Maksimal) * 100
+    //    untuk mendapatkan skor dalam skala 0-100.
+    $skorKinerja = ($totalBobotMaksimal > 0) ? round(($totalNilaiTercapai / $totalBobotMaksimal) * 100, 2) : 0;
+    // --- AKHIR PERBAIKAN RUMUS ---
+
+
+    // ... sisa kode di bawah ini tidak perlu diubah ...
+    $totalDurasiMenit = $penilaian->sum('jobList.durasi_waktu');
+    $jumlahHariKerja = $startDate->diffInWeekdays($endDate) + 1;
+    $waktuKerjaIdealMenit = $jumlahHariKerja * 8 * 60;
+    $bebanKerja = ($waktuKerjaIdealMenit > 0) ? round(($totalDurasiMenit / $waktuKerjaIdealMenit) * 100, 2) : 0;
+
+    $predikatKinerja = $this->getPredikatKinerja($skorKinerja);
+
+    $totalJamKerja = round($totalDurasiMenit / 60, 2);
+    $jamKerjaIdeal = round($waktuKerjaIdealMenit / 60, 2);
+    $selisihJam = $totalJamKerja - $jamKerjaIdeal;
+
+    return [
+        'penilaian' => $penilaian->groupBy(fn($item) => Carbon::parse($item->tanggal_penilaian)->format('Y-m-d')),
+        'predikat_kinerja' => $predikatKinerja,
+        'skor_kinerja' => $skorKinerja,
+        'beban_kerja' => $bebanKerja,
+        'total_durasi_jam' => $totalJamKerja,
+        'jumlah_hari_kerja' => $jumlahHariKerja,
+        'selisih_jam_kerja' => $selisihJam,
+    ];
+}
+
+    /**
+     * Helper function untuk menentukan predikat kinerja.
+     */
+    private function getPredikatKinerja($skorKinerja)
+    {
+        if ($skorKinerja > 90) {
+            return 'Handal Cermattzy';
+        } elseif ($skorKinerja >= 80) {
+            return 'Baik';
+        } elseif ($skorKinerja >= 70) {
+            return 'Cukup';
+        } elseif ($skorKinerja >= 60) {
+            return 'Kurang Memuaskan';
+        } else {
+            return 'SP 1 WAKAKA';
+        }
     }
 }

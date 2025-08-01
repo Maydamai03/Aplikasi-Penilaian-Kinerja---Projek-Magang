@@ -629,17 +629,9 @@
                                     </form>
                                 </div>
                             </td>
+                            
                             <td class="text-center">
-                                <div class="action-buttons">
-                                    <a href="<?php echo e(route('job.tetap', $k->id)); ?>" class="btn-job btn-job-tetap">
-                                        <i class="fas fa-briefcase"></i>
-                                        Job Tetap
-                                    </a>
-                                    <a href="<?php echo e(route('job.opsional', $k->id)); ?>" class="btn-job btn-job-opsional">
-                                        <i class="fas fa-tasks"></i>
-                                        Job Opsional
-                                    </a>
-                                </div>
+                                <a href="<?php echo e(route('job.tetap', $k->id)); ?>" class="btn-job btn-job-tetap">Kelola Joblist</a>
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>

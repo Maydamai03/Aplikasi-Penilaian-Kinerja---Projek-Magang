@@ -12,18 +12,21 @@ class CreateJobListsTable extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('job_lists', function (Blueprint $table) {
+{
+    Schema::create('job_lists', function (Blueprint $table) {
         $table->id();
         $table->foreignId('karyawan_id')->constrained('karyawan')->onDelete('cascade');
+
+        // KOLOM-KOLOM YANG BENAR SESUAI REVISI TERAKHIR
+        $table->enum('shift', ['Siang', 'Malam']);
+        $table->enum('tipe_job', ['Tetap', 'Opsional']);
         $table->string('nama_pekerjaan');
         $table->text('deskripsi_pekerjaan')->nullable();
-        $table->integer('bobot');
-        $table->integer('minggu_ke');
-        $table->integer('tahun');
+        $table->integer('durasi_waktu')->unsigned(); // Durasi dalam menit
+
         $table->timestamps();
     });
-    }
+}
 
     /**
      * Reverse the migrations.

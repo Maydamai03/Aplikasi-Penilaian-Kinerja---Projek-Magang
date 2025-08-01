@@ -1,197 +1,130 @@
 <?php $__env->startSection('content'); ?>
 <style>
-    .employee-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
-
-    .employee-header img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .employee-info p {
-        margin: 0;
-        line-height: 1.5;
-        color: #292828;
-    }
-
-    .employee-info p .label {
-        font-weight: 600;
-    }
-
-    .btn-back {
-        background-color: var(--accent-color);
-        color: var(--text-light);
-        padding: 8px 15px;
-        margin-bottom: 26px;
-        border-radius: 8px;
-        font-weight: 500;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .form-card {
-        background-color: var(--card-bg);
-        color: var(--text-dark);
-        padding: 25px;
-        border-radius: 15px;
-        margin-bottom: 25px;
-    }
-
-    .form-card h3 {
-        margin-top: 0;
-    }
-
-    .add-job-form {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px 20px;
-        align-items: flex-end;
-    }
-
-    .form-group {
-        width: 100%;
-    }
-
-    .form-group label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 8px;
-        font-size: 14px;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    .btn-add {
-        background-color: var(--accent-color);
-        color: var(--text-light);
-        padding: 10px 25px;
-        border-radius: 8px;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-    }
-
-    .joblist-card {
-        background-color: var(--card-bg);
-        color: var(--text-dark);
-        padding: 25px;
-        border-radius: 15px;
-    }
-
-    .joblist-header {
+    /* Header & Tombol Kembali */
+    .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
-
-    .joblist-header h3 {
-        margin: 0;
-    }
-
-    .btn-penilaian {
-        background-color: #22C55E;
+    .btn-back {
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
         padding: 10px 20px;
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 600;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
     }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
+    .btn-back:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
-
-    .table th,
-    .table td {
-        padding: 15px;
-        text-align: left;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .table thead th {
-        background-color: #f9fafb;
-        font-weight: 600;
-    }
-
-    .action-buttons {
+    .employee-header {
         display: flex;
-        gap: 8px;
+        align-items: center;
+        gap: 15px;
+        color: #000000;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
-
-    .btn-table {
-        padding: 5px 15px;
-        border-radius: 6px;
-        color: white;
-        text-decoration: none;
-        font-size: 13px;
-        border: none;
-        cursor: pointer;
+    .employee-header img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffd700;
     }
+    .employee-info p { margin: 0; line-height: 1.4; }
+    .employee-info .nama { font-weight: 600; font-size: 1.1rem; }
+    .employee-info .detail { font-size: 0.9rem; color: #000000; }
 
-    .btn-edit {
-        background-color: #3B82F6;
+    /* Kontainer Utama & Tabs */
+    .tabs-container {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        color: #1f2937;
+        padding: 10px 30px 30px 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
-
-    .btn-delete {
-        background-color: #EF4444;
+    .tabs-nav {
+        display: flex;
+        border-bottom: 1px solid #dee2e6;
+        margin-bottom: 25px;
     }
-
-    /* Style untuk total bobot display */
-    .total-bobot-display {
-        background-color: var(--card-bg);
-        color: var(--text-dark);
+    .tab-link {
         padding: 15px 25px;
-        border-radius: 10px;
-        margin-top: 25px;
+        cursor: pointer;
+        font-size: 1rem;
         font-weight: 600;
-        text-align: center;
-        border: 1px solid #e0e0e0;
+        color: #6c757d;
+        border: none;
+        background: transparent;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
     }
+    .tab-link.active {
+        color: #1f2937;
+        border-bottom-color: #ffd700;
+    }
+    .tab-link i { margin-right: 8px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeInUp 0.5s ease-out; }
+    @keyframes  fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    .total-bobot-display .current-total {
-        font-size: 1.2em;
-        color: var(--accent-color);
+    /* Form & Tabel di dalam Tabs */
+    .shift-header { margin-bottom: 20px; }
+    .shift-header h3 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+    .form-control { width: 100%; height: 48px; padding: 0 15px; border-radius: 10px; border: 1px solid #dee2e6; background-color: #f8f9fa; }
+    .btn-add {
+        height: 48px;
+        width: 120px;
+        background: linear-gradient(135deg, #1f2937, #374151);
+        color: white;
+        font-weight: 700;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
+    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
-    .total-bobot-display .status-ok {
-        color: #22C55E;
-        /* Hijau untuk OK */
-    }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 16px 15px; text-align: left; border-bottom: 1px solid #f3f4f6; }
+    .table thead th { background-color: transparent; font-weight: 700; color: #4b5563; font-size: 0.8rem; text-transform: uppercase; }
+    .table tbody tr:hover { background-color: rgba(255, 215, 0, 0.05); }
 
-    .total-bobot-display .status-warning {
-        color: #FBBF24;
-        /* Oranye untuk peringatan */
-    }
+    .action-buttons { display: flex; gap: 8px; }
+    .btn-table { font-size: 13px; font-weight: 600; border: none; cursor: pointer; padding: 8px 16px; border-radius: 8px; color: white; transition: transform 0.2s; }
+    .btn-table:hover { transform: translateY(-2px); }
+    .btn-edit { background-color: #3B82F6; }
+    .btn-delete { background-color: #EF4444; }
 
-    .total-bobot-display .status-error {
-        color: #EF4444;
-        /* Merah untuk error */
+    .btn-penilaian {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+        transition: all 0.3s ease;
     }
+    .btn-penilaian:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,197,94,0.4); }
+
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="<?php echo e(route('karyawan.index')); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
     <div class="employee-header m-0">
-        <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60'); ?>"
-            alt="Foto">
+        <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60'); ?>" alt="Foto">
         <div class="employee-info">
             <p><span class="label">Nama:</span> <?php echo e($karyawan->nama_lengkap); ?></p>
             <p><span class="label">NIP:</span> <?php echo e($karyawan->nip); ?></p>
@@ -200,82 +133,116 @@
     </div>
 </div>
 
-<?php if(session('success')): ?>
-<div class="alert alert-success mb-3"><?php echo e(session('success')); ?></div>
-<?php endif; ?>
 
-<div class="form-card">
-    <h3>Tambah Pekerjaan Tetap</h3>
-    <form id="addJobForm" action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST">
-        <?php echo csrf_field(); ?>
-        <input type="hidden" name="tipe_job" value="Tetap">
-        <div class="add-job-form">
-            <div class="form-group" style="grid-column: 1 / 3;">
-                <label for="nama_pekerjaan">Nama Pekerjaan *</label>
-                <input type="text" id="nama_pekerjaan" name="nama_pekerjaan" class="form-control" value="<?php echo e(old('nama_pekerjaan')); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="bobot">Bobot (1-100%) *</label>
-                <input type="number" id="bobot" name="bobot" class="form-control" placeholder="1-100 %" value="<?php echo e(old('bobot')); ?>" required>
-                <div id="bobot-error" class="text-danger mt-1" style="font-size: 0.875em;"></div>
-            </div>
-            <div class="form-group">
-                <label for="durasi_waktu">Durasi *</label>
-                <input type="number" id="durasi_waktu" name="durasi_waktu" class="form-control" placeholder="Menit" value="<?php echo e(old('durasi_waktu')); ?>" required>
-            </div>
-            <div class="form-group" style="grid-column: 1 / 3;">
-                <button type="submit" class="btn-add">+ Add</button>
+
+<div class="tabs-container">
+    <div class="tabs-nav">
+        <button class="tab-link active" data-tab="siang"><i class="fas fa-sun"></i> Shift Siang</button>
+        <button class="tab-link" data-tab="malam"><i class="fas fa-moon"></i> Shift Malam</button>
+    </div>
+
+    <div class="tabs-content">
+        <div id="siang" class="tab-panel active">
+            
+            <div class="shift-header"><h3>Tambah Pekerjaan Shift Siang</h3></div>
+            <form action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST" class="mb-4">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="tipe_job" value="Tetap">
+                <input type="hidden" name="shift" value="Siang">
+                <div class="row align-items-end g-3">
+                    <div class="col-md-6"><label>Nama Pekerjaan</label><input type="text" name="nama_pekerjaan" class="form-control" required></div> <br>
+                    <div class="col-md-4"><label>Durasi (menit)</label><input type="number" name="durasi_waktu" class="form-control" required></div> <br>
+                    <div class="col-md-2"><button type="submit" class="btn-add w-100">+ Add</button></div> <br>
+                </div>
+            </form>
+            <hr>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">No</th>
+                        <th>Pekerjaan</th>
+                        <th>Bobot (%)</th> 
+                        <th>Durasi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $__empty_1 = true; $__currentLoopData = $jobSiang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo e($loop->iteration); ?></td>
+                        <td><?php echo e($job->nama_pekerjaan); ?></td>
+                        
+                        <td><?php echo e(round(($job->durasi_waktu / 480) * 100)); ?>%</td>
+                        <td><?php echo e($job->durasi_waktu); ?> menit</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
+                                <button type="button" class="btn-table btn-delete" onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
+                                <form id="delete-form-<?php echo e($job->id); ?>" action="<?php echo e(route('job.destroy', $job->id)); ?>" method="POST" style="display: none;"><?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?></form>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <tr><td colspan="5" class="text-center p-4">Belum ada job untuk shift siang.</td></tr> 
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <br>
+            <div class="d-flex justify-content-end mt-4">
+                <a href="<?php echo e(route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Siang'])); ?>" class="btn-penilaian">Penilaian Kinerja Shift Siang</a>
             </div>
         </div>
-    </form>
-</div>
 
-<div class="joblist-card">
-    <div class="joblist-header">
-        <h3>Daftar Job Tetap</h3>
-        <a href="<?php echo e(route('penilaian.create', $karyawan->id)); ?>" class="btn-penilaian">
-            <i class="fas fa-check-circle"></i> Penilaian Kinerja
-        </a>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th style="width: 5%;">No</th>
-                <th>Pekerjaan</th>
-                <th>Bobot</th>
-                <th>Durasi (Menit)</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <tr>
-                <td><?php echo e($loop->iteration); ?></td>
-                <td><?php echo e($job->nama_pekerjaan); ?></td>
-                <td class="job-bobot-item"><?php echo e($job->bobot); ?>%</td>
-                <td><?php echo e($job->durasi_waktu); ?></td>
-                <td>
-                    <div class="action-buttons">
-                        <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
-                        <button type="button" class="btn-table btn-delete"
-                            onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
-                        <form id="delete-form-<?php echo e($job->id); ?>" action="<?php echo e(route('job.destroy', $job->id)); ?>"
-                            method="POST" style="display: none;">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <tr>
-                <td colspan="5" class="text-center">Belum ada job tetap yang ditambahkan.</td>
-            </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-    <div class="total-bobot-display">
-        Total Bobot Saat Ini: <span id="currentTotalBobotDisplay" class="current-total">0</span>% / 100%
+        <div id="malam" class="tab-panel">
+             
+            <div class="shift-header"><h3>Tambah Pekerjaan Shift Malam</h3></div>
+            <form action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST" class="mb-4">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="tipe_job" value="Tetap">
+                <input type="hidden" name="shift" value="Malam">
+                <div class="row align-items-end g-3">
+                    <div class="col-md-6"><label>Nama Pekerjaan</label><input type="text" name="nama_pekerjaan" class="form-control" required></div> <br>
+                    <div class="col-md-4"><label>Durasi (menit)</label><input type="number" name="durasi_waktu" class="form-control" required></div> <br>
+                    <div class="col-md-2"><button type="submit" class="btn-add w-100">+ Add</button></div> <br>
+                </div>
+            </form>
+            <hr>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">No</th>
+                        <th>Pekerjaan</th>
+                        <th>Bobot (%)</th> 
+                        <th>Durasi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $__empty_1 = true; $__currentLoopData = $jobMalam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo e($loop->iteration); ?></td>
+                        <td><?php echo e($job->nama_pekerjaan); ?></td>
+                        
+                        <td><?php echo e(round(($job->durasi_waktu / 480) * 100)); ?>%</td>
+                        <td><?php echo e($job->durasi_waktu); ?> menit</td>
+                        <td>
+                             <div class="action-buttons">
+                                <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
+                                <button type="button" class="btn-table btn-delete" onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
+                                <form id="delete-form-<?php echo e($job->id); ?>" action="<?php echo e(route('job.destroy', $job->id)); ?>" method="POST" style="display: none;"><?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?></form>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <tr><td colspan="5" class="text-center p-4">Belum ada job untuk shift malam.</td></tr> 
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <br>
+            <div class="d-flex justify-content-end mt-4">
+                <a href="<?php echo e(route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Malam'])); ?>" class="btn-penilaian">Penilaian Kinerja Shift Malam</a>
+            </div>
+        </div>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
@@ -283,192 +250,33 @@
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Fungsi deleteConfirmation (tidak berubah)
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        tabLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                tabLinks.forEach(l => l.classList.remove('active'));
+                tabPanels.forEach(p => p.classList.remove('active'));
+
+                const tabId = link.getAttribute('data-tab');
+                link.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+
     function deleteConfirmation(id) {
         Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Pekerjaan ini akan dihapus permanen!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#EF4444',
-            cancelButtonColor: '#6B7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
+            title: 'Apakah Anda yakin?', text: "Pekerjaan ini akan dihapus permanen!",
+            icon: 'warning', showCancelButton: true, confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#6B7280', confirmButtonText: 'Ya, Hapus!', cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('delete-form-' + id).submit();
             }
         })
     }
-
-    // Fungsi updateTotalBobotDisplay (untuk menampilkan total bobot real-time)
-    document.addEventListener('DOMContentLoaded', function() {
-        const jobBobotItems = document.querySelectorAll('.job-bobot-item');
-        const currentTotalBobotDisplay = document.getElementById('currentTotalBobotDisplay');
-
-        function updateTotalBobotDisplay() {
-            let totalBobot = 0;
-            jobBobotItems.forEach(item => {
-                const bobotText = item.textContent;
-                const bobotValue = parseInt(bobotText.replace('%', ''));
-                if (!isNaN(bobotValue)) {
-                    totalBobot += bobotValue;
-                }
-            });
-
-            currentTotalBobotDisplay.textContent = totalBobot;
-
-            currentTotalBobotDisplay.classList.remove('status-ok', 'status-warning', 'status-error');
-            if (totalBobot < 100) {
-                currentTotalBobotDisplay.classList.add('status-warning');
-            } else if (totalBobot === 100) {
-                currentTotalBobotDisplay.classList.add('status-ok');
-            } else { // totalBobot > 100
-                currentTotalBobotDisplay.classList.add('status-error');
-            }
-        }
-
-        updateTotalBobotDisplay();
-
-        const addJobForm = document.getElementById('addJobForm');
-        const bobotInput = document.getElementById('bobot');
-        const bobotErrorDiv = document.getElementById('bobot-error'); // Untuk menampilkan error validasi spesifik bobot
-
-        addJobForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Mencegah submit form standar
-
-            bobotErrorDiv.textContent = ''; // Hapus pesan error sebelumnya
-
-            const formData = new FormData(this); // Mengambil semua data form
-
-            fetch(this.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest', // Penting untuk deteksi AJAX di Laravel
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: formData
-                })
-                .then(response => {
-                    // Cek jika respon adalah redirect (misalnya, jika ada exception yang tidak tertangkap)
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                        return; // Hentikan eksekusi lebih lanjut
-                    }
-                    return response.json(); // Jika bukan redirect, coba parse sebagai JSON
-                })
-                .then(data => {
-                    if (data.status === 'rekomendasi') { // Jika total bobot kurang dari 100%
-                        const sisaBobot = data.sisa_bobot;
-                        const jobType = formData.get('tipe_job'); // Ambil tipe_job dari form data
-
-                        Swal.fire({
-                            title: `Bobot Pekerjaan ${jobType} Belum 100%`,
-                            html: `Total bobot setelah pekerjaan ini masih ${data.message}<br><br>
-                                   Anda bisa menambahkan bobot <b>${sisaBobot}%</b> untuk mencapai 100%.<br>`,
-                            icon: 'info',
-                            showCancelButton: true,
-                            showDenyButton: true, // Tampilkan tombol "Lanjutkan Saja"
-                            confirmButtonText: `Otomatis 100% (Tambah ${sisaBobot}%)`, // Tombol rekomendasi otomatis
-                            denyButtonText: 'Lanjutkan Saja', // Tombol untuk tetap dengan inputan user
-                            cancelButtonText: 'Batal', // Tombol batal
-                            confirmButtonColor: '#22C55E',
-                            denyButtonColor: '#FBBF24',
-                            cancelButtonColor: '#6B7280',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // User memilih "Otomatis 100%"
-                                const confirmedFormData = new FormData();
-                                for (const pair of formData.entries()) {
-                                    confirmedFormData.append(pair[0], pair[1]);
-                                }
-                                confirmedFormData.append('action_confirmed', 'auto_fill'); // Kirim flag ke backend
-
-                                fetch(addJobForm.action, {
-                                        method: 'POST',
-                                        headers: {
-                                            'X-Requested-With': 'XMLHttpRequest',
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                        },
-                                        body: confirmedFormData
-                                    })
-                                    .then(response => response.json())
-                                    .then(finalData => {
-                                        if (finalData.success) {
-                                            Swal.fire('Berhasil!', finalData.message, 'success')
-                                                .then(() => {
-                                                    window.location.reload(); // Reload halaman setelah sukses
-                                                });
-                                        } else {
-                                            Swal.fire('Error!', finalData.message || 'Terjadi kesalahan saat menyimpan.', 'error');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error during confirmed submission (auto_fill):', error);
-                                        Swal.fire('Error!', 'Terjadi kesalahan jaringan.', 'error');
-                                    });
-
-                            } else if (result.isDenied) {
-                                // User memilih "Lanjutkan Saja" (dengan inputan awal user)
-                                const confirmedFormData = new FormData();
-                                for (const pair of formData.entries()) {
-                                    confirmedFormData.append(pair[0], pair[1]);
-                                }
-                                confirmedFormData.append('action_confirmed', 'continue_anyway'); // Kirim flag ke backend
-
-                                fetch(addJobForm.action, {
-                                        method: 'POST',
-                                        headers: {
-                                            'X-Requested-With': 'XMLHttpRequest',
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                        },
-                                        body: confirmedFormData
-                                    })
-                                    .then(response => response.json())
-                                    .then(finalData => {
-                                        if (finalData.success) {
-                                            Swal.fire('Berhasil!', finalData.message, 'success')
-                                                .then(() => {
-                                                    window.location.reload(); // Reload halaman setelah sukses
-                                                });
-                                        } else {
-                                            Swal.fire('Error!', finalData.message || 'Terjadi kesalahan saat menyimpan.', 'error');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error during confirmed submission (continue_anyway):', error);
-                                        Swal.fire('Error!', 'Terjadi kesalahan jaringan.', 'error');
-                                    });
-
-                            } else {
-                                // User memilih "Batal" (tidak melakukan apa-apa)
-                            }
-                        });
-                    } else if (data.errors) {
-                        // Jika ada error validasi dari Laravel (misalnya total > 100% atau field lain error)
-                        if (data.errors.bobot) {
-                            bobotErrorDiv.textContent = data.errors.bobot[0];
-                        }
-                        Swal.fire({
-                            title: 'Kesalahan Input!',
-                            html: Object.values(data.errors).map(err => err[0]).join('<br>'),
-                            icon: 'error',
-                            confirmButtonColor: '#EF4444'
-                        });
-                    } else if (data.success) {
-                        // Jika total bobot tepat 100% pada percobaan pertama atau setelah konfirmasi langsung sukses
-                        Swal.fire('Berhasil!', data.message, 'success')
-                            .then(() => {
-                                window.location.reload(); // Reload halaman setelah sukses
-                            });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during form submission:', error);
-                    Swal.fire('Error!', 'Terjadi kesalahan jaringan atau server tidak merespons.', 'error');
-                });
-        });
-    });
 </script>
 <?php $__env->stopPush(); ?>
 
