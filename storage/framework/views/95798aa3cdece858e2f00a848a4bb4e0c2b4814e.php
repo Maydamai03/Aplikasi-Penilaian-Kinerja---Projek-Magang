@@ -1,6 +1,6 @@
-@extends('layouts.admin')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <style>
     .appraisal-card {
         background-color: #ffffff;
@@ -74,17 +74,17 @@
     }
 </style>
 
-<a href="{{ url()->previous() }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+<a href="<?php echo e(url()->previous()); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
 
-<form action="{{ route('penilaian.store', $karyawan->id) }}" method="POST">
-    @csrf
-    <input type="hidden" name="shift" value="{{ $shift }}">
+<form action="<?php echo e(route('penilaian.store', $karyawan->id)); ?>" method="POST">
+    <?php echo csrf_field(); ?>
+    <input type="hidden" name="shift" value="<?php echo e($shift); ?>">
     <div class="appraisal-card">
         <div class="appraisal-header">
-            <h3>Form Penilaian Kinerja (Shift {{ $shift }})</h3>
+            <h3>Form Penilaian Kinerja (Shift <?php echo e($shift); ?>)</h3>
             <p>
-                Karyawan: <strong>{{ $karyawan->nama_lengkap }}</strong> |
-                Tanggal: <strong>{{ \Carbon\Carbon::now()->format('d F Y') }}</strong>
+                Karyawan: <strong><?php echo e($karyawan->nama_lengkap); ?></strong> |
+                Tanggal: <strong><?php echo e(\Carbon\Carbon::now()->format('d F Y')); ?></strong>
             </p>
         </div>
 
@@ -99,17 +99,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($jobLists as $job)
+                    <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr>
-                        <td>{{ $job->nama_pekerjaan }}</td>
+                        <td><?php echo e($job->nama_pekerjaan); ?></td>
                         <td>
-                            <select name="status[{{ $job->id }}]" class="form-select form-control-table status-dropdown" required>
+                            <select name="status[<?php echo e($job->id); ?>]" class="form-select form-control-table status-dropdown" required>
                                 <option value="Dikerjakan">Dikerjakan</option>
                                 <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                             </select>
                         </td>
                         <td>
-                            <select name="skala[{{ $job->id }}]" class="form-select form-control-table skala-dropdown">
+                            <select name="skala[<?php echo e($job->id); ?>]" class="form-select form-control-table skala-dropdown">
                                 <option value="">-- Pilih Skala --</option>
                                 <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                                 <option value="Melakukan Tapi Tidak Benar">Melakukan Tapi Tidak Benar</option>
@@ -117,30 +117,30 @@
                             </select>
                         </td>
                         <td>
-                            <input type="text" name="catatan[{{ $job->id }}]" class="form-control-table catatan-input" placeholder="Isi jika perlu">
+                            <input type="text" name="catatan[<?php echo e($job->id); ?>]" class="form-control-table catatan-input" placeholder="Isi jika perlu">
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="4" class="text-center py-4 text-muted">
                             Belum ada pekerjaan yang bisa dinilai untuk shift ini.
                         </td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
-        @if($jobLists->isNotEmpty())
+        <?php if($jobLists->isNotEmpty()): ?>
         <div class="d-flex justify-content-end mt-4">
             <button type="submit" class="btn-save-appraisal"><i class="fas fa-save"></i> Simpan Penilaian</button>
         </div>
-        @endif
+        <?php endif; ?>
     </div>
 </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         function handleStatusChange(statusDropdown) {
@@ -171,4 +171,5 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/penilaian/create.blade.php ENDPATH**/ ?>
