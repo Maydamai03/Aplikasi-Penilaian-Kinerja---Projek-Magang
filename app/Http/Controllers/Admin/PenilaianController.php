@@ -9,6 +9,7 @@ use App\Models\PenilaianKinerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class PenilaianController extends Controller
 {
@@ -17,9 +18,11 @@ class PenilaianController extends Controller
      */
     public function create(Karyawan $karyawan, $shift)
     {
+        // Ambil hanya job tetap untuk shift yang dipilih
         $jobLists = JobList::where('karyawan_id', $karyawan->id)
-            ->where('shift', $shift)
-            ->get();
+                            ->where('shift', $shift)
+                            ->where('tipe_job', 'Tetap')
+                            ->get();
 
         return view('admin.penilaian.create', compact('karyawan', 'jobLists', 'shift'));
     }
@@ -27,69 +30,62 @@ class PenilaianController extends Controller
     /**
      * Menyimpan data penilaian kinerja.
      */
-    public function store(Request $request, Karyawan $karyawan)
-    {
-        $request->validate([
-            'status.*' => 'required|in:Dikerjakan,Tidak Dikerjakan',
-            'skala.*' => 'nullable|in:Tidak Dikerjakan,Melakukan Tapi Tidak Benar,Melakukan Dengan Benar',
-            'shift' => 'required|in:Siang,Malam',
-            // Validasi untuk job opsional dinamis (jika ada)
-            'opsional_nama.*' => 'nullable|string|max:255',
-            'opsional_durasi.*' => 'nullable|integer|min:1',
-            'opsional_status.*' => 'nullable|in:Dikerjakan,Tidak Dikerjakan',
-            'opsional_skala.*' => 'nullable|in:Baik,Sedang,Cukup',
-        ]);
+    // app/Http/Controllers/Admin/PenilaianController.php
 
-        $tanggalPenilaian = Carbon::now();
-        $jamKerjaMenit = 8 * 60; // 480 menit
+public function store(Request $request, Karyawan $karyawan)
+{
+    $request->validate([
+        'status.*' => 'required|in:Dikerjakan,Tidak Dikerjakan',
+        // Validasi diubah ke teks baru
+        'skala.*' => 'nullable|in:Tidak Dikerjakan,Melakukan Tapi Tidak Benar,Melakukan Dengan Benar',
+        'shift' => 'required|in:Siang,Malam',
+        // ... (validasi opsional jika ada)
+    ]);
 
-        // 1. Proses Penilaian Job Tetap
-        if ($request->has('status')) {
-            foreach ($request->status as $jobListId => $status) {
-                // Hanya proses yang statusnya "Dikerjakan"
-                if ($status === 'Tidak Dikerjakan') {
-                    continue; // Lewati pekerjaan ini
-                }
+    $tanggalPenilaian = Carbon::now();
+    $jamKerjaMenit = 8 * 60;
 
-                $job = JobList::find($jobListId);
-                // Pastikan job ada dan skalanya diisi
-                if (!$job || empty($request->skala[$jobListId])) {
-                    continue;
-                }
-
-                $skala = $request->skala[$jobListId];
-
-                // --- RUMUS BARU YANG SUDAH DIPERBAIKI ---
-                $bobot = ($job->durasi_waktu / $jamKerjaMenit) * 100;
-                $nilai = 0; // Default nilai adalah 0
-
-                switch ($skala) {
-                    case 'Tidak Dikerjakan':
-                        $nilai = $bobot * 0;
-                        break;
-                    case 'Melakukan Tapi Tidak Benar':
-                        $nilai = $bobot * 0.5;
-                        break;
-                    case 'Melakukan Dengan Benar':
-                        $nilai = $bobot * 1;
-                        break;
-                }
-
-
-                PenilaianKinerja::create([
-                    'job_list_id' => $jobListId,
-                    'penilai_id' => Auth::id(),
-                    'skala' => $skala,
-                    'nilai' => round($nilai, 2), // Bulatkan nilainya
-                    'catatan_penilai' => $request->catatan[$jobListId] ?? null,
-                    'tanggal_penilaian' => $tanggalPenilaian,
-                ]);
+    if ($request->has('status')) {
+        foreach ($request->status as $jobListId => $status) {
+            if ($status === 'Tidak Dikerjakan') {
+                continue;
             }
+            $job = JobList::find($jobListId);
+            if (!$job || empty($request->skala[$jobListId])) {
+                continue;
+            }
+
+            $skala = $request->skala[$jobListId];
+            $bobot = ($job->durasi_waktu / $jamKerjaMenit) * 100;
+            $nilai = 0;
+
+            // Switch case diubah ke teks baru
+            switch ($skala) {
+                case 'Tidak Dikerjakan':
+                    $nilai = 0;
+                    break;
+                case 'Melakukan Tapi Tidak Benar':
+                    $nilai = $bobot * 0.5; // 50% dari bobot
+                    break;
+                case 'Melakukan Dengan Benar':
+                    $nilai = $bobot * 1; // 100% dari bobot
+                    break;
+            }
+
+            PenilaianKinerja::create([
+                'job_list_id' => $jobListId,
+                'penilai_id' => Auth::id(),
+                'skala' => $skala,
+                'nilai' => round($nilai, 2),
+                'catatan_penilai' => $request->catatan[$jobListId] ?? null,
+                'tanggal_penilaian' => $tanggalPenilaian,
+            ]);
         }
-
-        // ... (Logika untuk Job Opsional bisa disesuaikan dengan cara yang sama) ...
-
-        return redirect()->route('job.tetap', $karyawan->id)
-            ->with('success', 'Penilaian kinerja berhasil disimpan.');
     }
+
+    // ... (Logika untuk Job Opsional) ...
+
+    return redirect()->route('job.tetap', $karyawan->id)
+                     ->with('success', 'Penilaian kinerja berhasil disimpan.');
+}
 }
