@@ -150,7 +150,7 @@ class ReportController extends Controller
     // --- AKHIR PERBAIKAN RUMUS ---
 
 
-    // ... sisa kode di bawah ini tidak perlu diubah ...
+    // --- RUMUS BEBAN KERJA ---
     $totalDurasiMenit = $penilaian->sum('jobList.durasi_waktu');
     $jumlahHariKerja = $startDate->diffInWeekdays($endDate) + 1;
     $waktuKerjaIdealMenit = $jumlahHariKerja * 8 * 60;
@@ -187,7 +187,7 @@ class ReportController extends Controller
         } elseif ($skorKinerja >= 60) {
             return 'Kurang Memuaskan';
         } else {
-            return 'SP 1 WAKAKA';
+            return 'SP 1 ';
         }
     }
 }

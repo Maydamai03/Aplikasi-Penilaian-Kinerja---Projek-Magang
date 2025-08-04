@@ -101,8 +101,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 30%;">Pekerjaan</th>
-                <th>Tipe Job</th>
+                <th style="width: 25%;">Pekerjaan</th>
+                <th>Tipe</th>
+                <th>Shift</th> 
                 <th>Skala</th>
                 <th>Bobot (%)</th>
                 <th>Durasi</th>
@@ -111,26 +112,22 @@
             </tr>
         </thead>
         <tbody>
-            
             <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                
                 <tr class="date-separator">
-                    <td colspan="7">
+                    <td colspan="8">
                         Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
 
                     </td>
                 </tr>
-
-                
                 <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <td><?php echo e($item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?></td>
                         <td><?php echo e($item->jobList->tipe_job ?? 'N/A'); ?></td>
+                        <td><?php echo e($item->jobList->shift ?? 'N/A'); ?></td> 
                         <td><?php echo e($item->skala); ?></td>
-                        
                         <td><?php echo e(round($item->jobList->bobot ?? 0)); ?>%</td>
                         <td><?php echo e($item->jobList->durasi_waktu ?? 0); ?> menit</td>
-                        <td><?php echo e($item->nilai); ?></td>
+                        <td><?php echo e(round($item->nilai)); ?></td>
                         <td><?php echo e($item->catatan_penilai); ?></td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

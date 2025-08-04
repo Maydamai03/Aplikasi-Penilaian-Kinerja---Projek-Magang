@@ -13,14 +13,18 @@ class JobListController extends Controller
      * Menampilkan halaman untuk mengelola joblist Shift Siang & Malam.
      */
     public function showTetap(Karyawan $karyawan)
-    {
-        $jobLists = $karyawan->jobLists()->get()->groupBy('shift');
+{
+    // [DIUBAH] Tambahkan filter untuk hanya mengambil Job Tetap
+    $jobLists = $karyawan->jobLists()
+                         ->where('tipe_job', 'Tetap')
+                         ->get()
+                         ->groupBy('shift');
 
-        $jobSiang = $jobLists->get('Siang', collect());
-        $jobMalam = $jobLists->get('Malam', collect());
+    $jobSiang = $jobLists->get('Siang', collect());
+    $jobMalam = $jobLists->get('Malam', collect());
 
-        return view('admin.joblist.tetap', compact('karyawan', 'jobSiang', 'jobMalam'));
-    }
+    return view('admin.joblist.tetap', compact('karyawan', 'jobSiang', 'jobMalam'));
+}
 
     /**
      * Menyimpan job baru (Siang atau Malam).

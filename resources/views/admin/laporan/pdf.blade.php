@@ -88,9 +88,9 @@
         <p><strong>Selisih Jam Kerja:</strong> {{ $reportData['selisih_jam_kerja'] }} Jam
             ({{ $reportData['selisih_jam_kerja'] * 60 }} menit)
             @if ($reportData['selisih_jam_kerja'] > 0)
-                <span style="color: green;">(Kelebihan)</span>
+                <span style="color: red;">(Kelebihan)</span>
             @elseif($reportData['selisih_jam_kerja'] < 0)
-                <span style="color: red;">(Kekurangan)</span>
+                <span style="color: yellow;">(Kekurangan)</span>
             @else
                 <span>(Sesuai)</span>
             @endif
@@ -101,8 +101,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 30%;">Pekerjaan</th>
-                <th>Tipe Job</th>
+                <th style="width: 25%;">Pekerjaan</th>
+                <th>Tipe</th>
+                <th>Shift</th> {{-- [BARU] Kolom Shift --}}
                 <th>Skala</th>
                 <th>Bobot (%)</th>
                 <th>Durasi</th>
@@ -111,25 +112,21 @@
             </tr>
         </thead>
         <tbody>
-            {{-- Loop pertama untuk setiap tanggal --}}
             @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
-                {{-- Baris pembatas tanggal --}}
                 <tr class="date-separator">
-                    <td colspan="7">
+                    <td colspan="8">
                         Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
                     </td>
                 </tr>
-
-                {{-- Loop kedua untuk setiap item pekerjaan di tanggal tersebut --}}
                 @foreach ($penilaianHarian as $item)
                     <tr>
                         <td>{{ $item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}</td>
                         <td>{{ $item->jobList->tipe_job ?? 'N/A' }}</td>
+                        <td>{{ $item->jobList->shift ?? 'N/A' }}</td> {{-- [BARU] Menampilkan Shift --}}
                         <td>{{ $item->skala }}</td>
-                        {{-- Hitung bobot dinamis agar selalu benar --}}
                         <td>{{ round($item->jobList->bobot ?? 0) }}%</td>
                         <td>{{ $item->jobList->durasi_waktu ?? 0 }} menit</td>
-                        <td>{{ $item->nilai }}</td>
+                        <td>{{ round($item->nilai) }}</td>
                         <td>{{ $item->catatan_penilai }}</td>
                     </tr>
                 @endforeach
