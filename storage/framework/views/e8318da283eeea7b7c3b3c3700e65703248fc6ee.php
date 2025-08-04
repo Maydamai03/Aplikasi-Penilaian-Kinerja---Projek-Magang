@@ -83,10 +83,54 @@
     }
 
     /* Employee Summary Card (Divisi Report) */
+    /* Employee Summary Card (Divisi Report) - Modified */
     .division-report-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
+        /* Maksimal 3 kolom */
         gap: 25px;
+        max-height: 70vh;
+        /* Batasi tinggi container */
+        overflow-y: auto;
+        /* Enable scroll vertikal */
+        padding-right: 10px;
+        /* Space untuk scrollbar */
+    }
+
+    /* Responsive design untuk layar yang lebih kecil */
+    @media (max-width: 1200px) {
+        .division-report-grid {
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 kolom untuk layar medium */
+        }
+    }
+
+    @media (max-width: 768px) {
+        .division-report-grid {
+            grid-template-columns: 1fr;
+            /* 1 kolom untuk layar kecil */
+            max-height: 60vh;
+            /* Sesuaikan tinggi untuk mobile */
+        }
+    }
+
+    /* Styling untuk scrollbar (opsional, untuk webkit browsers) */
+    .division-report-grid::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .division-report-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .division-report-grid::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    .division-report-grid::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
     }
 
     .employee-summary-card {
@@ -94,6 +138,8 @@
         border: 1px solid #e5e7eb;
         border-radius: 10px;
         padding: 20px;
+        min-height: 200px;
+        /* Minimum height untuk konsistensi */
     }
 
     .employee-summary-header {
@@ -109,6 +155,7 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
+        object-fit: cover;
     }
 
     .employee-summary-header .name {
@@ -118,9 +165,8 @@
         text-overflow: ellipsis;
         display: block;
         max-width: 300px;
-        /* atau sesuai kebutuhan */
+        /* Adjusted for 3-column layout */
     }
-
 
     .employee-summary-stats {
         display: flex;
@@ -151,6 +197,13 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .employee-summary-card .btn-export:hover {
+        background-color: #b91c1c;
+        color: white;
+        text-decoration: none;
     }
 
     /* Report Card for Individual Employee */
