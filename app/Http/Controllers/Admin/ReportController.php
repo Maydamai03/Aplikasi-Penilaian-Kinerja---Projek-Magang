@@ -145,7 +145,7 @@ class ReportController extends Controller
 
         // Hitung total nilai yang berhasil dicapai (Skor Kinerja)
         $skorKinerja = round($penilaian->sum('nilai'), 2);
-        
+
         // Hitung total bobot dari semua pekerjaan yang dinilai (Beban Kerja)
         $bebanKerja = round($penilaian->sum('jobList.bobot'), 2);
 
