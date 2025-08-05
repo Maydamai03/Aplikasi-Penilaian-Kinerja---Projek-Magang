@@ -79,7 +79,7 @@
     </div>
 
     <div class="summary">
-        <p><strong>Skor Kinerja Rata-Rata:</strong> <?php echo e($reportData['skor_kinerja']); ?></p>
+        <p><strong>Skor Kinerja:</strong> <?php echo e($reportData['skor_kinerja']); ?></p>
         <p><strong>Predikat Kinerja:</strong> <?php echo e($reportData['predikat_kinerja']); ?></p>
         <p><strong>Beban Kerja:</strong> <?php echo e($reportData['beban_kerja']); ?>%</p>
         <hr style="border-style: dashed; border-width: 0.5px;">
@@ -88,9 +88,9 @@
         <p><strong>Selisih Jam Kerja:</strong> <?php echo e($reportData['selisih_jam_kerja']); ?> Jam
             (<?php echo e($reportData['selisih_jam_kerja'] * 60); ?> menit)
             <?php if($reportData['selisih_jam_kerja'] > 0): ?>
-                <span style="color: green;">(Kelebihan)</span>
+                <span style="color: red;">(Kelebihan)</span>
             <?php elseif($reportData['selisih_jam_kerja'] < 0): ?>
-                <span style="color: red;">(Kekurangan)</span>
+                <span style="color: blue;">(Kekurangan)</span>
             <?php else: ?>
                 <span>(Sesuai)</span>
             <?php endif; ?>
@@ -101,8 +101,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 30%;">Pekerjaan</th>
-                <th>Tipe Job</th>
+                <th style="width: 25%;">Pekerjaan</th>
+                <th>Tipe</th>
+                <th>Shift</th>
                 <th>Skala</th>
                 <th>Bobot (%)</th>
                 <th>Durasi</th>
@@ -111,33 +112,30 @@
             </tr>
         </thead>
         <tbody>
-            
             <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                
-                <tr class="date-separator">
-                    <td colspan="7">
-                        Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
+            <tr class="date-separator">
+                <td colspan="8">
+                    Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
 
-                    </td>
-                </tr>
-
+                </td>
+            </tr>
+            <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <td><?php echo e($item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?></td>
+                <td><?php echo e($item->jobList->tipe_job ?? 'N/A'); ?></td>
+                <td><?php echo e($item->jobList->shift ?? 'N/A'); ?></td>
+                <td><?php echo e($item->skala); ?></td>
                 
-                <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <td><?php echo e($item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?></td>
-                        <td><?php echo e($item->jobList->tipe_job ?? 'N/A'); ?></td>
-                        <td><?php echo e($item->skala); ?></td>
-                        
-                        <td><?php echo e(round($item->jobList->bobot ?? 0)); ?>%</td>
-                        <td><?php echo e($item->jobList->durasi_waktu ?? 0); ?> menit</td>
-                        <td><?php echo e($item->nilai); ?></td>
-                        <td><?php echo e($item->catatan_penilai); ?></td>
-                    </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <td><?php echo e(number_format($item->jobList->bobot ?? 0, 2)); ?>%</td>
+                <td><?php echo e($item->jobList->durasi_waktu ?? 0); ?> menit</td>
+                
+                <td><?php echo e(number_format($item->nilai, 2)); ?></td>
+                <td><?php echo e($item->catatan_penilai); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
     </table>
 </body>
 
-</html>
-<?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/laporan/pdf.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/laporan/pdf.blade.php ENDPATH**/ ?>

@@ -26,7 +26,7 @@ class CreatePenilaianKinerjaTable extends Migration
             ])->nullable();
 
 
-            $table->integer('nilai');
+            $table->decimal('nilai', 8, 3);
             $table->text('catatan_penilai')->nullable();
             $table->date('tanggal_penilaian');
             $table->timestamps();
