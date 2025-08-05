@@ -137,6 +137,13 @@
                     <span class="label">Divisi</span>
                     <span class="value">: {{ $karyawan->divisi->nama_divisi }}</span>
                 </li>
+
+                {{-- [BARU] Menampilkan Jabatan --}}
+                <li class="detail-item">
+                    <span class="label">Jabatan</span>
+                    <span class="value">: {{ $karyawan->jabatan->nama_jabatan ?? '-' }}</span>
+                </li>
+
                 <li class="detail-item">
                     <span class="label">Nomor Telepon</span>
                     <span class="value">: {{ $karyawan->nomor_telepon }}</span>

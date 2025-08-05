@@ -74,6 +74,7 @@
     <div class="info">
         <p><strong>Nama:</strong> {{ $karyawan->nama_lengkap }}</p>
         <p><strong>NIP:</strong> {{ $karyawan->nip }}</p>
+        <p><strong>Jabatan:</strong> {{ $karyawan->jabatan->nama_jabatan ?? '-' }}</p>
         <p><strong>Divisi:</strong> {{ $karyawan->divisi->nama_divisi }}</p>
         <p><strong>Periode:</strong> {{ $startDate->format('d F Y') }} - {{ $endDate->format('d F Y') }}</p>
     </div>
@@ -90,7 +91,7 @@
             @if ($reportData['selisih_jam_kerja'] > 0)
                 <span style="color: red;">(Kelebihan)</span>
             @elseif($reportData['selisih_jam_kerja'] < 0)
-                <span style="color: blue;">(Kekurangan)</span>
+                <span style="color: orange;">(Kekurangan)</span>
             @else
                 <span>(Sesuai)</span>
             @endif
@@ -113,25 +114,25 @@
         </thead>
         <tbody>
             @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
-            <tr class="date-separator">
-                <td colspan="8">
-                    Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
-                </td>
-            </tr>
-            @foreach ($penilaianHarian as $item)
-            <tr>
-                <td>{{ $item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}</td>
-                <td>{{ $item->jobList->tipe_job ?? 'N/A' }}</td>
-                <td>{{ $item->jobList->shift ?? 'N/A' }}</td>
-                <td>{{ $item->skala }}</td>
-                {{-- DIPERBAIKI: Menampilkan bobot dengan 2 desimal --}}
-                <td>{{ number_format($item->jobList->bobot ?? 0, 2) }}%</td>
-                <td>{{ $item->jobList->durasi_waktu ?? 0 }} menit</td>
-                {{-- DIPERBAIKI: Menampilkan nilai dengan 2 desimal --}}
-                <td>{{ number_format($item->nilai, 2) }}</td>
-                <td>{{ $item->catatan_penilai }}</td>
-            </tr>
-            @endforeach
+                <tr class="date-separator">
+                    <td colspan="8">
+                        Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
+                    </td>
+                </tr>
+                @foreach ($penilaianHarian as $item)
+                    <tr>
+                        <td>{{ $item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}</td>
+                        <td>{{ $item->jobList->tipe_job ?? 'N/A' }}</td>
+                        <td>{{ $item->jobList->shift ?? 'N/A' }}</td>
+                        <td>{{ $item->skala }}</td>
+                        {{-- DIPERBAIKI: Menampilkan bobot dengan 2 desimal --}}
+                        <td>{{ number_format($item->jobList->bobot ?? 0, 2) }}%</td>
+                        <td>{{ $item->jobList->durasi_waktu ?? 0 }} menit</td>
+                        {{-- DIPERBAIKI: Menampilkan nilai dengan 2 desimal --}}
+                        <td>{{ number_format($item->nilai, 2) }}</td>
+                        <td>{{ $item->catatan_penilai }}</td>
+                    </tr>
+                @endforeach
             @endforeach
         </tbody>
     </table>

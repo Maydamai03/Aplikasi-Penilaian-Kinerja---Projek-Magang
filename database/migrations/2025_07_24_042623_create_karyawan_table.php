@@ -22,6 +22,7 @@ class CreateKaryawanTable extends Migration
         $table->text('alamat')->nullable();
         $table->string('foto_profil')->nullable();
         $table->foreignId('divisi_id')->constrained('divisi')->onDelete('cascade');
+        $table->foreignId('jabatan_id')->nullable()->constrained('jabatan')->onDelete('set null');
         $table->date('tanggal_masuk');
         $table->enum('status_karyawan', ['Aktif', 'Cuti', 'Resign'])->default('Aktif');
         $table->timestamps();

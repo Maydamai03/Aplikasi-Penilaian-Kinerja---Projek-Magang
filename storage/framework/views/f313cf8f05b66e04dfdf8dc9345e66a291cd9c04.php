@@ -74,12 +74,13 @@
     <div class="info">
         <p><strong>Nama:</strong> <?php echo e($karyawan->nama_lengkap); ?></p>
         <p><strong>NIP:</strong> <?php echo e($karyawan->nip); ?></p>
+        <p><strong>Jabatan:</strong> <?php echo e($karyawan->jabatan->nama_jabatan ?? '-'); ?></p>
         <p><strong>Divisi:</strong> <?php echo e($karyawan->divisi->nama_divisi); ?></p>
         <p><strong>Periode:</strong> <?php echo e($startDate->format('d F Y')); ?> - <?php echo e($endDate->format('d F Y')); ?></p>
     </div>
 
     <div class="summary">
-        <p><strong>Skor Kinerja Rata-Rata:</strong> <?php echo e($reportData['skor_kinerja']); ?></p>
+        <p><strong>Skor Kinerja:</strong> <?php echo e($reportData['skor_kinerja']); ?></p>
         <p><strong>Predikat Kinerja:</strong> <?php echo e($reportData['predikat_kinerja']); ?></p>
         <p><strong>Beban Kerja:</strong> <?php echo e($reportData['beban_kerja']); ?>%</p>
         <hr style="border-style: dashed; border-width: 0.5px;">
@@ -88,9 +89,9 @@
         <p><strong>Selisih Jam Kerja:</strong> <?php echo e($reportData['selisih_jam_kerja']); ?> Jam
             (<?php echo e($reportData['selisih_jam_kerja'] * 60); ?> menit)
             <?php if($reportData['selisih_jam_kerja'] > 0): ?>
-                <span style="color: green;">(Kelebihan)</span>
+                <span style="color: red;">(Kelebihan)</span>
             <?php elseif($reportData['selisih_jam_kerja'] < 0): ?>
-                <span style="color: red;">(Kekurangan)</span>
+                <span style="color: orange;">(Kekurangan)</span>
             <?php else: ?>
                 <span>(Sesuai)</span>
             <?php endif; ?>
@@ -103,7 +104,7 @@
             <tr>
                 <th style="width: 25%;">Pekerjaan</th>
                 <th>Tipe</th>
-                <th>Shift</th> 
+                <th>Shift</th>
                 <th>Skala</th>
                 <th>Bobot (%)</th>
                 <th>Durasi</th>
@@ -123,11 +124,13 @@
                     <tr>
                         <td><?php echo e($item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?></td>
                         <td><?php echo e($item->jobList->tipe_job ?? 'N/A'); ?></td>
-                        <td><?php echo e($item->jobList->shift ?? 'N/A'); ?></td> 
+                        <td><?php echo e($item->jobList->shift ?? 'N/A'); ?></td>
                         <td><?php echo e($item->skala); ?></td>
-                        <td><?php echo e(round($item->jobList->bobot ?? 0)); ?>%</td>
+                        
+                        <td><?php echo e(number_format($item->jobList->bobot ?? 0, 2)); ?>%</td>
                         <td><?php echo e($item->jobList->durasi_waktu ?? 0); ?> menit</td>
-                        <td><?php echo e(round($item->nilai)); ?></td>
+                        
+                        <td><?php echo e(number_format($item->nilai, 2)); ?></td>
                         <td><?php echo e($item->catatan_penilai); ?></td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

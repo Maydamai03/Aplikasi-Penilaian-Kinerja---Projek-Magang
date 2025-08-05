@@ -415,7 +415,7 @@
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        /* @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -425,7 +425,7 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
+        } */
 
         .table-container {
             animation: fadeInUp 0.6s ease-out;

@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         .form-card {
             background-color: var(--card-bg);
@@ -92,75 +90,79 @@
         <p style="margin: 5px 0 0 0;">Silakan perbarui informasi data diri karyawan.</p>
     </div>
 
-    <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT') {{-- Method untuk update --}}
+    <form action="<?php echo e(route('karyawan.update', $karyawan->id)); ?>" method="POST" enctype="multipart/form-data">
+        <?php echo csrf_field(); ?>
+        <?php echo method_field('PUT'); ?> 
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label for="nama_lengkap">Nama Lengkap *</label>
-                    <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap', $karyawan->nama_lengkap) }}" required>
+                    <input type="text" name="nama_lengkap" class="form-control" value="<?php echo e(old('nama_lengkap', $karyawan->nama_lengkap)); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="email">Email *</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email', $karyawan->email) }}" required>
+                    <input type="email" name="email" class="form-control" value="<?php echo e(old('email', $karyawan->email)); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="nomor_telepon">Nomor Telepon *</label>
-                    <input type="text" name="nomor_telepon" class="form-control" value="{{ old('nomor_telepon', $karyawan->nomor_telepon) }}" required>
+                    <input type="text" name="nomor_telepon" class="form-control" value="<?php echo e(old('nomor_telepon', $karyawan->nomor_telepon)); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="nip">NIP *</label>
-                    <input type="text" name="nip" class="form-control" value="{{ old('nip', $karyawan->nip) }}" required>
+                    <input type="text" name="nip" class="form-control" value="<?php echo e(old('nip', $karyawan->nip)); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="divisi_id">Divisi *</label>
                     <select name="divisi_id" class="form-control" required>
-                        @foreach ($divisi as $d)
-                            <option value="{{ $d->id }}" {{ old('divisi_id', $karyawan->divisi_id) == $d->id ? 'selected' : '' }}>
-                                {{ $d->nama_divisi }}
+                        <?php $__currentLoopData = $divisi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($d->id); ?>" <?php echo e(old('divisi_id', $karyawan->divisi_id) == $d->id ? 'selected' : ''); ?>>
+                                <?php echo e($d->nama_divisi); ?>
+
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
 
-                {{-- [BARU] Dropdown untuk Jabatan --}}
+                
                 <div class="form-group mb-3">
                     <label for="jabatan_id">Jabatan *</label>
                     <select id="jabatan_id" name="jabatan_id" class="form-control" required>
                         <option value="">Pilih Jabatan</option>
-                        @foreach($jabatan as $j)
-                            <option value="{{ $j->id }}" {{ old('jabatan_id', $karyawan->jabatan_id) == $j->id ? 'selected' : '' }}>
-                                {{ $j->nama_jabatan }}
+                        <?php $__currentLoopData = $jabatan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $j): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($j->id); ?>" <?php echo e(old('jabatan_id', $karyawan->jabatan_id) == $j->id ? 'selected' : ''); ?>>
+                                <?php echo e($j->nama_jabatan); ?>
+
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label for="tanggal_masuk">Tanggal Masuk *</label>
-                    <input type="date" name="tanggal_masuk" class="form-control" value="{{ old('tanggal_masuk', $karyawan->tanggal_masuk) }}" required>
+                    <input type="date" name="tanggal_masuk" class="form-control" value="<?php echo e(old('tanggal_masuk', $karyawan->tanggal_masuk)); ?>" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="alamat">Alamat *</label>
-                    <textarea name="alamat" class="form-control" rows="4" required>{{ old('alamat', $karyawan->alamat) }}</textarea>
+                    <textarea name="alamat" class="form-control" rows="4" required><?php echo e(old('alamat', $karyawan->alamat)); ?></textarea>
                 </div>
                 <div class="form-group mb-3">
                     <label>Ganti Foto Profil</label>
-                    @if ($karyawan->foto_profil)
-                        <img src="{{ Storage::url('karyawan/' . $karyawan->foto_profil) }}" alt="Foto saat ini" class="current-img mb-2">
-                    @endif
+                    <?php if($karyawan->foto_profil): ?>
+                        <img src="<?php echo e(Storage::url('karyawan/' . $karyawan->foto_profil)); ?>" alt="Foto saat ini" class="current-img mb-2">
+                    <?php endif; ?>
                     <input type="file" name="foto_profil" class="form-control">
                     <small class="text-muted">Kosongkan jika tidak ingin mengganti foto.</small>
                 </div>
             </div>
         </div>
         <div class="form-buttons">
-            <a href="{{ route('karyawan.show', $karyawan->id) }}" class="btn-form btn-cancel">Batal</a>
+            <a href="<?php echo e(route('karyawan.show', $karyawan->id)); ?>" class="btn-form btn-cancel">Batal</a>
             <button type="submit" class="btn-form btn-submit">Update Data</button>
         </div>
     </form>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/karyawan/edit.blade.php ENDPATH**/ ?>

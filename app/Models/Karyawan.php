@@ -22,4 +22,9 @@ class Karyawan extends Model
     {
         return $this->hasMany(JobList::class);
     }
+
+    public function jabatan()
+{
+    return $this->belongsTo(Jabatan::class);
+}
 }

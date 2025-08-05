@@ -136,6 +136,13 @@
                     <span class="label">Divisi</span>
                     <span class="value">: <?php echo e($karyawan->divisi->nama_divisi); ?></span>
                 </li>
+
+                
+                <li class="detail-item">
+                    <span class="label">Jabatan</span>
+                    <span class="value">: <?php echo e($karyawan->jabatan->nama_jabatan ?? '-'); ?></span>
+                </li>
+
                 <li class="detail-item">
                     <span class="label">Nomor Telepon</span>
                     <span class="value">: <?php echo e($karyawan->nomor_telepon); ?></span>

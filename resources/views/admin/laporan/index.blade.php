@@ -83,6 +83,44 @@
             width: 100px
         }
 
+        .btn-export {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white !important;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-export::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-export:hover::before {
+            left: 100%;
+        }
+
+        .btn-export:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+
         /* Employee Summary Card (Divisi Report) */
         /* Employee Summary Card (Divisi Report) - Modified */
         .division-report-grid {
@@ -293,6 +331,15 @@
             background-color: #f8f9fa;
         }
 
+        .wrap-text {
+            max-width: 300px;
+            /* Atur lebar maksimal kolom di sini */
+            word-wrap: break-word;
+            /* Memaksa teks turun ke baris baru */
+            white-space: normal;
+            /* Mengizinkan teks untuk wrap */
+        }
+
         /* [BARU] Style untuk menyesuaikan tampilan Select2 */
         .select2-container .select2-selection--single {
             height: 48px !important;
@@ -350,48 +397,46 @@
                 <div class="filter-form">
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
                     <form action="{{ route('laporan.index') }}" method="GET">
-        <input type="hidden" name="tab" value="karyawan">
-        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
-            <tr>
-                <td style="width: 20%; vertical-align: middle;">
-                    <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
-                </td>
-                <td>
-                    <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
-                        <option value="">-- Pilih Karyawan --</option>
-                        @foreach ($employees as $employee)
-                            <option value="{{ $employee->id }}" title="{{ $employee->nama_lengkap }}"
-                                {{ request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : '' }}>
-                                {{ Str::limit($employee->nama_lengkap, 30, '...') }}
-                            </option>
-                        @endforeach
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
-                <td>
-                    <input type="date" name="start_date" id="start_date_single" class="form-control"
-                        value="{{ request('start_date', date('Y-m-d')) }}"
-                        min="{{ date('Y-m-d') }}" required>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
-                <td>
-                    <input type="date" name="end_date" id="end_date_single" class="form-control"
-                        value="{{ request('end_date', date('Y-m-d')) }}"
-                        min="{{ date('Y-m-d') }}" required>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+                        <input type="hidden" name="tab" value="karyawan">
+                        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
+                            <tr>
+                                <td style="width: 20%; vertical-align: middle;">
+                                    <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
+                                </td>
+                                <td>
+                                    <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
+                                        <option value="">-- Pilih Karyawan --</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{ $employee->id }}" title="{{ $employee->nama_lengkap }}"
+                                                {{ request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : '' }}>
+                                                {{ Str::limit($employee->nama_lengkap, 30, '...') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_single" class="form-control"
+                                        value="{{ request('start_date', date('Y-m-d')) }}"required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_single" class="form-control"
+                                        value="{{ request('end_date', date('Y-m-d')) }}"required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
 
                 </div>
 
@@ -402,7 +447,9 @@
                                 alt="Foto {{ $selectedKaryawan->nama_lengkap }}">
                             <div class="info">
                                 <h3>{{ $selectedKaryawan->nama_lengkap }}</h3>
-                                <p>{{ $selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia' }}</p>
+                                {{-- Menampilkan Jabatan dan Divisi dalam satu baris --}}
+                                <p>{{ $selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia' }} |
+                                    {{ $selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia' }}</p>
                                 <p>Periode: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}</p>
                             </div>
                         </div>
@@ -429,8 +476,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5>Detail Penilaian Harian</h5>
                             <a href="{{ route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()]) }}"
-                                class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Export PDF
+                                class="btn-export">
+                                <i class="fas fa-file-pdf"></i> Ekspor ke PDF
                             </a>
                         </div>
 
@@ -450,10 +497,14 @@
                                     @foreach ($penilaianHarian as $penilaian)
                                         <tr>
                                             <td>{{ Carbon\Carbon::parse($tanggal)->format('d/m/Y') }}</td>
-                                            <td>{{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}</td>
+                                            <td>
+                                                <div class="wrap-text">
+                                                    {{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}
+                                                </div>
+                                            </td>
                                             <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
                                             <td>{{ round(($penilaian->jobList->durasi_waktu ?? 0) / 60, 2) }}</td>
-                                            <td>{{ $penilaian->nilai }}</td>
+                                            <td>{{ number_format($penilaian->nilai, 2) }}</td>
                                             <td>{{ round($penilaian->jobList->bobot ?? 0, 2) }}%</td>
                                         </tr>
                                     @endforeach
@@ -473,48 +524,46 @@
                 <div class="filter-form">
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
                     <form action="{{ route('laporan.index') }}" method="GET">
-        <input type="hidden" name="tab" value="divisi">
-        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
-            <tr>
-                <td style="width: 20%; vertical-align: middle;">
-                    <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
-                </td>
-                <td>
-                    <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
-                        <option value="">-- Pilih Divisi --</option>
-                        @foreach ($divisions as $division)
-                            <option value="{{ $division->id }}"
-                                {{ request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : '' }}>
-                                {{ $division->nama_divisi }}
-                            </option>
-                        @endforeach
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
-                <td>
-                    <input type="date" name="start_date" id="start_date_div" class="form-control"
-                        value="{{ request('start_date', date('Y-m-d')) }}"
-                        min="{{ date('Y-m-d') }}" required>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
-                <td>
-                    <input type="date" name="end_date" id="end_date_div" class="form-control"
-                        value="{{ request('end_date', date('Y-m-d')) }}"
-                        min="{{ date('Y-m-d') }}" required>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-tampilkan">Ok</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+                        <input type="hidden" name="tab" value="divisi">
+                        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
+                            <tr>
+                                <td style="width: 20%; vertical-align: middle;">
+                                    <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
+                                </td>
+                                <td>
+                                    <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
+                                        <option value="">-- Pilih Divisi --</option>
+                                        @foreach ($divisions as $division)
+                                            <option value="{{ $division->id }}"
+                                                {{ request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : '' }}>
+                                                {{ $division->nama_divisi }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_div" class="form-control"
+                                        value="{{ request('start_date', date('Y-m-d')) }}"required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_div" class="form-control"
+                                        value="{{ request('end_date', date('Y-m-d')) }}"required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">Ok</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
 
                 @if ($activeTab == 'divisi' && $reportData && $selectedDivisi)
