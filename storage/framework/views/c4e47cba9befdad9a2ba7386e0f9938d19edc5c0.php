@@ -398,4 +398,5 @@
     }
 </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/joblist/tetap.blade.php ENDPATH**/ ?>

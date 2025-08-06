@@ -2,47 +2,86 @@
 
 <?php $__env->startSection('content'); ?>
     <style>
+        :root {
+            /* Yellow Theme - Professional & Clean */
+            --primary-yellow: #f5d62d;
+            --yellow-light: #fef3c7;
+            --yellow-dark: #d69e2e;
+            --yellow-darker: #b7791f;
+
+            /* Neutral Colors */
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+
+            /* Theme Variables */
+            --text-dark: var(--gray-800);
+            --text-muted: var(--gray-500);
+            --border-color: var(--gray-200);
+            --border-radius: 8px;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
         /* Page Header */
         .page-header h1 {
-            font-size: 2.2rem;
-            color: #292828;
+            font-size: 1.875rem;
+            color: var(--text-dark);
             font-weight: 700;
-            margin: 0 0 30px 0;
+            margin: 0 0 25px 0;
         }
 
         /* Main Card & Tabs */
         .main-card {
-            background: #ffffff;
-            color: #1f2937;
-            padding: 10px 30px 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
 
         .tabs-nav {
             display: flex;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            margin: 0;
+            background: var(--gray-50);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .tab-link {
-            padding: 15px 25px;
+            padding: 18px 30px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 14px;
             font-weight: 600;
-            color: #6c757d;
+            color: var(--text-muted);
             border: none;
             background: transparent;
-            border-bottom: 3px solid transparent;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-link:hover {
+            color: var(--text-dark);
+            background: var(--yellow-light);
         }
 
         .tab-link.active {
-            color: #1f2937;
-            border-bottom-color: var(--accent-color);
+            color: var(--text-dark);
+            border-bottom-color: var(--primary-yellow);
+            background: var(--white);
         }
 
         .tab-panel {
             display: none;
+            padding: 30px;
         }
 
         .tab-panel.active {
@@ -54,164 +93,190 @@
         }
 
         /* Filter Form */
+        .filter-form {
+            background: var(--gray-50);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
         .filter-form h4 {
-            font-weight: 700;
-            font-size: 1.2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
             margin-bottom: 20px;
+            color: var(--text-dark);
         }
 
         .filter-form .form-label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--text-dark);
         }
 
         .filter-form .form-control,
         .filter-form .form-select {
-            height: 48px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
+            height: 42px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .filter-form .form-control:focus,
+        .filter-form .form-select:focus {
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 2px rgba(245, 214, 45, 0.2);
+            outline: none;
         }
 
         .btn-tampilkan {
-            height: 48px;
-            background: var(--accent-color, #dc2626);
-            color: white;
+            height: 42px;
+            background: var(--primary-yellow);
+            color: var(--text-dark);
             border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            width: 100px
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            padding: 0 25px;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
 
-        /* Employee Summary Card (Divisi Report) */
-        /* Employee Summary Card (Divisi Report) - Modified */
+        .btn-tampilkan:hover {
+            background: var(--yellow-dark);
+            color: var(--text-dark);
+        }
+
+        .btn-export {
+            background: #dc2626;
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-export:hover {
+            background: #b91c1c;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Division Report Grid */
         .division-report-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            /* Maksimal 3 kolom */
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
             max-height: 70vh;
-            /* Batasi tinggi container */
             overflow-y: auto;
-            /* Enable scroll vertikal */
             padding-right: 10px;
-            /* Space untuk scrollbar */
         }
 
         /* Responsive design untuk layar yang lebih kecil */
-        @media (max-width: 1200px) {
-            .division-report-grid {
-                grid-template-columns: repeat(2, 1fr);
-                /* 2 kolom untuk layar medium */
-            }
-        }
-
         @media (max-width: 768px) {
             .division-report-grid {
                 grid-template-columns: 1fr;
-                /* 1 kolom untuk layar kecil */
                 max-height: 60vh;
-                /* Sesuaikan tinggi untuk mobile */
             }
         }
 
-        /* Styling untuk scrollbar (opsional, untuk webkit browsers) */
+        /* Styling untuk scrollbar */
         .division-report-grid::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .division-report-grid::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: var(--gray-100);
             border-radius: 10px;
         }
 
         .division-report-grid::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
+            background: var(--gray-300);
             border-radius: 10px;
         }
 
         .division-report-grid::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+            background: var(--gray-400);
         }
 
         .employee-summary-card {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             padding: 20px;
-            min-height: 200px;
-            /* Minimum height untuk konsistensi */
+            transition: box-shadow 0.2s ease;
+        }
+
+        .employee-summary-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .employee-summary-header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             padding-bottom: 15px;
             margin-bottom: 15px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .employee-summary-header img {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             object-fit: cover;
+            border: 2px solid var(--yellow-light);
         }
 
         .employee-summary-header .name {
             font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            max-width: 300px;
-            /* Adjusted for 3-column layout */
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .employee-summary-header small {
+            color: var(--text-muted);
+            font-size: 12px;
         }
 
         .employee-summary-stats {
             display: flex;
             justify-content: space-around;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .stat-item .value {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
+            color: var(--text-dark);
         }
 
         .stat-item .label {
-            font-size: 0.8rem;
-            color: #6b7280;
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         .employee-summary-card .btn-export {
             width: 100%;
             justify-content: center;
-            margin-top: 20px;
-            background-color: #dc2626;
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.3s ease;
-        }
-
-        .employee-summary-card .btn-export:hover {
-            background-color: #b91c1c;
-            color: white;
-            text-decoration: none;
+            margin-top: 15px;
         }
 
         /* Report Card for Individual Employee */
         .report-card {
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             padding: 25px;
             margin-top: 20px;
         }
@@ -222,26 +287,28 @@
             gap: 20px;
             margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #dee2e6;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .report-header img {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
+            border: 3px solid var(--yellow-light);
         }
 
         .report-header .info h3 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.375rem;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--text-dark);
         }
 
         .report-header .info p {
             margin: 5px 0 0 0;
-            color: #6b7280;
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
         .stats-grid {
@@ -252,22 +319,22 @@
         }
 
         .stat-card {
-            background: white;
+            background: var(--yellow-light);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--primary-yellow);
         }
 
         .stat-card .value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #dc2626;
+            color: var(--text-dark);
         }
 
         .stat-card .label {
-            font-size: 0.9rem;
-            color: #6b7280;
+            font-size: 14px;
+            color: var(--text-muted);
             margin-top: 5px;
         }
 
@@ -275,61 +342,128 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 14px;
         }
 
         .detail-table th,
         .detail-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .detail-table th {
-            background-color: #f8f9fa;
+            background-color: var(--gray-50);
             font-weight: 600;
+            color: var(--text-dark);
         }
 
         .detail-table tr:hover {
-            background-color: #f8f9fa;
+            background-color: var(--gray-50);
         }
 
-        /* [BARU] Style untuk menyesuaikan tampilan Select2 */
+        .wrap-text {
+            max-width: 250px;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        /* Alert styling */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid transparent;
+            font-size: 14px;
+        }
+
+        .alert-warning {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        /* Select2 Styling */
         .select2-container .select2-selection--single {
-            height: 48px !important;
-            border-radius: 10px !important;
-            border: 1px solid #ddd !important;
+            height: 42px !important;
+            border-radius: var(--border-radius) !important;
+            border: 1px solid var(--border-color) !important;
             display: flex;
             align-items: center;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 46px !important;
+            line-height: 40px !important;
             padding-left: 15px !important;
+            color: var(--text-dark) !important;
+            font-weight: 400;
+            font-size: 14px;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 46px !important;
+            height: 40px !important;
+            right: 10px !important;
         }
 
         .select2-dropdown {
-            border-radius: 10px !important;
-            border: 1px solid #ddd !important;
+            border-radius: var(--border-radius) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: var(--shadow);
         }
 
-        /* Untuk teks pada item yang sedang TERPILIH */
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #1f2937 !important;
+        .select2-results__option {
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .select2-results__option--highlighted {
+            background-color: var(--yellow-light) !important;
+            color: var(--text-dark) !important;
+        }
+
+        .select2-container--default .select2-selection--single:focus {
+            border-color: var(--primary-yellow) !important;
+        }
+
+        /* Form table styling */
+        .filter-form table {
+            width: 100%;
+            border: 0;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .filter-form table td {
+            vertical-align: middle;
+            padding: 5px 10px 5px 0;
+        }
+
+        .filter-form table td:first-child {
+            width: 180px;
             font-weight: 500;
         }
 
-        /* Untuk teks pada setiap OPSI di dalam dropdown */
-        .select2-results__option {
-            color: #1f2937;
+        /* Header actions */
+        .d-flex.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
-        /* (Opsional) Untuk teks pada opsi yang sedang di-highlight/dipilih */
-        .select2-results__option--highlighted {
-            color: white;
+        .d-flex.justify-content-between h5 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Division report title */
+        .mt-4 {
+            margin-top: 25px !important;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
         }
     </style>
 
@@ -339,10 +473,12 @@
 
     <div class="main-card">
         <div class="tabs-nav">
-            <button class="tab-link <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>" data-tab="karyawan"><i
-                    class="fas fa-user"></i> Per Karyawan</button>
-            <button class="tab-link <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>" data-tab="divisi"><i
-                    class="fas fa-building"></i> Per Divisi</button>
+            <button class="tab-link <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>" data-tab="karyawan">
+                <i class="fas fa-user"></i> Per Karyawan
+            </button>
+            <button class="tab-link <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>" data-tab="divisi">
+                <i class="fas fa-building"></i> Per Divisi
+            </button>
         </div>
 
         <div class="tabs-content">
@@ -350,50 +486,47 @@
                 <div class="filter-form">
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
                     <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
-        <input type="hidden" name="tab" value="karyawan">
-        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
-            <tr>
-                <td style="width: 20%; vertical-align: middle;">
-                    <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
-                </td>
-                <td>
-                    <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
-                        <option value="">-- Pilih Karyawan --</option>
-                        <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>"
-                                <?php echo e(request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : ''); ?>>
-                                <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?>
+                        <input type="hidden" name="tab" value="karyawan">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
+                                </td>
+                                <td>
+                                    <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
+                                        <option value="">-- Pilih Karyawan --</option>
+                                        <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>"
+                                                <?php echo e(request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : ''); ?>>
+                                                <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?>
 
-                            </option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
-                <td>
-                    <input type="date" name="start_date" id="start_date_single" class="form-control"
-                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>"
-                        min="<?php echo e(date('Y-m-d')); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
-                <td>
-                    <input type="date" name="end_date" id="end_date_single" class="form-control"
-                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>"
-                        min="<?php echo e(date('Y-m-d')); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
-                </td>
-            </tr>
-        </table>
-    </form>
-
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_single" class="form-control"
+                                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_single" class="form-control"
+                                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
 
                 <?php if($activeTab == 'karyawan' && $reportData && $selectedKaryawan): ?>
@@ -403,7 +536,8 @@
                                 alt="Foto <?php echo e($selectedKaryawan->nama_lengkap); ?>">
                             <div class="info">
                                 <h3><?php echo e($selectedKaryawan->nama_lengkap); ?></h3>
-                                <p><?php echo e($selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia'); ?></p>
+                                <p><?php echo e($selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia'); ?> |
+                                    <?php echo e($selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia'); ?></p>
                                 <p>Periode: <?php echo e($startDate->format('d/m/Y')); ?> - <?php echo e($endDate->format('d/m/Y')); ?></p>
                             </div>
                         </div>
@@ -430,8 +564,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5>Detail Penilaian Harian</h5>
                             <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
-                                class="btn btn-danger">
-                                <i class="fas fa-file-pdf"></i> Export PDF
+                                class="btn-export">
+                                <i class="fas fa-file-pdf"></i> Ekspor ke PDF
                             </a>
                         </div>
 
@@ -451,11 +585,16 @@
                                     <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penilaian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td><?php echo e(Carbon\Carbon::parse($tanggal)->format('d/m/Y')); ?></td>
-                                            <td><?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?></td>
+                                            <td>
+                                                <div class="wrap-text">
+                                                    <?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?>
+
+                                                </div>
+                                            </td>
                                             <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
                                             <td><?php echo e(round(($penilaian->jobList->durasi_waktu ?? 0) / 60, 2)); ?></td>
-                                            <td><?php echo e($penilaian->nilai); ?></td>
-                                            <td><?php echo e(round($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
+                                            <td><?php echo e(number_format($penilaian->nilai, 1)); ?></td>
+                                            <td><?php echo e(round($penilaian->jobList->bobot ?? 0, 1)); ?>%</td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -464,8 +603,7 @@
                     </div>
                 <?php elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date'])): ?>
                     <div class="alert alert-warning mt-4">
-                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode
-                        yang dipilih.
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode yang dipilih.
                     </div>
                 <?php endif; ?>
             </div>
@@ -474,49 +612,47 @@
                 <div class="filter-form">
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
                     <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
-        <input type="hidden" name="tab" value="divisi">
-        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
-            <tr>
-                <td style="width: 20%; vertical-align: middle;">
-                    <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
-                </td>
-                <td>
-                    <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
-                        <option value="">-- Pilih Divisi --</option>
-                        <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $division): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($division->id); ?>"
-                                <?php echo e(request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : ''); ?>>
-                                <?php echo e($division->nama_divisi); ?>
+                        <input type="hidden" name="tab" value="divisi">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
+                                </td>
+                                <td>
+                                    <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
+                                        <option value="">-- Pilih Divisi --</option>
+                                        <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $division): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($division->id); ?>"
+                                                <?php echo e(request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : ''); ?>>
+                                                <?php echo e($division->nama_divisi); ?>
 
-                            </option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
-                <td>
-                    <input type="date" name="start_date" id="start_date_div" class="form-control"
-                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>"
-                        min="<?php echo e(date('Y-m-d')); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
-                <td>
-                    <input type="date" name="end_date" id="end_date_div" class="form-control"
-                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>"
-                        min="<?php echo e(date('Y-m-d')); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button type="submit" class="btn btn-tampilkan">Ok</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_div" class="form-control"
+                                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_div" class="form-control"
+                                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
 
                 <?php if($activeTab == 'divisi' && $reportData && $selectedDivisi): ?>
@@ -553,8 +689,7 @@
                     </div>
                 <?php elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date'])): ?>
                     <div class="alert alert-warning mt-4">
-                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode
-                        yang dipilih.
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
                     </div>
                 <?php endif; ?>
             </div>
@@ -581,12 +716,7 @@
             });
         });
 
-        // Script untuk tabs (tidak berubah)
-        document.addEventListener('DOMContentLoaded', function() {
-            /* ... kode tabs ... */
-        });
-
-        // [BARU] Inisialisasi Select2 untuk dropdown karyawan
+        // Inisialisasi Select2 untuk dropdown karyawan
         $(document).ready(function() {
             $('#karyawan_id_single').select2({
                 placeholder: "-- Pilih Karyawan --",

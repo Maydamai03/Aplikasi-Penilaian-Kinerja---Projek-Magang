@@ -187,7 +187,8 @@
                 <table class="table table-bordered align-middle">
                     <thead>
                         <tr>
-                            <th style="width: 35%;">Pekerjaan</th>
+                            <th style="width: 5%;">No.</th>
+                            <th style="width: 30%;">Pekerjaan</th>
                             <th class="text-center" style="width: 18%;">Status</th>
                             <th class="text-center" style="width: 20%;">Skala Penilaian</th>
                             <th style="width: 22%;">Catatan</th>
@@ -202,6 +203,7 @@
 
                         <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
+                                <td class="text-center"><?php echo e($loop->iteration); ?></td> 
                                 <td><?php echo e($job->nama_pekerjaan); ?></td>
                                 <td>
                                     <select name="status[<?php echo e($job->id); ?>]"
@@ -329,6 +331,7 @@
                 newRow.id = uniqueId;
 
                 newRow.innerHTML = `
+                <td class="text-center">${opsionalCounter}.</td>
                     <td>
                         <input type="text"
                                name="opsional_nama[]"

@@ -36,6 +36,7 @@ class PenilaianController extends Controller
 {
     $request->validate([
         'status.*' => 'required|in:Dikerjakan,Tidak Dikerjakan',
+        // [DIUBAH] Sesuaikan validasi dengan teks baru dari dropdown
         'skala.*' => ['nullable', Rule::in(['Tidak Dikerjakan', 'Melakukan Tapi Tidak Benar', 'Melakukan Dengan Benar'])],
         'shift' => 'required|in:Siang,Malam',
         'opsional_nama.*' => 'nullable|string|max:255',
@@ -50,26 +51,22 @@ class PenilaianController extends Controller
     // 1. Proses Penilaian Job Tetap
     if ($request->has('status')) {
         foreach ($request->status as $jobListId => $status) {
-            // Ini adalah filter Status: jika tidak relevan/berlaku, abaikan.
             if ($status === 'Tidak Dikerjakan') {
                 continue;
             }
-
             $job = JobList::find($jobListId);
-            $skala = $request->skala[$jobListId];
-
-            // Pastikan job ada dan skalanya diisi
-            if (!$job || empty($skala)) {
+            if (!$job || empty($request->skala[$jobListId])) {
                 continue;
             }
 
+            $skala = $request->skala[$jobListId];
             $bobot = ($job->durasi_waktu / $jamKerjaMenit) * 100;
             $nilai = 0;
 
-            // Ini adalah filter Skala Penilaian: menentukan kualitas kerja
+            // [DIUBAH] Sesuaikan case dengan teks baru
             switch ($skala) {
-                case 'Tidak Dikerjakan': // <-- Perbaiki di sini
-                    $nilai = 0; // Nilai jelek
+                case 'Tidak Dikerjakan':
+                    $nilai = 0; //Nilai jelek
                     break;
                 case 'Melakukan Tapi Tidak Benar':
                     $nilai = $bobot * 0.5; // 50% dari bobot
@@ -83,7 +80,7 @@ class PenilaianController extends Controller
                 'job_list_id' => $jobListId,
                 'penilai_id' => Auth::id(),
                 'skala' => $skala,
-                'nilai' => round($nilai, 1),
+                'nilai' => round($nilai, 2),
                 'catatan_penilai' => $request->catatan[$jobListId] ?? null,
                 'tanggal_penilaian' => $tanggalPenilaian,
             ]);
@@ -122,7 +119,7 @@ class PenilaianController extends Controller
                 'job_list_id' => $jobOpsional->id,
                 'penilai_id' => Auth::id(),
                 'skala' => $skalaOpsional,
-                'nilai' => round($nilaiOpsional, 1),
+                'nilai' => round($nilaiOpsional, 2),
                 'catatan_penilai' => $request->opsional_catatan[$key] ?? null,
                 'tanggal_penilaian' => $tanggalPenilaian,
             ]);
