@@ -123,41 +123,56 @@ class ReportController extends Controller
             ->whereHas('jobList', function ($query) use ($karyawan) {
                 $query->where('karyawan_id', $karyawan->id);
             })
-            // Filter ini untuk mengecualikan pekerjaan yang tidak dikerjakan
-            ->where('skala', '!=', 'Tidak Dikerjakan')
             ->whereBetween('tanggal_penilaian', [$startDate, $endDate])
             ->get();
 
+        // Meskipun tidak ada penilaian, kita tetap ingin menampilkan laporan kosong
+        // Jadi kita tidak mengembalikan null jika kosong, kecuali jika benar-benar tidak ada job sama sekali.
+        // Ini memastikan variabel reportData selalu ada.
         if ($penilaian->isEmpty()) {
-            return null;
+            return null; // Tetap null jika tidak ada data sama sekali
         }
 
-        $jamKerjaMenit = 8 * 60; // 480 menit
+        $jamKerjaMenit = 8 * 60;
 
         // Hitung bobot untuk setiap item penilaian secara dinamis
         foreach ($penilaian as $item) {
             if ($item->jobList) {
                 $item->jobList->bobot = ($item->jobList->durasi_waktu / $jamKerjaMenit) * 100;
             } else {
-                $item->jobList = (object)['bobot' => 0, 'durasi_waktu' => 0, 'nama_pekerjaan' => 'Pekerjaan Dihapus', 'tipe_job' => 'N/A'];
+                $item->jobList = (object)[
+                    'bobot' => 0, 'durasi_waktu' => 0,
+                    'nama_pekerjaan' => 'Pekerjaan Dihapus', 'tipe_job' => 'N/A'
+                ];
             }
         }
 
-        // Hitung total nilai yang berhasil dicapai (Skor Kinerja)
-        $skorKinerja = round($penilaian->sum('nilai'), 2);
+            // [BARU] Hitung jumlah job tetap dan opsional
+        $totalJobTetap = $penilaian->filter(function($item) {
+            return $item->jobList && $item->jobList->tipe_job === 'Tetap';
+        })->count();
 
-        // Hitung total bobot dari semua pekerjaan yang dinilai (Beban Kerja)
-        $bebanKerja = round($penilaian->sum('jobList.bobot'), 2);
+        $totalJobOpsional = $penilaian->filter(function($item) {
+            return $item->jobList && $item->jobList->tipe_job === 'Opsional';
+        })->count();
 
+        // --- RUMUS SKOR KINERJA YANG DIPERBAIKI ---
+        $totalBobotMaksimal = $penilaian->sum('jobList.bobot');
+        $totalNilaiTercapai = $penilaian->sum('nilai');
+        $skorKinerja = ($totalBobotMaksimal > 0) ? round(($totalNilaiTercapai / $totalBobotMaksimal) * 100, 1) : 0;
+
+        // Hitung Beban Kerja
         $totalDurasiMenit = $penilaian->sum('jobList.durasi_waktu');
-        $totalJamKerja = round($totalDurasiMenit / 60, 2);
-
-        // Hitung selisih jam kerja
-        $jumlahHariKerja = $startDate->diffInDays($endDate) + 1;
-        $waktuKerjaIdealMenit = $jumlahHariKerja * $jamKerjaMenit;
-        $selisihJam = round(($totalDurasiMenit - $waktuKerjaIdealMenit) / 60, 2);
+        $jumlahHariKerja = $startDate->diffInWeekdays($endDate) + 1;
+        $waktuKerjaIdealMenit = $jumlahHariKerja * 8 * 60;
+        $bebanKerja = ($waktuKerjaIdealMenit > 0) ? round(($totalDurasiMenit / $waktuKerjaIdealMenit) * 100, 2) : 0;
 
         $predikatKinerja = $this->getPredikatKinerja($skorKinerja);
+
+        // Hitung detail jam kerja untuk laporan
+        $totalJamKerja = round($totalDurasiMenit / 60, 2);
+        $jamKerjaIdeal = round($waktuKerjaIdealMenit / 60, 2);
+        $selisihJam = $totalJamKerja - $jamKerjaIdeal;
 
         return [
             'penilaian' => $penilaian->groupBy(fn($item) => Carbon::parse($item->tanggal_penilaian)->format('Y-m-d')),
@@ -165,7 +180,10 @@ class ReportController extends Controller
             'skor_kinerja' => $skorKinerja,
             'beban_kerja' => $bebanKerja,
             'total_durasi_jam' => $totalJamKerja,
+            'jumlah_hari_kerja' => $jumlahHariKerja,
             'selisih_jam_kerja' => $selisihJam,
+            'total_job_tetap' => $totalJobTetap,
+            'total_job_opsional' => $totalJobOpsional,
         ];
     }
 

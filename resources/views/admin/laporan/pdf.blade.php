@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Helvetica', sans-serif;
-            font-size: 12px;
+            font-size: 11px; /* Ukuran font disesuaikan agar lebih muat */
             color: #333;
         }
 
@@ -22,11 +22,11 @@
 
         .info {
             margin-bottom: 20px;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .info p {
-            margin: 5px 0;
+            margin: 4px 0;
         }
 
         .summary {
@@ -34,10 +34,11 @@
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
+            font-size: 12px;
         }
 
         .summary p {
-            margin: 6px 0;
+            margin: 5px 0;
         }
 
         .table {
@@ -49,8 +50,9 @@
         .table th,
         .table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 6px; /* Padding diperkecil */
             text-align: left;
+            vertical-align: top;
         }
 
         .table th {
@@ -80,14 +82,12 @@
     </div>
 
     <div class="summary">
-        <p><strong>Skor Kinerja:</strong> {{ $reportData['skor_kinerja'] }}</p>
+        <p><strong>Skor Kinerja Rata-Rata:</strong> {{ $reportData['skor_kinerja'] }}</p>
         <p><strong>Predikat Kinerja:</strong> {{ $reportData['predikat_kinerja'] }}</p>
         <p><strong>Beban Kerja:</strong> {{ $reportData['beban_kerja'] }}%</p>
         <hr style="border-style: dashed; border-width: 0.5px;">
-        <p><strong>Total Jam Kerja Tercatat:</strong> {{ $reportData['total_durasi_jam'] }} Jam
-            ({{ $reportData['total_durasi_jam'] * 60 }} menit)</p>
-        <p><strong>Selisih Jam Kerja:</strong> {{ $reportData['selisih_jam_kerja'] }} Jam
-            ({{ $reportData['selisih_jam_kerja'] * 60 }} menit)
+        <p><strong>Total Jam Kerja Tercatat:</strong> {{ $reportData['total_durasi_jam'] }} Jam ({{ $reportData['total_durasi_jam'] * 60 }} menit)</p>
+        <p><strong>Selisih Jam Kerja:</strong> {{ $reportData['selisih_jam_kerja'] }} Jam ({{ $reportData['selisih_jam_kerja'] * 60 }} menit)
             @if ($reportData['selisih_jam_kerja'] > 0)
                 <span style="color: red;">(Kelebihan)</span>
             @elseif($reportData['selisih_jam_kerja'] < 0)
@@ -96,12 +96,16 @@
                 <span>(Sesuai)</span>
             @endif
         </p>
+        <hr style="border-style: dashed; border-width: 0.5px;">
+        <p><strong>Total Job Tetap Dikerjakan:</strong> {{ $reportData['total_job_tetap'] }}</p>
+        <p><strong>Total Job Opsional Dikerjakan:</strong> {{ $reportData['total_job_opsional'] }}</p>
     </div>
 
     <h4>Detail Penilaian</h4>
     <table class="table">
         <thead>
             <tr>
+                <th style="width: 5%;">No</th>
                 <th style="width: 25%;">Pekerjaan</th>
                 <th>Tipe</th>
                 <th>Shift</th>
@@ -113,23 +117,23 @@
             </tr>
         </thead>
         <tbody>
+            @php $counter = 1; @endphp
             @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
                 <tr class="date-separator">
-                    <td colspan="8">
+                    <td colspan="9">
                         Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
                     </td>
                 </tr>
                 @foreach ($penilaianHarian as $item)
                     <tr>
+                        <td>{{ $counter++ }}</td>
                         <td>{{ $item->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}</td>
                         <td>{{ $item->jobList->tipe_job ?? 'N/A' }}</td>
                         <td>{{ $item->jobList->shift ?? 'N/A' }}</td>
                         <td>{{ $item->skala }}</td>
-                        {{-- DIPERBAIKI: Menampilkan bobot dengan 2 desimal --}}
-                        <td>{{ number_format($item->jobList->bobot ?? 0, 2) }}%</td>
+                        <td>{{ number_format($item->jobList->bobot ?? 0, 1) }}%</td>
                         <td>{{ $item->jobList->durasi_waktu ?? 0 }} menit</td>
-                        {{-- DIPERBAIKI: Menampilkan nilai dengan 2 desimal --}}
-                        <td>{{ number_format($item->nilai, 2) }}</td>
+                        <td>{{ number_format($item->nilai, 1) }}</td>
                         <td>{{ $item->catatan_penilai }}</td>
                     </tr>
                 @endforeach

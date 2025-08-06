@@ -2,86 +2,47 @@
 
 @section('content')
     <style>
-        :root {
-            /* Yellow Theme - Professional & Clean */
-            --primary-yellow: #f5d62d;
-            --yellow-light: #fef3c7;
-            --yellow-dark: #d69e2e;
-            --yellow-darker: #b7791f;
-
-            /* Neutral Colors */
-            --white: #ffffff;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-
-            /* Theme Variables */
-            --text-dark: var(--gray-800);
-            --text-muted: var(--gray-500);
-            --border-color: var(--gray-200);
-            --border-radius: 8px;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
-
         /* Page Header */
         .page-header h1 {
-            font-size: 1.875rem;
-            color: var(--text-dark);
+            font-size: 2.2rem;
+            color: #292828;
             font-weight: 700;
-            margin: 0 0 25px 0;
+            margin: 0 0 30px 0;
         }
 
         /* Main Card & Tabs */
         .main-card {
-            background: var(--white);
-            color: var(--text-dark);
-            padding: 0;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: #1f2937;
+            padding: 10px 30px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
         }
 
         .tabs-nav {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin: 0;
-            background: var(--gray-50);
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 25px;
         }
 
         .tab-link {
-            padding: 18px 30px;
+            padding: 15px 25px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 1rem;
             font-weight: 600;
-            color: var(--text-muted);
+            color: #6c757d;
             border: none;
             background: transparent;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s ease;
-        }
-
-        .tab-link:hover {
-            color: var(--text-dark);
-            background: var(--yellow-light);
+            border-bottom: 3px solid transparent;
         }
 
         .tab-link.active {
-            color: var(--text-dark);
-            border-bottom-color: var(--primary-yellow);
-            background: var(--white);
+            color: #1f2937;
+            border-bottom-color: var(--accent-color);
         }
 
         .tab-panel {
             display: none;
-            padding: 30px;
         }
 
         .tab-panel.active {
@@ -93,190 +54,202 @@
         }
 
         /* Filter Form */
-        .filter-form {
-            background: var(--gray-50);
-            padding: 25px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-        }
-
         .filter-form h4 {
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.2rem;
             margin-bottom: 20px;
-            color: var(--text-dark);
         }
 
         .filter-form .form-label {
-            font-weight: 500;
-            margin-bottom: 6px;
-            font-size: 14px;
-            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
 
         .filter-form .form-control,
         .filter-form .form-select {
-            height: 42px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 8px 15px;
-            font-size: 14px;
-            transition: border-color 0.2s ease;
-        }
-
-        .filter-form .form-control:focus,
-        .filter-form .form-select:focus {
-            border-color: var(--primary-yellow);
-            box-shadow: 0 0 0 2px rgba(245, 214, 45, 0.2);
-            outline: none;
+            height: 48px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
         }
 
         .btn-tampilkan {
-            height: 42px;
-            background: var(--primary-yellow);
-            color: var(--text-dark);
+            height: 48px;
+            background: var(--accent-color, #dc2626);
+            color: white;
             border: none;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            padding: 0 25px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-tampilkan:hover {
-            background: var(--yellow-dark);
-            color: var(--text-dark);
+            border-radius: 10px;
+            font-weight: 700;
+            width: 100px
         }
 
         .btn-export {
-            background: #dc2626;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: white !important;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
-            font-weight: 500;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: 600;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
             border: none;
-            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-export::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-export:hover::before {
+            left: 100%;
         }
 
         .btn-export:hover {
-            background: #b91c1c;
-            color: white;
-            text-decoration: none;
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
         }
 
-        /* Division Report Grid */
+        /* Employee Summary Card (Divisi Report) */
+        /* Employee Summary Card (Divisi Report) - Modified */
         .division-report-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            /* Maksimal 3 kolom */
+            gap: 25px;
             max-height: 70vh;
+            /* Batasi tinggi container */
             overflow-y: auto;
+            /* Enable scroll vertikal */
             padding-right: 10px;
+            /* Space untuk scrollbar */
         }
 
         /* Responsive design untuk layar yang lebih kecil */
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .division-report-grid {
-                grid-template-columns: 1fr;
-                max-height: 60vh;
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 kolom untuk layar medium */
             }
         }
 
-        /* Styling untuk scrollbar */
+        @media (max-width: 768px) {
+            .division-report-grid {
+                grid-template-columns: 1fr;
+                /* 1 kolom untuk layar kecil */
+                max-height: 60vh;
+                /* Sesuaikan tinggi untuk mobile */
+            }
+        }
+
+        /* Styling untuk scrollbar (opsional, untuk webkit browsers) */
         .division-report-grid::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         .division-report-grid::-webkit-scrollbar-track {
-            background: var(--gray-100);
+            background: #f1f1f1;
             border-radius: 10px;
         }
 
         .division-report-grid::-webkit-scrollbar-thumb {
-            background: var(--gray-300);
+            background: #c1c1c1;
             border-radius: 10px;
         }
 
         .division-report-grid::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-400);
+            background: #a8a8a8;
         }
 
         .employee-summary-card {
-            background-color: var(--white);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
             padding: 20px;
-            transition: box-shadow 0.2s ease;
-        }
-
-        .employee-summary-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-height: 200px;
+            /* Minimum height untuk konsistensi */
         }
 
         .employee-summary-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             padding-bottom: 15px;
             margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .employee-summary-header img {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--yellow-light);
         }
 
         .employee-summary-header .name {
             font-weight: 600;
-            font-size: 14px;
-            color: var(--text-dark);
-            margin-bottom: 2px;
-        }
-
-        .employee-summary-header small {
-            color: var(--text-muted);
-            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            max-width: 300px;
+            /* Adjusted for 3-column layout */
         }
 
         .employee-summary-stats {
             display: flex;
             justify-content: space-around;
             text-align: center;
-            margin-bottom: 20px;
         }
 
         .stat-item .value {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-dark);
         }
 
         .stat-item .label {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: 0.8rem;
+            color: #6b7280;
         }
 
         .employee-summary-card .btn-export {
             width: 100%;
             justify-content: center;
-            margin-top: 15px;
+            margin-top: 20px;
+            background-color: #dc2626;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .employee-summary-card .btn-export:hover {
+            background-color: #b91c1c;
+            color: white;
+            text-decoration: none;
         }
 
         /* Report Card for Individual Employee */
         .report-card {
-            background-color: var(--white);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
             padding: 25px;
             margin-top: 20px;
         }
@@ -287,28 +260,26 @@
             gap: 20px;
             margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid #dee2e6;
         }
 
         .report-header img {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--yellow-light);
         }
 
         .report-header .info h3 {
             margin: 0;
-            font-size: 1.375rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: #1f2937;
         }
 
         .report-header .info p {
             margin: 5px 0 0 0;
-            color: var(--text-muted);
-            font-size: 14px;
+            color: #6b7280;
         }
 
         .stats-grid {
@@ -319,22 +290,22 @@
         }
 
         .stat-card {
-            background: var(--yellow-light);
+            background: white;
             padding: 20px;
-            border-radius: var(--border-radius);
+            border-radius: 10px;
             text-align: center;
-            border: 1px solid var(--primary-yellow);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .stat-card .value {
-            font-size: 1.75rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: #dc2626;
         }
 
         .stat-card .label {
-            font-size: 14px;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: #6b7280;
             margin-top: 5px;
         }
 
@@ -342,128 +313,70 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 14px;
         }
 
         .detail-table th,
         .detail-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #dee2e6;
         }
 
         .detail-table th {
-            background-color: var(--gray-50);
+            background-color: #f8f9fa;
             font-weight: 600;
-            color: var(--text-dark);
         }
 
         .detail-table tr:hover {
-            background-color: var(--gray-50);
+            background-color: #f8f9fa;
         }
 
         .wrap-text {
-            max-width: 250px;
+            max-width: 300px;
+            /* Atur lebar maksimal kolom di sini */
             word-wrap: break-word;
+            /* Memaksa teks turun ke baris baru */
             white-space: normal;
+            /* Mengizinkan teks untuk wrap */
         }
 
-        /* Alert styling */
-        .alert {
-            padding: 15px 20px;
-            border-radius: var(--border-radius);
-            border: 1px solid transparent;
-            font-size: 14px;
-        }
-
-        .alert-warning {
-            background-color: #fef3c7;
-            border-color: #f59e0b;
-            color: #92400e;
-        }
-
-        /* Select2 Styling */
+        /* [BARU] Style untuk menyesuaikan tampilan Select2 */
         .select2-container .select2-selection--single {
-            height: 42px !important;
-            border-radius: var(--border-radius) !important;
-            border: 1px solid var(--border-color) !important;
+            height: 48px !important;
+            border-radius: 10px !important;
+            border: 1px solid #ddd !important;
             display: flex;
             align-items: center;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 40px !important;
+            line-height: 46px !important;
             padding-left: 15px !important;
-            color: var(--text-dark) !important;
-            font-weight: 400;
-            font-size: 14px;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 40px !important;
-            right: 10px !important;
+            height: 46px !important;
         }
 
         .select2-dropdown {
-            border-radius: var(--border-radius) !important;
-            border: 1px solid var(--border-color) !important;
-            box-shadow: var(--shadow);
+            border-radius: 10px !important;
+            border: 1px solid #ddd !important;
         }
 
-        .select2-results__option {
-            color: var(--text-dark);
-            font-size: 14px;
-        }
-
-        .select2-results__option--highlighted {
-            background-color: var(--yellow-light) !important;
-            color: var(--text-dark) !important;
-        }
-
-        .select2-container--default .select2-selection--single:focus {
-            border-color: var(--primary-yellow) !important;
-        }
-
-        /* Form table styling */
-        .filter-form table {
-            width: 100%;
-            border: 0;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-        }
-
-        .filter-form table td {
-            vertical-align: middle;
-            padding: 5px 10px 5px 0;
-        }
-
-        .filter-form table td:first-child {
-            width: 180px;
+        /* Untuk teks pada item yang sedang TERPILIH */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #1f2937 !important;
             font-weight: 500;
         }
 
-        /* Header actions */
-        .d-flex.justify-content-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        /* Untuk teks pada setiap OPSI di dalam dropdown */
+        .select2-results__option {
+            color: #1f2937;
         }
 
-        .d-flex.justify-content-between h5 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        /* Division report title */
-        .mt-4 {
-            margin-top: 25px !important;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 20px;
+        /* (Opsional) Untuk teks pada opsi yang sedang di-highlight/dipilih */
+        .select2-results__option--highlighted {
+            color: white;
         }
     </style>
 
@@ -473,12 +386,10 @@
 
     <div class="main-card">
         <div class="tabs-nav">
-            <button class="tab-link {{ $activeTab == 'karyawan' ? 'active' : '' }}" data-tab="karyawan">
-                <i class="fas fa-user"></i> Per Karyawan
-            </button>
-            <button class="tab-link {{ $activeTab == 'divisi' ? 'active' : '' }}" data-tab="divisi">
-                <i class="fas fa-building"></i> Per Divisi
-            </button>
+            <button class="tab-link {{ $activeTab == 'karyawan' ? 'active' : '' }}" data-tab="karyawan"><i
+                    class="fas fa-user"></i> Per Karyawan</button>
+            <button class="tab-link {{ $activeTab == 'divisi' ? 'active' : '' }}" data-tab="divisi"><i
+                    class="fas fa-building"></i> Per Divisi</button>
         </div>
 
         <div class="tabs-content">
@@ -487,9 +398,9 @@
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
                     <form action="{{ route('laporan.index') }}" method="GET">
                         <input type="hidden" name="tab" value="karyawan">
-                        <table>
+                        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
                             <tr>
-                                <td>
+                                <td style="width: 20%; vertical-align: middle;">
                                     <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
                                 </td>
                                 <td>
@@ -508,14 +419,14 @@
                                 <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
                                 <td>
                                     <input type="date" name="start_date" id="start_date_single" class="form-control"
-                                        value="{{ request('start_date', date('Y-m-d')) }}" required>
+                                        value="{{ request('start_date', date('Y-m-d')) }}"required>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
                                 <td>
                                     <input type="date" name="end_date" id="end_date_single" class="form-control"
-                                        value="{{ request('end_date', date('Y-m-d')) }}" required>
+                                        value="{{ request('end_date', date('Y-m-d')) }}"required>
                                 </td>
                             </tr>
                             <tr>
@@ -526,6 +437,7 @@
                             </tr>
                         </table>
                     </form>
+
                 </div>
 
                 @if ($activeTab == 'karyawan' && $reportData && $selectedKaryawan)
@@ -535,6 +447,7 @@
                                 alt="Foto {{ $selectedKaryawan->nama_lengkap }}">
                             <div class="info">
                                 <h3>{{ $selectedKaryawan->nama_lengkap }}</h3>
+                                {{-- Menampilkan Jabatan dan Divisi dalam satu baris --}}
                                 <p>{{ $selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia' }} |
                                     {{ $selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia' }}</p>
                                 <p>Periode: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}</p>
@@ -591,8 +504,8 @@
                                             </td>
                                             <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
                                             <td>{{ round(($penilaian->jobList->durasi_waktu ?? 0) / 60, 2) }}</td>
-                                            <td>{{ number_format($penilaian->nilai, 1) }}</td>
-                                            <td>{{ round($penilaian->jobList->bobot ?? 0, 1) }}%</td>
+                                            <td>{{ number_format($penilaian->nilai, 2) }}</td>
+                                            <td>{{ round($penilaian->jobList->bobot ?? 0, 2) }}%</td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -601,7 +514,8 @@
                     </div>
                 @elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date']))
                     <div class="alert alert-warning mt-4">
-                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode yang dipilih.
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode
+                        yang dipilih.
                     </div>
                 @endif
             </div>
@@ -611,9 +525,9 @@
                     <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
                     <form action="{{ route('laporan.index') }}" method="GET">
                         <input type="hidden" name="tab" value="divisi">
-                        <table>
+                        <table style="width:100%; border: 0; border-collapse: separate; border-spacing: 10px;">
                             <tr>
-                                <td>
+                                <td style="width: 20%; vertical-align: middle;">
                                     <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
                                 </td>
                                 <td>
@@ -632,14 +546,14 @@
                                 <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
                                 <td>
                                     <input type="date" name="start_date" id="start_date_div" class="form-control"
-                                        value="{{ request('start_date', date('Y-m-d')) }}" required>
+                                        value="{{ request('start_date', date('Y-m-d')) }}"required>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
                                 <td>
                                     <input type="date" name="end_date" id="end_date_div" class="form-control"
-                                        value="{{ request('end_date', date('Y-m-d')) }}" required>
+                                        value="{{ request('end_date', date('Y-m-d')) }}"required>
                                 </td>
                             </tr>
                             <tr>
@@ -686,7 +600,8 @@
                     </div>
                 @elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date']))
                     <div class="alert alert-warning mt-4">
-                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode
+                        yang dipilih.
                     </div>
                 @endif
             </div>
@@ -713,7 +628,12 @@
             });
         });
 
-        // Inisialisasi Select2 untuk dropdown karyawan
+        // Script untuk tabs (tidak berubah)
+        document.addEventListener('DOMContentLoaded', function() {
+            /* ... kode tabs ... */
+        });
+
+        // [BARU] Inisialisasi Select2 untuk dropdown karyawan
         $(document).ready(function() {
             $('#karyawan_id_single').select2({
                 placeholder: "-- Pilih Karyawan --",
