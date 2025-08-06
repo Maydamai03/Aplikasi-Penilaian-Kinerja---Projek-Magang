@@ -560,7 +560,7 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <button type="submit" class="btn btn-tampilkan">Ok</button>
+                                    <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
                                 </td>
                             </tr>
                         </table>
