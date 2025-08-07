@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     :root {
         /* Yellow Theme - Professional & Clean */
@@ -249,16 +247,17 @@
 
 <div class="page-header">
     <h1>Kelola Akun Admin</h1>
-    <a href="{{ route('kelola-admin.create') }}" class="btn-add-admin">
+    <a href="<?php echo e(route('kelola-admin.create')); ?>" class="btn-add-admin">
         <i class="fas fa-user-plus"></i> Tambah Admin
     </a>
 </div>
 
-@if(session('success'))
+<?php if(session('success')): ?>
     <div class="alert alert-success">
-        <i class="fas fa-check-circle"></i> {{ session('success') }}
+        <i class="fas fa-check-circle"></i> <?php echo e(session('success')); ?>
+
     </div>
-@endif
+<?php endif; ?>
 
 <div class="table-container">
     <table class="table">
@@ -271,44 +270,44 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($admins as $admin)
+            <?php $__empty_1 = true; $__currentLoopData = $admins; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $admin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td><?php echo e($loop->iteration); ?></td>
                 <td>
-                    <div style="font-weight: 500;">{{ $admin->name }}</div>
+                    <div style="font-weight: 500;"><?php echo e($admin->name); ?></div>
                 </td>
                 <td>
-                    <div style="color: var(--text-muted);">{{ $admin->email }}</div>
+                    <div style="color: var(--text-muted);"><?php echo e($admin->email); ?></div>
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="{{ route('kelola-admin.edit', $admin->id) }}" class="btn-action btn-info">
+                        <a href="<?php echo e(route('kelola-admin.edit', $admin->id)); ?>" class="btn-action btn-info">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <form id="delete-form-{{ $admin->id }}" action="{{ route('kelola-admin.destroy', $admin->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="btn-action btn-danger" onclick="deleteConfirmation({{ $admin->id }})">
+                        <form id="delete-form-<?php echo e($admin->id); ?>" action="<?php echo e(route('kelola-admin.destroy', $admin->id)); ?>" method="POST" style="display: inline;">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('DELETE'); ?>
+                            <button type="button" class="btn-action btn-danger" onclick="deleteConfirmation(<?php echo e($admin->id); ?>)">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </form>
                     </div>
                 </td>
             </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <tr>
                 <td colspan="4" class="text-center p-5">
                     <i class="fas fa-users" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 10px; display: block;"></i>
                     Belum ada akun admin yang terdaftar.
                 </td>
             </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function deleteConfirmation(id) {
@@ -347,4 +346,6 @@
         });
     }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/superadmin/kelola-admin/index.blade.php ENDPATH**/ ?>

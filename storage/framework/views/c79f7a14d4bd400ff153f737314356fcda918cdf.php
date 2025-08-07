@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     :root {
         /* Yellow Theme - Professional & Clean */
@@ -473,19 +471,19 @@
 
 <div class="main-card">
     <div class="tabs-nav">
-        <button class="tab-link {{ $activeTab == 'karyawan' ? 'active' : '' }}" data-tab="karyawan">
+        <button class="tab-link <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>" data-tab="karyawan">
             <i class="fas fa-user"></i> Per Karyawan
         </button>
-        <button class="tab-link {{ $activeTab == 'divisi' ? 'active' : '' }}" data-tab="divisi">
+        <button class="tab-link <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>" data-tab="divisi">
             <i class="fas fa-building"></i> Per Divisi
         </button>
     </div>
 
     <div class="tabs-content">
-        <div id="karyawan" class="tab-panel {{ $activeTab == 'karyawan' ? 'active' : '' }}">
+        <div id="karyawan" class="tab-panel <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>">
             <div class="filter-form">
                 <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
-                <form action="{{ route('laporan.index') }}" method="GET">
+                <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
                     <input type="hidden" name="tab" value="karyawan">
                     <table>
                         <tr>
@@ -495,12 +493,13 @@
                             <td>
                                 <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
                                     <option value="">-- Pilih Karyawan --</option>
-                                    @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}" title="{{ $employee->nama_lengkap }}"
-                                        {{ request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : '' }}>
-                                        {{ Str::limit($employee->nama_lengkap, 30, '...') }}
+                                    <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>"
+                                        <?php echo e(request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : ''); ?>>
+                                        <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </td>
                         </tr>
@@ -508,14 +507,14 @@
                             <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
                             <td>
                                 <input type="date" name="start_date" id="start_date_single" class="form-control"
-                                    value="{{ request('start_date', date('Y-m-d')) }}" required>
+                                    value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
                             </td>
                         </tr>
                         <tr>
                             <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
                             <td>
                                 <input type="date" name="end_date" id="end_date_single" class="form-control"
-                                    value="{{ request('end_date', date('Y-m-d')) }}" required>
+                                    value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
                             </td>
                         </tr>
                         <tr>
@@ -528,42 +527,43 @@
                 </form>
             </div>
 
-            @if ($activeTab == 'karyawan' && $reportData && $selectedKaryawan)
+            <?php if($activeTab == 'karyawan' && $reportData && $selectedKaryawan): ?>
             <div class="report-card">
                 <div class="report-header">
-                    <img src="{{ $selectedKaryawan->foto_profil ? Storage::url('karyawan/' . $selectedKaryawan->foto_profil) : 'https://via.placeholder.com/80' }}"
-                        alt="Foto {{ $selectedKaryawan->nama_lengkap }}">
+                    <img src="<?php echo e($selectedKaryawan->foto_profil ? Storage::url('karyawan/' . $selectedKaryawan->foto_profil) : 'https://via.placeholder.com/80'); ?>"
+                        alt="Foto <?php echo e($selectedKaryawan->nama_lengkap); ?>">
                     <div class="info">
-                        <h3>{{ $selectedKaryawan->nama_lengkap }}</h3>
-                        <p>{{ $selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia' }} |
-                            {{ $selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia' }}
+                        <h3><?php echo e($selectedKaryawan->nama_lengkap); ?></h3>
+                        <p><?php echo e($selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia'); ?> |
+                            <?php echo e($selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia'); ?>
+
                         </p>
-                        <p>Periode: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}</p>
+                        <p>Periode: <?php echo e($startDate->format('d/m/Y')); ?> - <?php echo e($endDate->format('d/m/Y')); ?></p>
                     </div>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['skor_kinerja'] }}</div>
+                        <div class="value"><?php echo e($reportData['skor_kinerja']); ?></div>
                         <div class="label">Skor Kinerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['beban_kerja'] }}%</div>
+                        <div class="value"><?php echo e($reportData['beban_kerja']); ?>%</div>
                         <div class="label">Beban Kerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['total_durasi_jam'] }}</div>
+                        <div class="value"><?php echo e($reportData['total_durasi_jam']); ?></div>
                         <div class="label">Total Jam Kerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['predikat_kinerja'] }}</div>
+                        <div class="value"><?php echo e($reportData['predikat_kinerja']); ?></div>
                         <div class="label">Predikat</div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5>Detail Penilaian Harian</h5>
-                    <a href="{{ route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()]) }}"
+                    <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
                         class="btn-export">
                         <i class="fas fa-file-pdf"></i> Ekspor ke PDF
                     </a>
@@ -576,7 +576,7 @@
                             <th>Nama Pekerjaan</th>
                             <th>Tipe Job</th>
                             <th>Shift</th>
-                            {{-- <th>Skala Penilaian</th> --}}
+                            
                             <th>Bobot (%)</th>
                             <th>Durasi (%)</th>
                             <th>Nilai (%)</th>
@@ -585,57 +585,59 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php $counter = 1; @endphp
-                        @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
+                        <?php $counter = 1; ?>
+                        <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr class="date-separator">
                             <td colspan="8">
-                                Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}
-                                <form action="{{ route('penilaian.destroy.bydate') }}" method="POST" class="d-inline-block float-end" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="karyawan_id" value="{{ $selectedKaryawan->id }}">
-                                    <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+                                Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
+
+                                <form action="<?php echo e(route('penilaian.destroy.bydate')); ?>" method="POST" class="d-inline-block float-end" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
+                                    <input type="hidden" name="karyawan_id" value="<?php echo e($selectedKaryawan->id); ?>">
+                                    <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
                                     <button type="submit" class="btn btn-sm btn-danger ms-2" title="Hapus semua penilaian pada hari ini">
                                         <i class="fas fa-trash"></i> Hapus Hari Ini
                                     </button>
                                 </form>
                             </td>
                         </tr>
-                        @foreach ($penilaianHarian as $penilaian)
+                        <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penilaian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $counter++ }}</td>
+                            <td><?php echo e($counter++); ?></td>
                             <td>
                                 <div class="wrap-text">
-                                    {{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}
+                                    <?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?>
+
                                 </div>
                             </td>
-                            <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
-                            <td>{{ $penilaian->jobList->shift ?? 'N/A' }}</td>
-                            {{-- <td>{{ $penilaian->skala }}</td> --}}
-                            <td>{{ number_format($penilaian->jobList->bobot ?? 0, 2) }}%</td>
-                            <td>{{ $penilaian->jobList->durasi_waktu ?? 0 }} menit</td>
-                            <td>{{ number_format($penilaian->nilai, 2) }}</td>
-                            {{-- <td>{{ $penilaian->catatan_penilai }}</td> --}}
+                            <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
+                            <td><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></td>
+                            
+                            <td><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
+                            <td><?php echo e($penilaian->jobList->durasi_waktu ?? 0); ?> menit</td>
+                            <td><?php echo e(number_format($penilaian->nilai, 2)); ?></td>
+                            
                             <td>
-                                <a href="{{ route('penilaian.edit', $penilaian->id) }}" class="btn btn-sm btn-info">Edit</a>
+                                <a href="<?php echo e(route('penilaian.edit', $penilaian->id)); ?>" class="btn btn-sm btn-info">Edit</a>
                             </td>
                         </tr>
-                        @endforeach
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
-            @elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date']))
+            <?php elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date'])): ?>
             <div class="alert alert-warning mt-4">
                 <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode yang dipilih.
             </div>
-            @endif
+            <?php endif; ?>
         </div>
 
-        <div id="divisi" class="tab-panel {{ $activeTab == 'divisi' ? 'active' : '' }}">
+        <div id="divisi" class="tab-panel <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>">
             <div class="filter-form">
                 <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
-                <form action="{{ route('laporan.index') }}" method="GET">
+                <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
                     <input type="hidden" name="tab" value="divisi">
                     <table>
                         <tr>
@@ -645,12 +647,13 @@
                             <td>
                                 <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
                                     <option value="">-- Pilih Divisi --</option>
-                                    @foreach ($divisions as $division)
-                                    <option value="{{ $division->id }}"
-                                        {{ request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : '' }}>
-                                        {{ $division->nama_divisi }}
+                                    <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $division): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($division->id); ?>"
+                                        <?php echo e(request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : ''); ?>>
+                                        <?php echo e($division->nama_divisi); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </td>
                         </tr>
@@ -658,14 +661,14 @@
                             <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
                             <td>
                                 <input type="date" name="start_date" id="start_date_div" class="form-control"
-                                    value="{{ request('start_date', date('Y-m-d')) }}" required>
+                                    value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
                             </td>
                         </tr>
                         <tr>
                             <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
                             <td>
                                 <input type="date" name="end_date" id="end_date_div" class="form-control"
-                                    value="{{ request('end_date', date('Y-m-d')) }}" required>
+                                    value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
                             </td>
                         </tr>
                         <tr>
@@ -678,49 +681,49 @@
                 </form>
             </div>
 
-            @if ($activeTab == 'divisi' && $reportData && $selectedDivisi)
-            <h3 class="mt-4">Ringkasan Divisi: {{ $selectedDivisi->nama_divisi }}</h3>
+            <?php if($activeTab == 'divisi' && $reportData && $selectedDivisi): ?>
+            <h3 class="mt-4">Ringkasan Divisi: <?php echo e($selectedDivisi->nama_divisi); ?></h3>
             <div class="division-report-grid">
-                @forelse($reportData as $karyawanReport)
+                <?php $__empty_1 = true; $__currentLoopData = $reportData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $karyawanReport): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="employee-summary-card">
                     <div class="employee-summary-header">
-                        <img src="{{ $karyawanReport['karyawan']->foto_profil ? Storage::url('karyawan/' . $karyawanReport['karyawan']->foto_profil) : 'https://via.placeholder.com/50' }}"
+                        <img src="<?php echo e($karyawanReport['karyawan']->foto_profil ? Storage::url('karyawan/' . $karyawanReport['karyawan']->foto_profil) : 'https://via.placeholder.com/50'); ?>"
                             alt="Foto">
                         <div>
-                            <div class="name">{{ $karyawanReport['karyawan']->nama_lengkap }}</div>
-                            <small>{{ $karyawanReport['data']['predikat_kinerja'] }}</small>
+                            <div class="name"><?php echo e($karyawanReport['karyawan']->nama_lengkap); ?></div>
+                            <small><?php echo e($karyawanReport['data']['predikat_kinerja']); ?></small>
                         </div>
                     </div>
                     <div class="employee-summary-stats">
                         <div class="stat-item">
-                            <div class="value">{{ $karyawanReport['data']['skor_kinerja'] }}</div>
+                            <div class="value"><?php echo e($karyawanReport['data']['skor_kinerja']); ?></div>
                             <div class="label">Skor</div>
                         </div>
                         <div class="stat-item">
-                            <div class="value">{{ $karyawanReport['data']['beban_kerja'] }}%</div>
+                            <div class="value"><?php echo e($karyawanReport['data']['beban_kerja']); ?>%</div>
                             <div class="label">Beban</div>
                         </div>
                     </div>
-                    <a href="{{ route('laporan.exportPdf', ['karyawan_id' => $karyawanReport['karyawan']->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()]) }}"
+                    <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $karyawanReport['karyawan']->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
                         class="btn-export">
                         <i class="fas fa-file-pdf"></i> Ekspor PDF
                     </a>
                 </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p>Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.</p>
-                @endforelse
+                <?php endif; ?>
             </div>
-            @elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date']))
+            <?php elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date'])): ?>
             <div class="alert alert-warning mt-4">
                 <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const tabLinks = document.querySelectorAll('.tab-link');
@@ -747,4 +750,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/laporan/index.blade.php ENDPATH**/ ?>
