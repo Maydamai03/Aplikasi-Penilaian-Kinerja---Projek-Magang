@@ -3,11 +3,21 @@
 @section('content')
 <style>
     .btn-back {
-        background-color: var(--accent-color); color: var(--text-light); padding: 8px 15px;
-        border-radius: 8px; font-weight: 500; text-decoration: none; display: inline-flex;
-        align-items: center; gap: 8px; margin-bottom: 25px; transition: background-color 0.3s;
+        color: var(--accent-color);
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 25px;
+        font-size: 1rem;
+        transition: color 0.3s;
     }
-    .btn-back:hover { background-color: #6d0000; }
+
+    .btn-back:hover {
+        color: #6d0000;
+        text-decoration: underline;
+    }
 
     /* Kartu Utama */
     .detail-container {

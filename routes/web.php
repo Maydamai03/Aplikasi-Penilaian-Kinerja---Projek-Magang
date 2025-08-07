@@ -31,10 +31,12 @@ Route::get('/', function () {
 // Route untuk halaman setelah login (biasanya dashboard)
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
-     // Route BARU untuk CRUD Karyawan
+    // Route BARU untuk CRUD Karyawan
     Route::resource('karyawan', KaryawanController::class);
 
     // Route BARU untuk update status karyawan langsung di detail info karyawan
@@ -62,11 +64,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-pdf', [ReportController::class, 'exportPdf'])->name('laporan.exportPdf');
 
+    // Route untuk menampilkan form edit
+    Route::get('penilaian/{penilaian_kinerja}/edit', [PenilaianController::class, 'edit'])->name('penilaian.edit');
 
+    // Route untuk menyimpan perubahan dari form edit
+    Route::put('penilaian/{penilaian_kinerja}', [PenilaianController::class, 'update'])->name('penilaian.update');
+
+    // routes/web.php
+
+    // ... (kode route lainnya) ...
+
+    // Route untuk menghapus semua penilaian pada tanggal tertentu
+    Route::delete('penilaian/hapus-per-tanggal', [PenilaianController::class, 'destroyByDate'])->name('penilaian.destroy.bydate');
 });
 
 // --- ROUTE KHUSUS SUPERADMIN ---
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('kelola-admin', KelolaAdminController::class);
 });
-
