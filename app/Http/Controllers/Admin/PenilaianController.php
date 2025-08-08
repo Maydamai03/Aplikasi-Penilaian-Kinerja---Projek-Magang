@@ -36,7 +36,7 @@ class PenilaianController extends Controller
             'tanggal_penilaian' => 'required|date',
             'status.*' => 'required|in:Dikerjakan,Tidak Dikerjakan',
             'skala.*' => ['nullable', Rule::in(['Tidak Dikerjakan', 'Melakukan Tapi Tidak Benar', 'Melakukan Dengan Benar'])],
-            'shift' => 'required|in:Siang,Malam',
+            'shift' => 'required|in:Pagi,Siang',
             'opsional_nama.*' => 'nullable|string|max:255',
             'opsional_durasi.*' => 'nullable|integer|min:1',
             'opsional_status.*' => 'nullable|in:Dikerjakan,Tidak Dikerjakan',
@@ -124,6 +124,55 @@ class PenilaianController extends Controller
 
         return redirect()->route('job.tetap', $karyawan->id)
                          ->with('success', 'Penilaian kinerja berhasil disimpan.');
+    }
+
+    public function edit(PenilaianKinerja $penilaian_kinerja)
+    {
+        return view('admin.penilaian.edit', compact('penilaian_kinerja'));
+    }
+
+    /**
+     * [BARU] Memperbarui satu entri penilaian di database.
+     */
+    public function update(Request $request, PenilaianKinerja $penilaian_kinerja)
+    {
+        $request->validate([
+            'skala' => ['required', Rule::in(['Tidak Dikerjakan', 'Melakukan Tapi Tidak Benar', 'Melakukan Dengan Benar'])],
+            'catatan_penilai' => 'nullable|string',
+        ]);
+
+        $job = $penilaian_kinerja->jobList;
+        if (!$job) {
+            return redirect()->back()->with('error', 'Job terkait tidak ditemukan.');
+        }
+
+        $skala = $request->skala;
+        $jamKerjaMenit = 8 * 60;
+        $bobot = ($job->durasi_waktu / $jamKerjaMenit) * 100;
+        $nilai = 0;
+
+        switch ($skala) {
+            case 'Tidak Dikerjakan': $nilai = 0; break;
+            case 'Melakukan Tapi Tidak Benar': $nilai = $bobot * 0.5; break;
+            case 'Melakukan Dengan Benar': $nilai = $bobot * 1; break;
+        }
+
+        $penilaian_kinerja->update([
+            'skala' => $skala,
+            'nilai' => round($nilai, 1),
+            'catatan_penilai' => $request->catatan_penilai,
+        ]);
+
+        // Buat URL untuk kembali ke halaman laporan dengan filter yang sama
+        $queryParams = [
+            'tab' => 'karyawan',
+            'karyawan_id' => $job->karyawan_id,
+            'start_date' => $penilaian_kinerja->tanggal_penilaian,
+            'end_date' => $penilaian_kinerja->tanggal_penilaian,
+        ];
+
+        return redirect()->route('laporan.index', $queryParams)
+                         ->with('success', 'Penilaian berhasil diperbarui.');
     }
 
     public function destroyByDate(Request $request)

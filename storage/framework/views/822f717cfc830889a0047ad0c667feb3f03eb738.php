@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         /* Menggunakan style yang sama dengan halaman kelola joblist */
         .btn-back {
@@ -99,43 +97,32 @@
         }
     </style>
 
-    {{-- <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ route('job.tetap', $karyawan->id) }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
-
-        <div class="employee-header m-0">
-            <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60' }}"
-                alt="Foto">
-            <div class="employee-info">
-                <p class="nama">{{ $karyawan->nama_lengkap }}</p>
-                <p class="detail">{{ $karyawan->nip }} | {{ $karyawan->divisi->nama_divisi }}</p>
-            </div>
-        </div>
-    </div> --}}
-    <a href="{{ route('job.tetap', $karyawan->id) }}" class="btn-back"><i class="fas fa-arrow-left "></i> Kembali</a>
+    
+    <a href="<?php echo e(route('job.tetap', $karyawan->id)); ?>" class="btn-back"><i class="fas fa-arrow-left "></i> Kembali</a>
 
 
     <div class="form-card">
         <div class="form-header">
-            <h1>Edit Pekerjaan (Shift {{ $joblist->shift }})</h1>
+            <h1>Edit Pekerjaan (Shift <?php echo e($joblist->shift); ?>)</h1>
         </div>
 
-        <form action="{{ route('job.update', $joblist->id) }}" method="POST">
-            @csrf
-            @method('PATCH')
+        <form action="<?php echo e(route('job.update', $joblist->id)); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PATCH'); ?>
 
             <div class="row mt-4">
                 <div class="col-md-8 mb-3">
                     <div class="form-group">
                         <label for="nama_pekerjaan">Nama Pekerjaan *</label>
                         <input type="text" name="nama_pekerjaan" class="form-control"
-                            value="{{ old('nama_pekerjaan', $joblist->nama_pekerjaan) }}" required>
+                            value="<?php echo e(old('nama_pekerjaan', $joblist->nama_pekerjaan)); ?>" required>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="durasi_waktu">Durasi (menit) *</label>
                         <input type="number" name="durasi_waktu" class="form-control"
-                            value="{{ old('durasi_waktu', $joblist->durasi_waktu) }}" required>
+                            value="<?php echo e(old('durasi_waktu', $joblist->durasi_waktu)); ?>" required>
                     </div>
                 </div>
             </div>
@@ -144,9 +131,9 @@
             </div>
         </form>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const uploadBox = document.getElementById('upload-box');
@@ -178,4 +165,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/joblist/edit.blade.php ENDPATH**/ ?>

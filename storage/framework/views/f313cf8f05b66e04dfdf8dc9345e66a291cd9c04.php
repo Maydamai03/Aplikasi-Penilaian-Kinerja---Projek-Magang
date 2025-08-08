@@ -85,6 +85,9 @@
         <p><strong>Skor Kinerja Rata-Rata:</strong> <?php echo e($reportData['skor_kinerja']); ?></p>
         <p><strong>Predikat Kinerja:</strong> <?php echo e($reportData['predikat_kinerja']); ?></p>
         <p><strong>Beban Kerja:</strong> <?php echo e($reportData['beban_kerja']); ?>%</p>
+        <p style="padding-left: 15px; font-size: 11px;"><em>Beban Kerja Job Tetap: <?php echo e($reportData['beban_kerja_tetap']); ?>%</em></p>
+        <p style="padding-left: 15px; font-size: 11px;"><em>Beban Kerja Job Opsional: <?php echo e($reportData['beban_kerja_opsional']); ?>%</em></p>
+
         <hr style="border-style: dashed; border-width: 0.5px;">
         <p><strong>Total Jam Kerja Tercatat:</strong> <?php echo e($reportData['total_durasi_jam']); ?> Jam (<?php echo e($reportData['total_durasi_jam'] * 60); ?> menit)</p>
         <p><strong>Selisih Jam Kerja:</strong> <?php echo e($reportData['selisih_jam_kerja']); ?> Jam (<?php echo e($reportData['selisih_jam_kerja'] * 60); ?> menit)

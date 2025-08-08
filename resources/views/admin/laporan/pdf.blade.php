@@ -85,6 +85,9 @@
         <p><strong>Skor Kinerja Rata-Rata:</strong> {{ $reportData['skor_kinerja'] }}</p>
         <p><strong>Predikat Kinerja:</strong> {{ $reportData['predikat_kinerja'] }}</p>
         <p><strong>Beban Kerja:</strong> {{ $reportData['beban_kerja'] }}%</p>
+        <p style="padding-left: 15px; font-size: 11px;"><em>Beban Kerja Job Tetap: {{ $reportData['beban_kerja_tetap'] }}%</em></p>
+        <p style="padding-left: 15px; font-size: 11px;"><em>Beban Kerja Job Opsional: {{ $reportData['beban_kerja_opsional'] }}%</em></p>
+
         <hr style="border-style: dashed; border-width: 0.5px;">
         <p><strong>Total Jam Kerja Tercatat:</strong> {{ $reportData['total_durasi_jam'] }} Jam ({{ $reportData['total_durasi_jam'] * 60 }} menit)</p>
         <p><strong>Selisih Jam Kerja:</strong> {{ $reportData['selisih_jam_kerja'] }} Jam ({{ $reportData['selisih_jam_kerja'] * 60 }} menit)

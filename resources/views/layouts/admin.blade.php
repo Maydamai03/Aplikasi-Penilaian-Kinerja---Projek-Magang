@@ -476,7 +476,7 @@
                 <li><a href="{{ route('karyawan.index') }}" class="{{ request()->is('karyawan*') ? 'active' : '' }}">
                     <i class="fas fa-users"></i> Karyawan</a></li>
                 <li><a href="{{ route('laporan.index') }}" class="{{ request()->is('laporan*') ? 'active' : '' }}">
-                    <i class="fas fa-chart-line"></i> Kinerja</a></li>
+                    <i class="fas fa-chart-line"></i> Laporan</a></li>
 
                 {{-- [BARU] Tampilkan menu ini hanya untuk Superadmin --}}
                 @if (Auth::user()->role == 'superadmin')

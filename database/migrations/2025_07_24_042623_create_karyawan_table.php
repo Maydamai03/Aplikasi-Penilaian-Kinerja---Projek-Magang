@@ -17,6 +17,7 @@ class CreateKaryawanTable extends Migration
         $table->id();
         $table->string('nip', 50)->unique();
         $table->string('nama_lengkap');
+        $table->date('tanggal_lahir')->nullable();
         $table->string('email')->unique();
         $table->string('nomor_telepon', 20)->nullable();
         $table->text('alamat')->nullable();
