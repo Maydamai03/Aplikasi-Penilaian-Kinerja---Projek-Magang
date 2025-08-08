@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         .form-card {
             background-color: var(--card-bg);
@@ -128,65 +126,66 @@
             <p style="margin: 5px 0 0 0;">Silakan lengkapi informasi data diri Anda.</p>
         </div>
 
-        @if ($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert alert-danger">
                 <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
-        @endif
+        <?php endif; ?>
 
-        <form action="{{ route('karyawan.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+        <form action="<?php echo e(route('karyawan.store')); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="nama_lengkap">Nama Lengkap *</label>
                         <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control"
-                            placeholder="Masukkan nama lengkap Anda" value="{{ old('nama_lengkap') }}" required>
+                            placeholder="Masukkan nama lengkap Anda" value="<?php echo e(old('nama_lengkap')); ?>" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="tanggal_lahir">Tanggal Lahir</label>
                         <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control"
-                            value="{{ old('tanggal_lahir') }}">
+                            value="<?php echo e(old('tanggal_lahir')); ?>">
                     </div>
                     <div class="form-group mb-3">
                         <label for="email">Email *</label>
                         <input type="email" id="email" name="email" class="form-control"
-                            placeholder="contoh@email.com" value="{{ old('email') }}" required>
+                            placeholder="contoh@email.com" value="<?php echo e(old('email')); ?>" required>
                         <small class="text-muted">contoh@email.com</small>
                     </div>
                     <div class="form-group mb-3">
                         <label for="nomor_telepon">Nomor Telepon *</label>
                         <input type="text" id="nomor_telepon" name="nomor_telepon" class="form-control"
-                            placeholder="08xxxxxxxxxx" value="{{ old('nomor_telepon') }}" required>
+                            placeholder="08xxxxxxxxxx" value="<?php echo e(old('nomor_telepon')); ?>" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="nip">NIP *</label>
                         <input type="text" id="nip" name="nip" class="form-control"
-                            placeholder="Nomor Induk Pegawai" value="{{ old('nip') }}" required>
+                            placeholder="Nomor Induk Pegawai" value="<?php echo e(old('nip')); ?>" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="divisi_id">Divisi *</label>
                         <select id="divisi_id" name="divisi_id" class="form-control" required>
                             <option value="">Pilih Divisi</option>
-                            @foreach ($divisi as $d)
-                                <option value="{{ $d->id }}" {{ old('divisi_id') == $d->id ? 'selected' : '' }}>
-                                    {{ $d->nama_divisi }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $divisi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($d->id); ?>" <?php echo e(old('divisi_id') == $d->id ? 'selected' : ''); ?>>
+                                    <?php echo e($d->nama_divisi); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="form-group mb-3">
                         <label for="jabatan_id">Jabatan *</label>
                         <select id="jabatan_id" name="jabatan_id" class="form-control" required>
                             <option value="">Pilih Jabatan</option>
-                            @foreach ($jabatan as $j)
-                                <option value="{{ $j->id }}" {{ old('jabatan_id') == $j->id ? 'selected' : '' }}>
-                                    {{ $j->nama_jabatan }}
+                            <?php $__currentLoopData = $jabatan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $j): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($j->id); ?>" <?php echo e(old('jabatan_id') == $j->id ? 'selected' : ''); ?>>
+                                    <?php echo e($j->nama_jabatan); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
@@ -194,11 +193,11 @@
                     <div class="form-group mb-3">
                         <label for="tanggal_masuk">Tanggal Masuk *</label>
                         <input type="date" id="tanggal_masuk" name="tanggal_masuk" class="form-control"
-                            value="{{ old('tanggal_masuk') }}" required>
+                            value="<?php echo e(old('tanggal_masuk')); ?>" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="alamat">Alamat *</label>
-                        <textarea id="alamat" name="alamat" class="form-control" rows="4" required>{{ old('alamat') }}</textarea>
+                        <textarea id="alamat" name="alamat" class="form-control" rows="4" required><?php echo e(old('alamat')); ?></textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label>Foto Profil</label>
@@ -215,14 +214,14 @@
                 </div>
             </div>
             <div class="form-buttons">
-                <a href="{{ route('karyawan.index') }}" class="btn-form btn-cancel">Batal</a>
+                <a href="<?php echo e(route('karyawan.index')); ?>" class="btn-form btn-cancel">Batal</a>
                 <button type="submit" class="btn-form btn-submit">Simpan Data</button>
             </div>
         </form>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const uploadBox = document.getElementById('upload-box');
@@ -254,4 +253,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/karyawan/create.blade.php ENDPATH**/ ?>

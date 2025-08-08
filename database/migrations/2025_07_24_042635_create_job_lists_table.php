@@ -18,7 +18,7 @@ class CreateJobListsTable extends Migration
         $table->foreignId('karyawan_id')->constrained('karyawan')->onDelete('cascade');
 
         // KOLOM-KOLOM YANG BENAR SESUAI REVISI TERAKHIR
-        $table->enum('shift', ['Siang', 'Malam']);
+        $table->enum('shift', ['Pagi', 'Siang']);
         $table->enum('tipe_job', ['Tetap', 'Opsional']);
         $table->string('nama_pekerjaan');
         $table->text('deskripsi_pekerjaan')->nullable();

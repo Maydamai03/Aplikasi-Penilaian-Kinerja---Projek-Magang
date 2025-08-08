@@ -128,7 +128,7 @@ class ReportController extends Controller
                 $query->where('karyawan_id', $karyawan->id);
             })
             // Filter ini untuk mengecualikan pekerjaan yang tidak dikerjakan
-            ->where('skala', '!=', 'Tidak Dikerjakan')
+            // ->where('skala', '!=', 'Tidak Dikerjakan')
             ->whereBetween('tanggal_penilaian', [$startDate, $endDate])
             ->get();
 
@@ -157,9 +157,21 @@ class ReportController extends Controller
         $totalJamKerja = round($totalDurasiMenit / 60, 2);
 
         // Hitung selisih jam kerja
-        $jumlahHariKerja = $startDate->diffInDays($endDate) + 1;
+        // Menghitung jumlah hari kerja dengan asumsi 6 hari kerja per minggu
+        $totalHariDalamPeriode = $startDate->diffInDays($endDate) + 1;
+        $jumlahMinggu = floor($totalHariDalamPeriode / 7);
+        $jumlahHariKerja = $totalHariDalamPeriode - $jumlahMinggu;
+
         $waktuKerjaIdealMenit = $jumlahHariKerja * $jamKerjaMenit;
         $selisihJam = round(($totalDurasiMenit - $waktuKerjaIdealMenit) / 60, 2);
+
+        // Hitung Beban Kerja per Tipe Job
+        $durasiJobTetap = $penilaian->filter(fn($item) => $item->jobList && $item->jobList->tipe_job === 'Tetap')->sum('jobList.durasi_waktu');
+        $durasiJobOpsional = $penilaian->filter(fn($item) => $item->jobList && $item->jobList->tipe_job === 'Opsional')->sum('jobList.durasi_waktu');
+
+        $bebanKerjaTetap = ($waktuKerjaIdealMenit > 0) ? round(($durasiJobTetap / $waktuKerjaIdealMenit) * 100, 2) : 0;
+        $bebanKerjaOpsional = ($waktuKerjaIdealMenit > 0) ? round(($durasiJobOpsional / $waktuKerjaIdealMenit) * 100, 2) : 0;
+
 
         // Menghitung total job tetap dan opsional
         $totalJobTetap = $penilaian->where('jobList.tipe_job', 'Tetap')->count();
@@ -172,6 +184,8 @@ class ReportController extends Controller
             'predikat_kinerja' => $predikatKinerja,
             'skor_kinerja' => $skorKinerja,
             'beban_kerja' => $bebanKerja,
+            'beban_kerja_tetap' => $bebanKerjaTetap,       // <-- Kirim data baru
+            'beban_kerja_opsional' => $bebanKerjaOpsional, // <-- Kirim data baru
             'total_durasi_jam' => $totalJamKerja,
             'selisih_jam_kerja' => $selisihJam,
             'total_job_tetap' => $totalJobTetap,

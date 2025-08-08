@@ -56,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
     // Mengupdate item joblist
     Route::patch('/job/{joblist}', [JobListController::class, 'update'])->name('job.update');
 
+    // [BARU] Route untuk ekspor PDF joblist per shift
+    Route::get('/karyawan/{karyawan}/job/export-pdf/{shift}', [JobListController::class, 'exportJoblistPdf'])->name('job.exportPdf');
+
+
     // Menampilkan halaman form penilaian per shift
     Route::get('/karyawan/{karyawan}/penilaian/create/{shift}', [PenilaianController::class, 'create'])->name('penilaian.create');
     // Menyimpan data dari form penilaian

@@ -52,6 +52,7 @@ class KaryawanController extends Controller
     {
         $request->validate([
             'nama_lengkap' => 'required|string|max:255',
+            'tanggal_lahir' => 'nullable|date',
             'email' => 'required|email|unique:karyawan,email',
             'nomor_telepon' => 'required|string|max:20',
             'nip' => 'required|string|max:50|unique:karyawan,nip',
@@ -96,6 +97,7 @@ class KaryawanController extends Controller
     {
         $request->validate([
             'nama_lengkap' => 'required|string|max:255',
+            'tanggal_lahir' => 'nullable|date',
             'email' => 'required|email|unique:karyawan,email,' . $karyawan->id,
             'nomor_telepon' => 'required|string|max:20',
             'nip' => 'required|string|max:50|unique:karyawan,nip,' . $karyawan->id,

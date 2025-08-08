@@ -82,85 +82,147 @@
             background-color: #F0C419;
             color: #333;
         }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            /* Batasi tinggi maksimal gambar */
+            border-radius: 8px;
+            /* display: none; <-- Biarkan diatur oleh inline style */
+        }
     </style>
 
-   <h1 style="font-size: 1.8rem;color:#292828">Form Edit Data Karyawan</h1>
+    <h1 style="font-size: 1.8rem;color:#292828">Form Edit Data Karyawan</h1>
 
-<div class="form-card mt-4">
-    <div class="form-header">
-        <h3 style="margin: 0; font-weight:700;">Data Diri Karyawan</h3>
-        <p style="margin: 5px 0 0 0;">Silakan perbarui informasi data diri karyawan.</p>
+    <div class="form-card mt-4">
+        <div class="form-header">
+            <h3 style="margin: 0; font-weight:700;">Data Diri Karyawan</h3>
+            <p style="margin: 5px 0 0 0;">Silakan perbarui informasi data diri karyawan.</p>
+        </div>
+
+        <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT') {{-- Method untuk update --}}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="nama_lengkap">Nama Lengkap *</label>
+                        <input type="text" name="nama_lengkap" class="form-control"
+                            value="{{ old('nama_lengkap', $karyawan->nama_lengkap) }}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="tanggal_lahir">Tanggal Lahir</label>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="form-control"
+                            value="{{ old('tanggal_lahir', $karyawan->tanggal_lahir) }}">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email">Email *</label>
+                        <input type="email" name="email" class="form-control"
+                            value="{{ old('email', $karyawan->email) }}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="nomor_telepon">Nomor Telepon *</label>
+                        <input type="text" name="nomor_telepon" class="form-control"
+                            value="{{ old('nomor_telepon', $karyawan->nomor_telepon) }}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="nip">NIP *</label>
+                        <input type="text" name="nip" class="form-control" value="{{ old('nip', $karyawan->nip) }}"
+                            required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="divisi_id">Divisi *</label>
+                        <select name="divisi_id" class="form-control" required>
+                            @foreach ($divisi as $d)
+                                <option value="{{ $d->id }}"
+                                    {{ old('divisi_id', $karyawan->divisi_id) == $d->id ? 'selected' : '' }}>
+                                    {{ $d->nama_divisi }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- [BARU] Dropdown untuk Jabatan --}}
+                    <div class="form-group mb-3">
+                        <label for="jabatan_id">Jabatan *</label>
+                        <select id="jabatan_id" name="jabatan_id" class="form-control" required>
+                            <option value="">Pilih Jabatan</option>
+                            @foreach ($jabatan as $j)
+                                <option value="{{ $j->id }}"
+                                    {{ old('jabatan_id', $karyawan->jabatan_id) == $j->id ? 'selected' : '' }}>
+                                    {{ $j->nama_jabatan }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="tanggal_masuk">Tanggal Masuk *</label>
+                        <input type="date" name="tanggal_masuk" class="form-control"
+                            value="{{ old('tanggal_masuk', $karyawan->tanggal_masuk) }}" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="alamat">Alamat *</label>
+                        <textarea name="alamat" class="form-control" rows="4" required>{{ old('alamat', $karyawan->alamat) }}</textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Ganti Foto Profil</label>
+                        <div class="upload-box" id="upload-box">
+                            <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : '#' }}"
+                                id="image-preview" alt="Image Preview"
+                                style="{{ $karyawan->foto_profil ? 'display: block;' : 'display: none;' }}">
+
+                            <div id="upload-placeholder"
+                                style="{{ $karyawan->foto_profil ? 'display: none;' : 'display: block;' }}">
+                                <i class="fas fa-image"></i>
+                                <p><span>Klik untuk upload</span> atau drag and drop</p>
+                            </div>
+                        </div>
+                        <input type="file" name="foto_profil" id="foto_profil_input" accept="image/*">
+                        <small class="text-muted">Kosongkan jika tidak ingin mengganti foto.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-buttons">
+                <a href="{{ route('karyawan.show', $karyawan->id) }}" class="btn-form btn-cancel">Batal</a>
+                <button type="submit" class="btn-form btn-submit">Update Data</button>
+            </div>
+        </form>
     </div>
-
-    <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT') {{-- Method untuk update --}}
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="nama_lengkap">Nama Lengkap *</label>
-                    <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap', $karyawan->nama_lengkap) }}" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email">Email *</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email', $karyawan->email) }}" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="nomor_telepon">Nomor Telepon *</label>
-                    <input type="text" name="nomor_telepon" class="form-control" value="{{ old('nomor_telepon', $karyawan->nomor_telepon) }}" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="nip">NIP *</label>
-                    <input type="text" name="nip" class="form-control" value="{{ old('nip', $karyawan->nip) }}" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="divisi_id">Divisi *</label>
-                    <select name="divisi_id" class="form-control" required>
-                        @foreach ($divisi as $d)
-                            <option value="{{ $d->id }}" {{ old('divisi_id', $karyawan->divisi_id) == $d->id ? 'selected' : '' }}>
-                                {{ $d->nama_divisi }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                {{-- [BARU] Dropdown untuk Jabatan --}}
-                <div class="form-group mb-3">
-                    <label for="jabatan_id">Jabatan *</label>
-                    <select id="jabatan_id" name="jabatan_id" class="form-control" required>
-                        <option value="">Pilih Jabatan</option>
-                        @foreach($jabatan as $j)
-                            <option value="{{ $j->id }}" {{ old('jabatan_id', $karyawan->jabatan_id) == $j->id ? 'selected' : '' }}>
-                                {{ $j->nama_jabatan }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="tanggal_masuk">Tanggal Masuk *</label>
-                    <input type="date" name="tanggal_masuk" class="form-control" value="{{ old('tanggal_masuk', $karyawan->tanggal_masuk) }}" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="alamat">Alamat *</label>
-                    <textarea name="alamat" class="form-control" rows="4" required>{{ old('alamat', $karyawan->alamat) }}</textarea>
-                </div>
-                <div class="form-group mb-3">
-                    <label>Ganti Foto Profil</label>
-                    @if ($karyawan->foto_profil)
-                        <img src="{{ Storage::url('karyawan/' . $karyawan->foto_profil) }}" alt="Foto saat ini" class="current-img mb-2">
-                    @endif
-                    <input type="file" name="foto_profil" class="form-control">
-                    <small class="text-muted">Kosongkan jika tidak ingin mengganti foto.</small>
-                </div>
-            </div>
-        </div>
-        <div class="form-buttons">
-            <a href="{{ route('karyawan.show', $karyawan->id) }}" class="btn-form btn-cancel">Batal</a>
-            <button type="submit" class="btn-form btn-submit">Update Data</button>
-        </div>
-    </form>
-</div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadBox = document.getElementById('upload-box');
+            const fileInput = document.getElementById('foto_profil_input');
+            const imagePreview = document.getElementById('image-preview');
+            const uploadPlaceholder = document.getElementById('upload-placeholder');
+
+            // Memicu klik pada input file saat kotak di klik
+            uploadBox.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // Menangani perubahan pada input file (saat gambar baru dipilih)
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        // Tampilkan preview gambar yang baru
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        // Sembunyikan placeholder
+                        uploadPlaceholder.style.display = 'none';
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+@endpush

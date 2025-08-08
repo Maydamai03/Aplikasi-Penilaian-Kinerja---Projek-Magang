@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         /* Header & Tombol Kembali */
         .page-header {
@@ -106,7 +104,7 @@
             animation: fadeInUp 0.5s ease-out;
         }
 
-        @keyframes fadeInUp {
+        @keyframes  fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -240,19 +238,19 @@
     </style>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{{ route('karyawan.index') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+        <a href="<?php echo e(route('karyawan.index')); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
         <div class="employee-header m-0">
-            <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60' }}"
+            <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/60'); ?>"
                 alt="Foto">
             <div class="employee-info">
-                <p><span class="label">Nama:</span> {{ $karyawan->nama_lengkap }}</p>
-                <p><span class="label">NIP:</span> {{ $karyawan->nip }}</p>
-                <p><span class="label">Divisi:</span> {{ $karyawan->divisi->nama_divisi }}</p>
+                <p><span class="label">Nama:</span> <?php echo e($karyawan->nama_lengkap); ?></p>
+                <p><span class="label">NIP:</span> <?php echo e($karyawan->nip); ?></p>
+                <p><span class="label">Divisi:</span> <?php echo e($karyawan->divisi->nama_divisi); ?></p>
             </div>
         </div>
     </div>
 
-    {{-- @if (session('success')) <div class="alert alert-success mb-3">{{ session('success') }}</div> @endif --}}
+    
 
     <div class="tabs-container">
         <div class="tabs-nav">
@@ -262,12 +260,12 @@
 
         <div class="tabs-content">
             <div id="pagi" class="tab-panel active">
-                {{-- Form tidak berubah --}}
+                
                 <div class="shift-header">
                     <h3>Tambah Pekerjaan Shift Pagi</h3>
                 </div>
-                <form action="{{ route('job.store', $karyawan->id) }}" method="POST" class="mb-4">
-                    @csrf
+                <form action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST" class="mb-4">
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="tipe_job" value="Tetap">
                     <input type="hidden" name="shift" value="Pagi">
                     <div class="row align-items-end g-3">
@@ -280,7 +278,7 @@
                 </form>
                 <hr>
                 <div class="d-flex justify-content-end mb-3">
-                    <a href="{{ route('job.exportPdf', ['karyawan' => $karyawan->id, 'shift' => 'Pagi']) }}"
+                    <a href="<?php echo e(route('job.exportPdf', ['karyawan' => $karyawan->id, 'shift' => 'Pagi'])); ?>"
                         class="btn-export-joblist">
                         <i class="fas fa-file-pdf"></i> Ekspor Joblist Pagi
                     </a>
@@ -296,45 +294,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($jobPagi as $job)
+                        <?php $__empty_1 = true; $__currentLoopData = $jobPagi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $job->nama_pekerjaan }}</td>
-                                {{-- DIPERBAIKI: Menampilkan bobot dengan 1 desimal --}}
-                                <td>{{ number_format(($job->durasi_waktu / 480) * 100, 1) }}%</td>
-                                <td>{{ $job->durasi_waktu }} menit</td>
+                                <td><?php echo e($loop->iteration); ?></td>
+                                <td><?php echo e($job->nama_pekerjaan); ?></td>
+                                
+                                <td><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
+                                <td><?php echo e($job->durasi_waktu); ?> menit</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
+                                        <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
-                                            onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}"
-                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
-                                            style="display: none;">@csrf @method('DELETE')</form>
+                                            onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
+                                        <form id="delete-form-<?php echo e($job->id); ?>"
+                                            action="<?php echo e(route('job.destroy', $job->id)); ?>" method="POST"
+                                            style="display: none;"><?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?></form>
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="5" class="text-center p-4">Belum ada job untuk shift Pagi.</td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
                 <br>
                 <div class="d-flex justify-content-end mt-4">
-                    <a href="{{ route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Pagi']) }}"
+                    <a href="<?php echo e(route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Pagi'])); ?>"
                         class="btn-penilaian">Penilaian Kinerja Shift Pagi</a>
                 </div>
             </div>
 
             <div id="siang" class="tab-panel">
-                {{-- Form tidak berubah --}}
+                
                 <div class="shift-header">
                     <h3>Tambah Pekerjaan Shift Siang</h3>
                 </div>
-                <form action="{{ route('job.store', $karyawan->id) }}" method="POST" class="mb-4">
-                    @csrf
+                <form action="<?php echo e(route('job.store', $karyawan->id)); ?>" method="POST" class="mb-4">
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="tipe_job" value="Tetap">
                     <input type="hidden" name="shift" value="Siang">
                     <div class="row align-items-end g-3">
@@ -347,7 +345,7 @@
                 </form>
                 <hr>
                 <div class="d-flex justify-content-end mb-3">
-                    <a href="{{ route('job.exportPdf', ['karyawan' => $karyawan->id, 'shift' => 'Siang']) }}"
+                    <a href="<?php echo e(route('job.exportPdf', ['karyawan' => $karyawan->id, 'shift' => 'Siang'])); ?>"
                         class="btn-export-joblist">
                         <i class="fas fa-file-pdf"></i> Ekspor Joblist Siang
                     </a>
@@ -363,42 +361,42 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($jobSiang as $job)
+                        <?php $__empty_1 = true; $__currentLoopData = $jobSiang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $job->nama_pekerjaan }}</td>
-                                {{-- DIPERBAIKI: Menampilkan bobot dengan 1 desimal --}}
-                                <td>{{ number_format(($job->durasi_waktu / 480) * 100, 1) }}%</td>
-                                <td>{{ $job->durasi_waktu }} menit</td>
+                                <td><?php echo e($loop->iteration); ?></td>
+                                <td><?php echo e($job->nama_pekerjaan); ?></td>
+                                
+                                <td><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
+                                <td><?php echo e($job->durasi_waktu); ?> menit</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
+                                        <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
-                                            onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}"
-                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
-                                            style="display: none;">@csrf @method('DELETE')</form>
+                                            onclick="deleteConfirmation(<?php echo e($job->id); ?>)">Hapus</button>
+                                        <form id="delete-form-<?php echo e($job->id); ?>"
+                                            action="<?php echo e(route('job.destroy', $job->id)); ?>" method="POST"
+                                            style="display: none;"><?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?></form>
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="5" class="text-center p-4">Belum ada job untuk shift Siang.</td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
                 <br>
                 <div class="d-flex justify-content-end mt-4">
-                    <a href="{{ route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Siang']) }}"
+                    <a href="<?php echo e(route('penilaian.create', ['karyawan' => $karyawan->id, 'shift' => 'Siang'])); ?>"
                         class="btn-penilaian">Penilaian Kinerja Shift Siang</a>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -474,4 +472,6 @@
             })
         }
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/joblist/tetap.blade.php ENDPATH**/ ?>

@@ -13,13 +13,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 
-    {{-- PENTING: TAMBAHKAN META TAG CSRF INI DI SINI --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- END PENTING --}}
+    
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    
 
-    {{-- PENTING: TAMBAHKAN LINK CSS UNTUK SWEETALERT JIKA BELUM TERMASUK DI FILE CSS LAIN --}}
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    {{-- END PENTING --}}
+    
 
     <style>
         * {
@@ -466,24 +466,24 @@
 
     <aside class="sidebar">
         <div class="logo">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+            <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Logo">
             <span>Decaa.id</span>
         </div>
         <nav>
             <ul>
-                <li><a href="{{ route('home') }}" class="{{ request()->is('home') ? 'active' : '' }}">
+                <li><a href="<?php echo e(route('home')); ?>" class="<?php echo e(request()->is('home') ? 'active' : ''); ?>">
                     <i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="{{ route('karyawan.index') }}" class="{{ request()->is('karyawan*') ? 'active' : '' }}">
+                <li><a href="<?php echo e(route('karyawan.index')); ?>" class="<?php echo e(request()->is('karyawan*') ? 'active' : ''); ?>">
                     <i class="fas fa-users"></i> Karyawan</a></li>
-                <li><a href="{{ route('laporan.index') }}" class="{{ request()->is('laporan*') ? 'active' : '' }}">
+                <li><a href="<?php echo e(route('laporan.index')); ?>" class="<?php echo e(request()->is('laporan*') ? 'active' : ''); ?>">
                     <i class="fas fa-chart-line"></i> Laporan</a></li>
 
-                {{-- [BARU] Tampilkan menu ini hanya untuk Superadmin --}}
-                @if (Auth::user()->role == 'superadmin')
-                    <li><a href="{{ route('kelola-admin.index') }}"
-                            class="{{ request()->is('kelola-admin*') ? 'active' : '' }}">
+                
+                <?php if(Auth::user()->role == 'superadmin'): ?>
+                    <li><a href="<?php echo e(route('kelola-admin.index')); ?>"
+                            class="<?php echo e(request()->is('kelola-admin*') ? 'active' : ''); ?>">
                         <i class="fas fa-user-shield"></i> Kelola Admin</a></li>
-                @endif
+                <?php endif; ?>
             </ul>
         </nav>
     </aside>
@@ -503,23 +503,19 @@
                 <div class="user-dropdown">
                     <div class="user-info" id="userDropdownToggle">
                         <div class="user-avatar">
-                            {{ substr(Auth::user()->name, 0, 1) }}
+                            <?php echo e(substr(Auth::user()->name, 0, 1)); ?>
+
                         </div>
-                        <div class="user-name">{{ Auth::user()->name }}</div>
+                        <div class="user-name"><?php echo e(Auth::user()->name); ?></div>
                         <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </div>
 
                     <div class="dropdown-menu" id="userDropdownMenu">
                         <div class="dropdown-header">
-                            <div class="user-name">{{ Auth::user()->name }}</div>
-                            <div class="user-role">{{ Auth::user()->role }}</div>
+                            <div class="user-name"><?php echo e(Auth::user()->name); ?></div>
+                            <div class="user-role"><?php echo e(Auth::user()->role); ?></div>
                         </div>
-                        {{-- <a href="#" class="profile-item">
-                            <i class="fas fa-user"></i> Profil Saya
-                        </a>
-                        <a href="#" class="settings-item">
-                            <i class="fas fa-cog"></i> Pengaturan
-                        </a> --}}
+                        
                         <a href="#" id="logoutButton" class="logout-item">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
@@ -527,11 +523,11 @@
                 </div>
             </div>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+            <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;"><?php echo csrf_field(); ?></form>
         </header>
 
         <div class="content">
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </div>
     </main>
 
@@ -616,7 +612,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 
 </html>
+<?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

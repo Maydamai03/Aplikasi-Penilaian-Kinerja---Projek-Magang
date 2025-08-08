@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Karyawan;
 use App\Models\JobList;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class JobListController extends Controller
 {
@@ -20,10 +21,10 @@ class JobListController extends Controller
                          ->get()
                          ->groupBy('shift');
 
+    $jobPagi = $jobLists->get('Pagi', collect());
     $jobSiang = $jobLists->get('Siang', collect());
-    $jobMalam = $jobLists->get('Malam', collect());
 
-    return view('admin.joblist.tetap', compact('karyawan', 'jobSiang', 'jobMalam'));
+    return view('admin.joblist.tetap', compact('karyawan', 'jobPagi', 'jobSiang'));
 }
 
     /**
@@ -34,7 +35,7 @@ class JobListController extends Controller
         $request->validate([
             'nama_pekerjaan' => 'required|string|max:255',
             'durasi_waktu' => 'required|integer|min:1',
-            'shift' => 'required|in:Siang,Malam',
+            'shift' => 'required|in:Pagi,Siang',
             'tipe_job' => 'required|in:Tetap,Opsional'
         ]);
 
@@ -73,5 +74,28 @@ class JobListController extends Controller
     {
         $joblist->delete();
         return redirect()->back()->with('success', 'Pekerjaan berhasil dihapus.');
+    }
+
+    public function exportJoblistPdf(Karyawan $karyawan, $shift)
+    {
+        // Ambil data joblist sesuai karyawan dan shift yang diminta
+        $jobLists = JobList::where('karyawan_id', $karyawan->id)
+                            ->where('tipe_job', 'Tetap')
+                            ->where('shift', $shift)
+                            ->get();
+
+        if ($jobLists->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada joblist untuk diekspor pada shift ini.');
+        }
+
+        // Buat PDF
+        $pdf = Pdf::loadView('admin.joblist.pdf', [
+            'jobLists' => $jobLists,
+            'karyawan' => $karyawan,
+            'shift' => $shift
+        ]);
+
+        // Download PDF
+        return $pdf->download('joblist-' . $karyawan->nama_lengkap . '-shift-' . $shift . '.pdf');
     }
 }

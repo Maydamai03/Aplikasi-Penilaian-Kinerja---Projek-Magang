@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <style>
         .appraisal-card {
             background-color: #ffffff;
@@ -170,21 +168,21 @@
         }
     </style>
 
-    <a href="{{ url()->previous() }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+    <a href="<?php echo e(url()->previous()); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
 
-    <form action="{{ route('penilaian.store', $karyawan->id) }}" method="POST">
-        @csrf
-        <input type="hidden" name="shift" value="{{ $shift }}">
+    <form action="<?php echo e(route('penilaian.store', $karyawan->id)); ?>" method="POST">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="shift" value="<?php echo e($shift); ?>">
         <div class="appraisal-card mt-3">
              <div class="appraisal-header">
-            <h3>Form Penilaian Kinerja (Shift {{ $shift }})</h3>
-            <p>Karyawan: <strong>{{ $karyawan->nama_lengkap }}</strong></p>
+            <h3>Form Penilaian Kinerja (Shift <?php echo e($shift); ?>)</h3>
+            <p>Karyawan: <strong><?php echo e($karyawan->nama_lengkap); ?></strong></p>
 
-            {{-- [BARU] Tambahkan input tanggal di sini --}}
+            
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="tanggal_penilaian" class="form-label fw-bold">Pilih Tanggal Penilaian</label>
-                    <input type="date" id="tanggal_penilaian" name="tanggal_penilaian" class="form-control" value="{{ date('Y-m-d') }}" required>
+                    <input type="date" id="tanggal_penilaian" name="tanggal_penilaian" class="form-control" value="<?php echo e(date('Y-m-d')); ?>" required>
                 </div>
             </div>
         </div>
@@ -202,24 +200,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Judul untuk Job Tetap --}}
+                        
                         <tr class="job-type-header">
                             <td colspan="5">Job Tetap</td>
                         </tr>
 
-                        @forelse ($jobLists as $job)
+                        <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td class="text-center">{{ $loop->iteration }}</td> {{-- [BARU] Menampilkan nomor urut --}}
-                                <td>{{ $job->nama_pekerjaan }}</td>
+                                <td class="text-center"><?php echo e($loop->iteration); ?></td> 
+                                <td><?php echo e($job->nama_pekerjaan); ?></td>
                                 <td>
-                                    <select name="status[{{ $job->id }}]"
+                                    <select name="status[<?php echo e($job->id); ?>]"
                                         class="form-select form-control-table status-dropdown" required>
                                         <option value="Dikerjakan">Dikerjakan</option>
                                         <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="skala[{{ $job->id }}]"
+                                    <select name="skala[<?php echo e($job->id); ?>]"
                                         class="form-select form-control-table skala-dropdown" required>
                                         <option value="">-- Pilih Skala --</option>
                                         <option value="Melakukan Dengan Benar">Melakukan Dengan Benar</option>
@@ -227,18 +225,18 @@
                                         <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                                     </select>
                                 </td>
-                                <td><input type="text" name="catatan[{{ $job->id }}]"
+                                <td><input type="text" name="catatan[<?php echo e($job->id); ?>]"
                                         class="form-control-table catatan-input" placeholder="Isi jika perlu"></td>
                                 <td class="action-cell"></td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="5" class="empty-state">Belum ada Job Tetap untuk dinilai.</td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
 
-                    {{-- Container untuk Job Opsional dinamis --}}
+                    
                     <tbody id="opsional-jobs-container">
                         <tr class="job-type-header">
                             <td colspan="5">Job Opsional</td>
@@ -259,9 +257,9 @@
             </div>
         </div>
     </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let opsionalCounter = 0;
@@ -431,4 +429,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/penilaian/create.blade.php ENDPATH**/ ?>
