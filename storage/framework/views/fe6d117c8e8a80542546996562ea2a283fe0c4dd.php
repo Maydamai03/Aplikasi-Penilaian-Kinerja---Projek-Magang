@@ -476,7 +476,7 @@
                 <li><a href="<?php echo e(route('karyawan.index')); ?>" class="<?php echo e(request()->is('karyawan*') ? 'active' : ''); ?>">
                     <i class="fas fa-users"></i> Karyawan</a></li>
                 <li><a href="<?php echo e(route('laporan.index')); ?>" class="<?php echo e(request()->is('laporan*') ? 'active' : ''); ?>">
-                    <i class="fas fa-chart-line"></i> Kinerja</a></li>
+                    <i class="fas fa-chart-line"></i> Laporan</a></li>
 
                 
                 <?php if(Auth::user()->role == 'superadmin'): ?>

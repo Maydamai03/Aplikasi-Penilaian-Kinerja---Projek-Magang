@@ -176,18 +176,19 @@
         @csrf
         <input type="hidden" name="shift" value="{{ $shift }}">
         <div class="appraisal-card mt-3">
-             <div class="appraisal-header">
-            <h3>Form Penilaian Kinerja (Shift {{ $shift }})</h3>
-            <p>Karyawan: <strong>{{ $karyawan->nama_lengkap }}</strong></p>
+            <div class="appraisal-header">
+                <h3>Form Penilaian Kinerja (Shift {{ $shift }})</h3>
+                <p>Karyawan: <strong>{{ $karyawan->nama_lengkap }}</strong></p>
 
-            {{-- [BARU] Tambahkan input tanggal di sini --}}
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="tanggal_penilaian" class="form-label fw-bold">Pilih Tanggal Penilaian</label>
-                    <input type="date" id="tanggal_penilaian" name="tanggal_penilaian" class="form-control" value="{{ date('Y-m-d') }}" required>
+                {{-- [BARU] Tambahkan input tanggal di sini --}}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="tanggal_penilaian" class="form-label fw-bold">Pilih Tanggal Penilaian</label>
+                        <input type="date" id="tanggal_penilaian" name="tanggal_penilaian" class="form-control"
+                            value="{{ date('Y-m-d') }}" required>
+                    </div>
                 </div>
             </div>
-        </div>
 
             <div class="table-responsive">
                 <table class="table table-bordered align-middle">
@@ -212,23 +213,23 @@
                                 <td class="text-center">{{ $loop->iteration }}</td> {{-- [BARU] Menampilkan nomor urut --}}
                                 <td>{{ $job->nama_pekerjaan }}</td>
                                 <td>
-                                    <select name="status[{{ $job->id }}]"
-                                        class="form-select form-control-table status-dropdown" required>
+                                    <select name="status[{{ $job->id }}]" class="form-select form-control-table status-dropdown"
+                                        required>
                                         <option value="Dikerjakan">Dikerjakan</option>
                                         <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="skala[{{ $job->id }}]"
-                                        class="form-select form-control-table skala-dropdown" required>
+                                    <select name="skala[{{ $job->id }}]" class="form-select form-control-table skala-dropdown"
+                                        required>
                                         <option value="">-- Pilih Skala --</option>
                                         <option value="Melakukan Dengan Benar">Melakukan Dengan Benar</option>
                                         <option value="Melakukan Tapi Tidak Benar">Melakukan Tapi Tidak Benar</option>
                                         <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
                                     </select>
                                 </td>
-                                <td><input type="text" name="catatan[{{ $job->id }}]"
-                                        class="form-control-table catatan-input" placeholder="Isi jika perlu"></td>
+                                <td><input type="text" name="catatan[{{ $job->id }}]" class="form-control-table catatan-input"
+                                        placeholder="Isi jika perlu"></td>
                                 <td class="action-cell"></td>
                             </tr>
                         @empty
@@ -244,7 +245,8 @@
                             <td colspan="5">Job Opsional</td>
                         </tr>
                         <tr id="no-opsional-jobs" class="empty-state-row">
-                            <td colspan="5" class="empty-state">Belum ada Job Opsional. Klik tombol di bawah untuk menambah.</td>
+                            <td colspan="5" class="empty-state">Belum ada Job Opsional. Klik tombol di bawah untuk
+                                menambah.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -262,8 +264,30 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // SweetAlert2 pop-up notifications
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+
+        document.addEventListener('DOMContentLoaded', function () {
             let opsionalCounter = 0;
 
             // Fungsi untuk mengatur dropdown Skala berdasarkan Status
@@ -305,11 +329,11 @@
             function addFormValidation(row) {
                 const inputs = row.querySelectorAll('input[required], select[required]');
                 inputs.forEach(input => {
-                    input.addEventListener('invalid', function() {
+                    input.addEventListener('invalid', function () {
                         this.style.borderColor = '#ef4444';
                     });
 
-                    input.addEventListener('input', function() {
+                    input.addEventListener('input', function () {
                         if (this.checkValidity()) {
                             this.style.borderColor = '#d1d5db';
                         }
@@ -324,7 +348,7 @@
             });
 
             // Fungsi untuk menambah baris form job opsional
-            document.getElementById('add-opsional-btn').addEventListener('click', function() {
+            document.getElementById('add-opsional-btn').addEventListener('click', function () {
                 opsionalCounter++;
                 const container = document.getElementById('opsional-jobs-container');
                 const uniqueId = `opsional_row_${opsionalCounter}`;
@@ -337,62 +361,62 @@
                 newRow.id = uniqueId;
 
                 newRow.innerHTML = `
-                <td class="text-center">${opsionalCounter}.</td>
-                    <td>
-                        <input type="text"
-                               name="opsional_nama[]"
-                               class="form-control-table mb-2"
-                               placeholder="Masukkan nama pekerjaan..."
-                               required
-                               maxlength="100">
-                        <div class="job-duration-section">
-                            <span class="duration-label">Durasi:</span>
-                            <input type="number"
-                                   name="opsional_durasi[]"
-                                   class="form-control-table duration-input"
-                                   placeholder="0"
-                                   min="1"
-                                   max="999"
-                                   required>
-                            <small class="text-muted">menit</small>
-                        </div>
-                    </td>
-                    <td class="opsional-field-wrapper">
-                        <select name="opsional_status[]" class="form-select form-control-table status-dropdown" required>
-                            <option value="Dikerjakan">Dikerjakan</option>
-                            <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
-                        </select>
-                    </td>
-                    <td class="opsional-field-wrapper">
-                        <select name="opsional_skala[]" class="form-select form-control-table skala-dropdown" required>
-                            <option value="">-- Pilih Skala --</option>
-                            <option value="Melakukan Dengan Benar">Melakukan Dengan Benar</option>
-                            <option value="Melakukan Tapi Tidak Benar">Melakukan Tapi Tidak Benar</option>
-                            <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
-                        </select>
-                    </td>
-                    <td class="opsional-field-wrapper">
-                        <input type="text"
-                               name="opsional_catatan[]"
-                               class="form-control-table catatan-input"
-                               placeholder="Catatan tambahan..."
-                               maxlength="255">
-                    </td>
-                    <td class="action-cell opsional-field-wrapper">
-                        <button type="button"
-                                class="btn-delete-opsional"
-                                onclick="deleteOpsionalJob(this)"
-                                title="Hapus pekerjaan ini">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
+                    <td class="text-center">${opsionalCounter}.</td>
+                        <td>
+                            <input type="text"
+                                   name="opsional_nama[]"
+                                   class="form-control-table mb-2"
+                                   placeholder="Masukkan nama pekerjaan..."
+                                   required
+                                   maxlength="100">
+                            <div class="job-duration-section">
+                                <span class="duration-label">Durasi:</span>
+                                <input type="number"
+                                       name="opsional_durasi[]"
+                                       class="form-control-table duration-input"
+                                       placeholder="0"
+                                       min="1"
+                                       max="999"
+                                       required>
+                                <small class="text-muted">menit</small>
+                            </div>
+                        </td>
+                        <td class="opsional-field-wrapper">
+                            <select name="opsional_status[]" class="form-select form-control-table status-dropdown" required>
+                                <option value="Dikerjakan">Dikerjakan</option>
+                                <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
+                            </select>
+                        </td>
+                        <td class="opsional-field-wrapper">
+                            <select name="opsional_skala[]" class="form-select form-control-table skala-dropdown" required>
+                                <option value="">-- Pilih Skala --</option>
+                                <option value="Melakukan Dengan Benar">Melakukan Dengan Benar</option>
+                                <option value="Melakukan Tapi Tidak Benar">Melakukan Tapi Tidak Benar</option>
+                                <option value="Tidak Dikerjakan">Tidak Dikerjakan</option>
+                            </select>
+                        </td>
+                        <td class="opsional-field-wrapper">
+                            <input type="text"
+                                   name="opsional_catatan[]"
+                                   class="form-control-table catatan-input"
+                                   placeholder="Catatan tambahan..."
+                                   maxlength="255">
+                        </td>
+                        <td class="action-cell opsional-field-wrapper">
+                            <button type="button"
+                                    class="btn-delete-opsional"
+                                    onclick="deleteOpsionalJob(this)"
+                                    title="Hapus pekerjaan ini">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
 
                 container.appendChild(newRow);
 
                 // Terapkan event listeners dan validasi ke baris baru
                 const statusDropdown = newRow.querySelector('.status-dropdown');
-                statusDropdown.addEventListener('change', function() {
+                statusDropdown.addEventListener('change', function () {
                     handleStatusChange(this);
                 });
 
@@ -410,7 +434,7 @@
             window.deleteOpsionalJob = deleteOpsionalJob;
 
             // Validasi form sebelum submit
-            document.querySelector('form').addEventListener('submit', function(e) {
+            document.querySelector('form').addEventListener('submit', function (e) {
                 let hasError = false;
                 const requiredFields = this.querySelectorAll('input[required], select[required]');
 

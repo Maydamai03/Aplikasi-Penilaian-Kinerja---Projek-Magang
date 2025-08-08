@@ -14,18 +14,18 @@ class JobListController extends Controller
      * Menampilkan halaman untuk mengelola joblist Shift Siang & Malam.
      */
     public function showTetap(Karyawan $karyawan)
-{
-    // [DIUBAH] Tambahkan filter untuk hanya mengambil Job Tetap
-    $jobLists = $karyawan->jobLists()
-                         ->where('tipe_job', 'Tetap')
-                         ->get()
-                         ->groupBy('shift');
+    {
+        // [DIUBAH] Tambahkan filter untuk hanya mengambil Job Tetap
+        $jobLists = $karyawan->jobLists()
+            ->where('tipe_job', 'Tetap')
+            ->get()
+            ->groupBy('shift');
 
-    $jobPagi = $jobLists->get('Pagi', collect());
-    $jobSiang = $jobLists->get('Siang', collect());
+        $jobPagi = $jobLists->get('Pagi', collect());
+        $jobSiang = $jobLists->get('Siang', collect());
 
-    return view('admin.joblist.tetap', compact('karyawan', 'jobPagi', 'jobSiang'));
-}
+        return view('admin.joblist.tetap', compact('karyawan', 'jobPagi', 'jobSiang'));
+    }
 
     /**
      * Menyimpan job baru (Siang atau Malam).
@@ -41,7 +41,11 @@ class JobListController extends Controller
 
         $karyawan->jobLists()->create($request->all());
 
-        return redirect()->back()->with('success', 'Pekerjaan baru berhasil ditambahkan.');
+        // Perbaikan: Redirect ke route yang spesifik dengan parameter tab
+        return redirect()->route('job.tetap', [
+            'karyawan' => $karyawan->id,
+            'tab' => strtolower($request->shift) // Sesuaikan nama tab jika perlu
+        ])->with('success', 'Pekerjaan baru berhasil ditambahkan.');
     }
 
     public function edit(JobList $joblist)
@@ -64,7 +68,7 @@ class JobListController extends Controller
 
         // Redirect kembali ke halaman kelola joblist utama
         return redirect()->route('job.tetap', $joblist->karyawan_id)
-                         ->with('success', 'Pekerjaan berhasil diperbarui.');
+            ->with('success', 'Pekerjaan berhasil diperbarui.');
     }
 
     /**
@@ -80,9 +84,9 @@ class JobListController extends Controller
     {
         // Ambil data joblist sesuai karyawan dan shift yang diminta
         $jobLists = JobList::where('karyawan_id', $karyawan->id)
-                            ->where('tipe_job', 'Tetap')
-                            ->where('shift', $shift)
-                            ->get();
+            ->where('tipe_job', 'Tetap')
+            ->where('shift', $shift)
+            ->get();
 
         if ($jobLists->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada joblist untuk diekspor pada shift ini.');

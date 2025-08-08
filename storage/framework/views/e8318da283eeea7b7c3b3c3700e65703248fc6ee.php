@@ -577,9 +577,11 @@
                             <th>Tanggal</th>
                             <th>Nama Pekerjaan</th>
                             <th>Tipe Job</th>
-                            <th>Durasi (Jam)</th>
-                            <th>Nilai</th>
+                            <th>Shift</th>
+                            
                             <th>Bobot (%)</th>
+                            <th>Durasi (%)</th>
+                            <th>Nilai (%)</th>
                             <th>Aksi</th>
                         </tr>
                         </tr>
@@ -613,11 +615,11 @@
                             </td>
                             <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
                             <td><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></td>
-                            <td><?php echo e($penilaian->skala); ?></td>
+                            
                             <td><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
                             <td><?php echo e($penilaian->jobList->durasi_waktu ?? 0); ?> menit</td>
                             <td><?php echo e(number_format($penilaian->nilai, 2)); ?></td>
-                            <td><?php echo e($penilaian->catatan_penilai); ?></td>
+                            
                             <td>
                                 <a href="<?php echo e(route('penilaian.edit', $penilaian->id)); ?>" class="btn btn-sm btn-info">Edit</a>
                             </td>
@@ -751,4 +753,5 @@
     });
 </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/laporan/index.blade.php ENDPATH**/ ?>

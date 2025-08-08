@@ -308,9 +308,8 @@
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
                                             onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}"
-                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
-                                            style="display: none;">@csrf @method('DELETE')</form>
+                                        <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"
+                                            method="POST" style="display: none;">@csrf @method('DELETE')</form>
                                     </div>
                                 </td>
                             </tr>
@@ -375,9 +374,8 @@
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
                                             onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}"
-                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
-                                            style="display: none;">@csrf @method('DELETE')</form>
+                                        <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"
+                                            method="POST" style="display: none;">@csrf @method('DELETE')</form>
                                     </div>
                                 </td>
                             </tr>
@@ -401,7 +399,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabLinks = document.querySelectorAll('.tab-link');
             const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -440,7 +438,7 @@
 
             // 3. Saat form di-submit, tambahkan info tab yang aktif
             document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function() {
+                form.addEventListener('submit', function () {
                     // Hapus dulu jika sudah ada, untuk mencegah duplikat
                     let oldTabInput = this.querySelector('input[name="tab"]');
                     if (oldTabInput) {
@@ -456,6 +454,28 @@
                 });
             });
         });
+
+        // NOTIFIKASI POP UP
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 800 // Diubah dari 3000 menjadi 1500 milidetik
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 800 // Diubah dari 3000 menjadi 1500 milidetik
+            });
+        @endif
+
 
         function deleteConfirmation(id) {
             Swal.fire({

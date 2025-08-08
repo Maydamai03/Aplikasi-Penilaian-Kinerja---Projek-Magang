@@ -1,6 +1,6 @@
-@extends('layouts.admin')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <style>
         .btn-back {
             color: var(--accent-color);
@@ -176,42 +176,41 @@
         }
     </style>
 
-    <a href="{{ route('karyawan.index') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
+    <a href="<?php echo e(route('karyawan.index')); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
 
-    {{-- @if (session('success'))
-    <div class="alert alert-success mb-3">{{ session('success') }}</div>
-    @endif --}}
+    
 
     <div class="detail-container">
         <div class="detail-header">
             <h3><i class="fas fa-user-circle"></i> Informasi Karyawan</h3>
             <div class="header-actions">
-                <a href="{{ route('karyawan.edit', $karyawan->id) }}" class="btn-action btn-edit">Edit Profil</a>
+                <a href="<?php echo e(route('karyawan.edit', $karyawan->id)); ?>" class="btn-action btn-edit">Edit Profil</a>
             </div>
         </div>
 
         <div class="detail-body">
             <div class="profile-sidebar">
-                <img src="{{ $karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/150' }}"
+                <img src="<?php echo e($karyawan->foto_profil ? Storage::url('karyawan/' . $karyawan->foto_profil) : 'https://via.placeholder.com/150'); ?>"
                     alt="Foto Profil" class="profile-img">
-                <h4 class="profile-name">{{ $karyawan->nama_lengkap }}</h4>
-                <p class="profile-nip">{{ $karyawan->nip }}</p>
+                <h4 class="profile-name"><?php echo e($karyawan->nama_lengkap); ?></h4>
+                <p class="profile-nip"><?php echo e($karyawan->nip); ?></p>
                 <span class="status-badge"
-                    style="background-color: {{ $karyawan->status_karyawan == 'Aktif' ? '#22C55E' : ($karyawan->status_karyawan == 'Cuti' ? '#F59E0B' : '#EF4444') }};">
-                    {{ $karyawan->status_karyawan }}
+                    style="background-color: <?php echo e($karyawan->status_karyawan == 'Aktif' ? '#22C55E' : ($karyawan->status_karyawan == 'Cuti' ? '#F59E0B' : '#EF4444')); ?>;">
+                    <?php echo e($karyawan->status_karyawan); ?>
+
                 </span>
 
                 <div class="status-update-form">
-                    <form action="{{ route('karyawan.updateStatus', $karyawan->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
+                    <form action="<?php echo e(route('karyawan.updateStatus', $karyawan->id)); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
                         <label for="status_karyawan">Ubah Status:</label>
                         <select name="status_karyawan" id="status_karyawan" class="form-select">
-                            <option value="Aktif" {{ $karyawan->status_karyawan == 'Aktif' ? 'selected' : '' }}>Aktif
+                            <option value="Aktif" <?php echo e($karyawan->status_karyawan == 'Aktif' ? 'selected' : ''); ?>>Aktif
                             </option>
-                            <option value="Cuti" {{ $karyawan->status_karyawan == 'Cuti' ? 'selected' : '' }}>Cuti
+                            <option value="Cuti" <?php echo e($karyawan->status_karyawan == 'Cuti' ? 'selected' : ''); ?>>Cuti
                             </option>
-                            <option value="Resign" {{ $karyawan->status_karyawan == 'Resign' ? 'selected' : '' }}>Resign
+                            <option value="Resign" <?php echo e($karyawan->status_karyawan == 'Resign' ? 'selected' : ''); ?>>Resign
                             </option>
                         </select>
                         <button type="submit" class="btn-update-status">Update</button>
@@ -223,71 +222,72 @@
                 <ul class="detail-list">
                     <li class="detail-item">
                         <span class="label">NIP</span>
-                        <span class="value">: {{ $karyawan->nip }}</span>
+                        <span class="value">: <?php echo e($karyawan->nip); ?></span>
                     </li>
                     <li class="detail-item">
                         <span class="label">Tanggal Lahir</span>
                         <span class="value">:
-                            {{ $karyawan->tanggal_lahir ? \Carbon\Carbon::parse($karyawan->tanggal_lahir)->format('d F Y') : '-' }}</span>
+                            <?php echo e($karyawan->tanggal_lahir ? \Carbon\Carbon::parse($karyawan->tanggal_lahir)->format('d F Y') : '-'); ?></span>
                     </li>
                     <li class="detail-item">
                         <span class="label">Divisi</span>
-                        <span class="value">: {{ $karyawan->divisi->nama_divisi }}</span>
+                        <span class="value">: <?php echo e($karyawan->divisi->nama_divisi); ?></span>
                     </li>
 
-                    {{-- [BARU] Menampilkan Jabatan --}}
+                    
                     <li class="detail-item">
                         <span class="label">Jabatan</span>
-                        <span class="value">: {{ $karyawan->jabatan->nama_jabatan ?? '-' }}</span>
+                        <span class="value">: <?php echo e($karyawan->jabatan->nama_jabatan ?? '-'); ?></span>
                     </li>
 
                     <li class="detail-item">
                         <span class="label">Nomor Telepon</span>
-                        <span class="value">: {{ $karyawan->nomor_telepon }}</span>
+                        <span class="value">: <?php echo e($karyawan->nomor_telepon); ?></span>
                     </li>
                     <li class="detail-item">
                         <span class="label">Email</span>
-                        <span class="value">: {{ $karyawan->email }}</span>
+                        <span class="value">: <?php echo e($karyawan->email); ?></span>
                     </li>
                     <li class="detail-item">
                         <span class="label">Tanggal Bergabung</span>
                         <span class="value">:
-                            {{ \Carbon\Carbon::parse($karyawan->tanggal_masuk)->format('d F Y') }}</span>
+                            <?php echo e(\Carbon\Carbon::parse($karyawan->tanggal_masuk)->format('d F Y')); ?></span>
                     </li>
                     <li class="detail-item">
                         <span class="label">Alamat</span>
-                        <span class="value">: {{ $karyawan->alamat }}</span>
+                        <span class="value">: <?php echo e($karyawan->alamat); ?></span>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // SweetAlert2 pop-up notifications
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil!',
-                    text: '{{ session('success') }}',
+                    text: '<?php echo e(session('success')); ?>',
                     showConfirmButton: false,
                     timer: 1500
                 });
-            @endif
+            <?php endif; ?>
 
-            @if (session('error'))
+            <?php if(session('error')): ?>
                 Swal.fire({
                     icon: 'error',
                     title: 'Terjadi Kesalahan!',
-                    text: '{{ session('error') }}',
+                    text: '<?php echo e(session('error')); ?>',
                     showConfirmButton: false,
                     timer: 1500
                 });
-            @endif
+            <?php endif; ?>
             });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Tugas Kuliah\Magang\Projek Karyawan\PenilaianKaryawan\resources\views/admin/karyawan/show.blade.php ENDPATH**/ ?>
