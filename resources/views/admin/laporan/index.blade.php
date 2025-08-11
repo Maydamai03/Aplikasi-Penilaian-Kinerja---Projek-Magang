@@ -264,6 +264,7 @@
     .stat-item .label {
         font-size: 12px;
         color: var(--text-muted);
+        margin-top: 5px;
     }
 
     .employee-summary-card .btn-export {
@@ -544,15 +545,18 @@
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['skor_kinerja'] }}</div>
+                        {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk skor kinerja --}}
+                        <div class="value">{{ number_format($reportData['skor_kinerja'], 2) }}</div>
                         <div class="label">Skor Kinerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['beban_kerja'] }}%</div>
+                        {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk beban kerja --}}
+                        <div class="value">{{ number_format($reportData['beban_kerja'], 2) }}%</div>
                         <div class="label">Beban Kerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value">{{ $reportData['total_durasi_jam'] }}</div>
+                        {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk total jam kerja --}}
+                        <div class="value">{{ number_format($reportData['total_durasi_jam'], 2) }}</div>
                         <div class="label">Total Jam Kerja</div>
                     </div>
                     <div class="stat-card">
@@ -581,7 +585,6 @@
                             <th>Durasi (%)</th>
                             <th>Nilai (%)</th>
                             <th>Aksi</th>
-                        </tr>
                         </tr>
                     </thead>
                     <tbody>
@@ -612,8 +615,11 @@
                             <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
                             <td>{{ $penilaian->jobList->shift ?? 'N/A' }}</td>
                             {{-- <td>{{ $penilaian->skala }}</td> --}}
+                            {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk bobot --}}
                             <td>{{ number_format($penilaian->jobList->bobot ?? 0, 2) }}%</td>
-                            <td>{{ $penilaian->jobList->durasi_waktu ?? 0 }} menit</td>
+                            {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk durasi --}}
+                            <td>{{ number_format($penilaian->jobList->durasi_waktu ?? 0) }} menit</td>
+                            {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk nilai --}}
                             <td>{{ number_format($penilaian->nilai, 2) }}</td>
                             {{-- <td>{{ $penilaian->catatan_penilai }}</td> --}}
                             <td>
@@ -693,11 +699,13 @@
                     </div>
                     <div class="employee-summary-stats">
                         <div class="stat-item">
-                            <div class="value">{{ $karyawanReport['data']['skor_kinerja'] }}</div>
+                            {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk skor --}}
+                            <div class="value">{{ number_format($karyawanReport['data']['skor_kinerja'], 2) }}</div>
                             <div class="label">Skor</div>
                         </div>
                         <div class="stat-item">
-                            <div class="value">{{ $karyawanReport['data']['beban_kerja'] }}%</div>
+                            {{-- PERBAIKAN: Menambahkan number_format() dengan presisi 2 untuk beban kerja --}}
+                            <div class="value">{{ number_format($karyawanReport['data']['beban_kerja'], 2) }}%</div>
                             <div class="label">Beban</div>
                         </div>
                     </div>

@@ -147,14 +147,15 @@ class ReportController extends Controller
             }
         }
 
+        // --- PERBAIKAN: Menghapus fungsi round() untuk mendapatkan presisi penuh ---
         // Hitung total nilai yang berhasil dicapai (Skor Kinerja)
-        $skorKinerja = round($penilaian->sum('nilai'), 2);
+        $skorKinerja = $penilaian->sum('nilai'); // Nilai floating point penuh
 
         // Hitung total bobot dari semua pekerjaan yang dinilai (Beban Kerja)
-        $bebanKerja = round($penilaian->sum('jobList.bobot'), 2);
+        $bebanKerja = $penilaian->sum('jobList.bobot'); // Nilai floating point penuh
 
         $totalDurasiMenit = $penilaian->sum('jobList.durasi_waktu');
-        $totalJamKerja = round($totalDurasiMenit / 60, 2);
+        $totalJamKerja = $totalDurasiMenit / 60; // Nilai floating point penuh
 
         // Hitung selisih jam kerja
         // Menghitung jumlah hari kerja dengan asumsi 6 hari kerja per minggu
@@ -163,15 +164,15 @@ class ReportController extends Controller
         $jumlahHariKerja = $totalHariDalamPeriode - $jumlahMinggu;
 
         $waktuKerjaIdealMenit = $jumlahHariKerja * $jamKerjaMenit;
-        $selisihJam = round(($totalDurasiMenit - $waktuKerjaIdealMenit) / 60, 2);
+        $selisihJam = ($totalDurasiMenit - $waktuKerjaIdealMenit) / 60; // Nilai floating point penuh
 
         // Hitung Beban Kerja per Tipe Job
         $durasiJobTetap = $penilaian->filter(fn($item) => $item->jobList && $item->jobList->tipe_job === 'Tetap')->sum('jobList.durasi_waktu');
         $durasiJobOpsional = $penilaian->filter(fn($item) => $item->jobList && $item->jobList->tipe_job === 'Opsional')->sum('jobList.durasi_waktu');
 
-        $bebanKerjaTetap = ($waktuKerjaIdealMenit > 0) ? round(($durasiJobTetap / $waktuKerjaIdealMenit) * 100, 2) : 0;
-        $bebanKerjaOpsional = ($waktuKerjaIdealMenit > 0) ? round(($durasiJobOpsional / $waktuKerjaIdealMenit) * 100, 2) : 0;
-
+        $bebanKerjaTetap = ($waktuKerjaIdealMenit > 0) ? ($durasiJobTetap / $waktuKerjaIdealMenit) * 100 : 0; // Nilai floating point penuh
+        $bebanKerjaOpsional = ($waktuKerjaIdealMenit > 0) ? ($durasiJobOpsional / $waktuKerjaIdealMenit) * 100 : 0; // Nilai floating point penuh
+        // --- AKHIR PERBAIKAN ---
 
         // Menghitung total job tetap dan opsional
         $totalJobTetap = $penilaian->where('jobList.tipe_job', 'Tetap')->count();
@@ -184,8 +185,8 @@ class ReportController extends Controller
             'predikat_kinerja' => $predikatKinerja,
             'skor_kinerja' => $skorKinerja,
             'beban_kerja' => $bebanKerja,
-            'beban_kerja_tetap' => $bebanKerjaTetap,       // <-- Kirim data baru
-            'beban_kerja_opsional' => $bebanKerjaOpsional, // <-- Kirim data baru
+            'beban_kerja_tetap' => $bebanKerjaTetap,
+            'beban_kerja_opsional' => $bebanKerjaOpsional,
             'total_durasi_jam' => $totalJamKerja,
             'selisih_jam_kerja' => $selisihJam,
             'total_job_tetap' => $totalJobTetap,

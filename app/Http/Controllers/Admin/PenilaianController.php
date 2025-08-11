@@ -20,9 +20,9 @@ class PenilaianController extends Controller
     {
         // Ambil hanya job tetap untuk shift yang dipilih
         $jobLists = JobList::where('karyawan_id', $karyawan->id)
-                            ->where('shift', $shift)
-                            ->where('tipe_job', 'Tetap')
-                            ->get();
+            ->where('shift', $shift)
+            ->where('tipe_job', 'Tetap')
+            ->get();
 
         return view('admin.penilaian.create', compact('karyawan', 'jobLists', 'shift'));
     }
@@ -77,7 +77,7 @@ class PenilaianController extends Controller
                     'job_list_id' => $jobListId,
                     'penilai_id' => Auth::id(),
                     'skala' => $skala,
-                    'nilai' => round($nilai, 1),
+                    'nilai' => $nilai, // PERBAIKAN: Menghapus fungsi round()
                     'catatan_penilai' => $request->catatan[$jobListId] ?? null,
                     'tanggal_penilaian' => $tanggalPenilaian,
                 ]);
@@ -106,16 +106,22 @@ class PenilaianController extends Controller
                 $nilaiOpsional = 0;
 
                 switch ($skalaOpsional) {
-                    case 'Tidak Dikerjakan': $nilaiOpsional = 0; break;
-                    case 'Melakukan Tapi Tidak Benar': $nilaiOpsional = $bobotOpsional * 0.5; break;
-                    case 'Melakukan Dengan Benar': $nilaiOpsional = $bobotOpsional * 1; break;
+                    case 'Tidak Dikerjakan':
+                        $nilaiOpsional = 0;
+                        break;
+                    case 'Melakukan Tapi Tidak Benar':
+                        $nilaiOpsional = $bobotOpsional * 0.5;
+                        break;
+                    case 'Melakukan Dengan Benar':
+                        $nilaiOpsional = $bobotOpsional * 1;
+                        break;
                 }
 
                 PenilaianKinerja::create([
                     'job_list_id' => $jobOpsional->id,
                     'penilai_id' => Auth::id(),
                     'skala' => $skalaOpsional,
-                    'nilai' => round($nilaiOpsional, 1),
+                    'nilai' => $nilaiOpsional, // PERBAIKAN: Menghapus fungsi round()
                     'catatan_penilai' => $request->opsional_catatan[$key] ?? null,
                     'tanggal_penilaian' => $tanggalPenilaian,
                 ]);
@@ -123,7 +129,7 @@ class PenilaianController extends Controller
         }
 
         return redirect()->route('job.tetap', $karyawan->id)
-                         ->with('success', 'Penilaian kinerja berhasil disimpan.');
+            ->with('success', 'Penilaian kinerja berhasil disimpan.');
     }
 
     public function edit(PenilaianKinerja $penilaian_kinerja)
@@ -152,14 +158,20 @@ class PenilaianController extends Controller
         $nilai = 0;
 
         switch ($skala) {
-            case 'Tidak Dikerjakan': $nilai = 0; break;
-            case 'Melakukan Tapi Tidak Benar': $nilai = $bobot * 0.5; break;
-            case 'Melakukan Dengan Benar': $nilai = $bobot * 1; break;
+            case 'Tidak Dikerjakan':
+                $nilai = 0;
+                break;
+            case 'Melakukan Tapi Tidak Benar':
+                $nilai = $bobot * 0.5;
+                break;
+            case 'Melakukan Dengan Benar':
+                $nilai = $bobot * 1;
+                break;
         }
 
         $penilaian_kinerja->update([
             'skala' => $skala,
-            'nilai' => round($nilai, 1),
+            'nilai' => $nilai, // PERBAIKAN: Menghapus fungsi round()
             'catatan_penilai' => $request->catatan_penilai,
         ]);
 
@@ -172,7 +184,7 @@ class PenilaianController extends Controller
         ];
 
         return redirect()->route('laporan.index', $queryParams)
-                         ->with('success', 'Penilaian berhasil diperbarui.');
+            ->with('success', 'Penilaian berhasil diperbarui.');
     }
 
     public function destroyByDate(Request $request)
@@ -184,8 +196,8 @@ class PenilaianController extends Controller
 
         // Cari semua job list ID yang dinilai pada hari itu untuk karyawan tersebut
         $penilaianToDelete = PenilaianKinerja::whereHas('jobList', function ($query) use ($request) {
-                $query->where('karyawan_id', $request->karyawan_id);
-            })
+            $query->where('karyawan_id', $request->karyawan_id);
+        })
             ->whereDate('tanggal_penilaian', $request->tanggal);
 
         // Ambil ID job list yang bertipe Opsional sebelum dihapus
@@ -196,8 +208,8 @@ class PenilaianController extends Controller
 
         // Hapus semua data penilaian pada tanggal tersebut
         PenilaianKinerja::whereHas('jobList', function ($query) use ($request) {
-                $query->where('karyawan_id', $request->karyawan_id);
-            })
+            $query->where('karyawan_id', $request->karyawan_id);
+        })
             ->whereDate('tanggal_penilaian', $request->tanggal)
             ->delete();
 
