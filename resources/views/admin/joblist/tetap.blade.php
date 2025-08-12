@@ -11,22 +11,24 @@
         }
 
         .btn-back {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            padding: 10px 18px;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-300);
+            margin-bottom: 25px;
         }
 
         .btn-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .employee-header {
@@ -308,8 +310,9 @@
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
                                             onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"
-                                            method="POST" style="display: none;">@csrf @method('DELETE')</form>
+                                        <form id="delete-form-{{ $job->id }}"
+                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
+                                            style="display: none;">@csrf @method('DELETE')</form>
                                     </div>
                                 </td>
                             </tr>
@@ -374,8 +377,9 @@
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
                                             onclick="deleteConfirmation({{ $job->id }})">Hapus</button>
-                                        <form id="delete-form-{{ $job->id }}" action="{{ route('job.destroy', $job->id) }}"
-                                            method="POST" style="display: none;">@csrf @method('DELETE')</form>
+                                        <form id="delete-form-{{ $job->id }}"
+                                            action="{{ route('job.destroy', $job->id) }}" method="POST"
+                                            style="display: none;">@csrf @method('DELETE')</form>
                                     </div>
                                 </td>
                             </tr>
@@ -399,7 +403,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const tabLinks = document.querySelectorAll('.tab-link');
             const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -438,7 +442,7 @@
 
             // 3. Saat form di-submit, tambahkan info tab yang aktif
             document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function () {
+                form.addEventListener('submit', function() {
                     // Hapus dulu jika sudah ada, untuk mencegah duplikat
                     let oldTabInput = this.querySelector('input[name="tab"]');
                     if (oldTabInput) {

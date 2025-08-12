@@ -82,11 +82,12 @@
         }
 
         #image-preview {
-    max-width: 100%;
-    max-height: 150px; /* Batasi tinggi maksimal gambar */
-    border-radius: 8px;
-    /* display: none; <-- Biarkan diatur oleh inline style */
-}
+            max-width: 100%;
+            max-height: 150px;
+            /* Batasi tinggi maksimal gambar */
+            border-radius: 8px;
+            /* display: none; <-- Biarkan diatur oleh inline style */
+        }
     </style>
 
     <h1 style="font-size: 1.8rem;color:#292828">Form Edit Data Karyawan</h1>

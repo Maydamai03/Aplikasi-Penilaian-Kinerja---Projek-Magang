@@ -9,22 +9,24 @@
         }
 
         .btn-back {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            padding: 10px 18px;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-300);
+            margin-bottom: 25px;
         }
 
         .btn-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .employee-header {
@@ -454,6 +456,28 @@
                 });
             });
         });
+
+        // NOTIFIKASI POP UP
+        <?php if(session('success')): ?>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '<?php echo e(session('success')); ?>',
+                showConfirmButton: false,
+                timer: 800 // Diubah dari 3000 menjadi 1500 milidetik
+            });
+        <?php endif; ?>
+
+        <?php if(session('error')): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '<?php echo e(session('error')); ?>',
+                showConfirmButton: false,
+                timer: 800 // Diubah dari 3000 menjadi 1500 milidetik
+            });
+        <?php endif; ?>
+
 
         function deleteConfirmation(id) {
             Swal.fire({

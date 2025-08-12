@@ -52,13 +52,25 @@
         }
 
         .btn-back {
-            display: inline-block;
-            margin-bottom: 10px;
-            background: none;
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        background-color: var(--gray-100);
+        color: var(--gray-700);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border: 1px solid var(--gray-300);
+        margin-bottom: 25px;
+    }
+
+    .btn-back:hover {
+        background-color: var(--gray-200);
+        color: var(--gray-800);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
 
         .btn-save-appraisal {
             background-color: #10b981;

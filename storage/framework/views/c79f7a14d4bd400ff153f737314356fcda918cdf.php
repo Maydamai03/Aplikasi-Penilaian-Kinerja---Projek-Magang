@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
 <style>
     :root {
@@ -262,6 +264,7 @@
     .stat-item .label {
         font-size: 12px;
         color: var(--text-muted);
+        margin-top: 5px;
     }
 
     .employee-summary-card .btn-export {
@@ -544,15 +547,18 @@
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="value"><?php echo e($reportData['skor_kinerja']); ?></div>
+                        
+                        <div class="value"><?php echo e(number_format($reportData['skor_kinerja'], 2)); ?></div>
                         <div class="label">Skor Kinerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value"><?php echo e($reportData['beban_kerja']); ?>%</div>
+                        
+                        <div class="value"><?php echo e(number_format($reportData['beban_kerja'], 2)); ?>%</div>
                         <div class="label">Beban Kerja</div>
                     </div>
                     <div class="stat-card">
-                        <div class="value"><?php echo e($reportData['total_durasi_jam']); ?></div>
+                        
+                        <div class="value"><?php echo e(number_format($reportData['total_durasi_jam'], 2)); ?></div>
                         <div class="label">Total Jam Kerja</div>
                     </div>
                     <div class="stat-card">
@@ -581,7 +587,6 @@
                             <th>Durasi (%)</th>
                             <th>Nilai (%)</th>
                             <th>Aksi</th>
-                        </tr>
                         </tr>
                     </thead>
                     <tbody>
@@ -614,8 +619,11 @@
                             <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
                             <td><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></td>
                             
+                            
                             <td><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
-                            <td><?php echo e($penilaian->jobList->durasi_waktu ?? 0); ?> menit</td>
+                            
+                            <td><?php echo e(number_format($penilaian->jobList->durasi_waktu ?? 0)); ?> menit</td>
+                            
                             <td><?php echo e(number_format($penilaian->nilai, 2)); ?></td>
                             
                             <td>
@@ -696,11 +704,13 @@
                     </div>
                     <div class="employee-summary-stats">
                         <div class="stat-item">
-                            <div class="value"><?php echo e($karyawanReport['data']['skor_kinerja']); ?></div>
+                            
+                            <div class="value"><?php echo e(number_format($karyawanReport['data']['skor_kinerja'], 2)); ?></div>
                             <div class="label">Skor</div>
                         </div>
                         <div class="stat-item">
-                            <div class="value"><?php echo e($karyawanReport['data']['beban_kerja']); ?>%</div>
+                            
+                            <div class="value"><?php echo e(number_format($karyawanReport['data']['beban_kerja'], 2)); ?>%</div>
                             <div class="label">Beban</div>
                         </div>
                     </div>
