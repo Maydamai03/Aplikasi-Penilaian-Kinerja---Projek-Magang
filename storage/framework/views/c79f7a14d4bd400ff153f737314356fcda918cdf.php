@@ -1,765 +1,1145 @@
-
-
 <?php $__env->startSection('content'); ?>
-<style>
-    :root {
-        /* Yellow Theme - Professional & Clean */
-        --primary-yellow: #f5d62d;
-        --yellow-light: #fef3c7;
-        --yellow-dark: #d69e2e;
-        --yellow-darker: #b7791f;
-
-        /* Neutral Colors */
-        --white: #ffffff;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-300: #d1d5db;
-        --gray-400: #9ca3af;
-        --gray-500: #6b7280;
-        --gray-600: #4b5563;
-        --gray-700: #374151;
-        --gray-800: #1f2937;
-        --gray-900: #111827;
-
-        /* Theme Variables */
-        --text-dark: var(--gray-800);
-        --text-muted: var(--gray-500);
-        --border-color: var(--gray-200);
-        --border-radius: 8px;
-        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    }
-
-    /* Page Header */
-    .page-header h1 {
-        font-size: 1.875rem;
-        color: var(--text-dark);
-        font-weight: 700;
-        margin: 0 0 25px 0;
-    }
-
-    /* Main Card & Tabs */
-    .main-card {
-        background: var(--white);
-        color: var(--text-dark);
-        padding: 0;
-        border-radius: var(--border-radius);
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border-color);
-    }
-
-    .tabs-nav {
-        display: flex;
-        border-bottom: 1px solid var(--border-color);
-        margin: 0;
-        background: var(--gray-50);
-        border-radius: var(--border-radius) var(--border-radius) 0 0;
-    }
-
-    .tab-link {
-        padding: 18px 30px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text-muted);
-        border: none;
-        background: transparent;
-        border-bottom: 2px solid transparent;
-        transition: all 0.2s ease;
-    }
-
-    .tab-link:hover {
-        color: var(--text-dark);
-        background: var(--yellow-light);
-    }
-
-    .tab-link.active {
-        color: var(--text-dark);
-        border-bottom-color: var(--primary-yellow);
-        background: var(--white);
-    }
-
-    .tab-panel {
-        display: none;
-        padding: 30px;
-    }
-
-    .tab-panel.active {
-        display: block;
-    }
-
-    .tab-link i {
-        margin-right: 8px;
-    }
-
-    /* Filter Form */
-    .filter-form {
-        background: var(--gray-50);
-        padding: 25px;
-        border-radius: var(--border-radius);
-        margin-bottom: 30px;
-        border: 1px solid var(--border-color);
-    }
-
-    .filter-form h4 {
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-        color: var(--text-dark);
-    }
-
-    .filter-form .form-label {
-        font-weight: 500;
-        margin-bottom: 6px;
-        font-size: 14px;
-        color: var(--text-dark);
-    }
-
-    .filter-form .form-control,
-    .filter-form .form-select {
-        height: 42px;
-        border-radius: var(--border-radius);
-        border: 1px solid var(--border-color);
-        padding: 8px 15px;
-        font-size: 14px;
-        transition: border-color 0.2s ease;
-    }
-
-    .filter-form .form-control:focus,
-    .filter-form .form-select:focus {
-        border-color: var(--primary-yellow);
-        box-shadow: 0 0 0 2px rgba(245, 214, 45, 0.2);
-        outline: none;
-    }
-
-    .btn-tampilkan {
-        height: 42px;
-        background: var(--primary-yellow);
-        color: var(--text-dark);
-        border: none;
-        border-radius: var(--border-radius);
-        font-weight: 600;
-        padding: 0 25px;
-        font-size: 14px;
-        transition: all 0.2s ease;
-    }
-
-    .btn-tampilkan:hover {
-        background: var(--yellow-dark);
-        color: var(--text-dark);
-    }
-
-    .btn-export {
-        background: #dc2626;
-        color: white !important;
-        padding: 10px 20px;
-        border-radius: var(--border-radius);
-        font-weight: 500;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.2s ease;
-        border: none;
-        font-size: 14px;
-    }
-
-    .btn-export:hover {
-        background: #b91c1c;
-        color: white;
-        text-decoration: none;
-    }
-
-    /* Division Report Grid */
-    .division-report-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 20px;
-        max-height: 70vh;
-        overflow-y: auto;
-        padding-right: 10px;
-    }
-
-    /* Responsive design untuk layar yang lebih kecil */
-    @media (max-width: 768px) {
-        .division-report-grid {
-            grid-template-columns: 1fr;
-            max-height: 60vh;
+    <style>
+        /* DashboardHeader Style */
+        .dashboard-header {
+            position: relative;
+            margin-bottom: 40px;
         }
-    }
 
-    /* Styling untuk scrollbar */
-    .division-report-grid::-webkit-scrollbar {
-        width: 6px;
-    }
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -20px;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+            border-radius: 2px;
+        }
 
-    .division-report-grid::-webkit-scrollbar-track {
-        background: var(--gray-100);
-        border-radius: 10px;
-    }
+        .dashboard-header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            color: #292828 !important;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
-    .division-report-grid::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        border-radius: 10px;
-    }
+        .dashboard-header p {
+            font-size: 1.1rem;
+            color: #292828 !important;
+            margin-top: 8px;
+            font-weight: 400;
+        }
 
-    .division-report-grid::-webkit-scrollbar-thumb:hover {
-        background: var(--gray-400);
-    }
+        /* Main Card */
+        .main-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            color: #414141 !important;
+            padding: 0;
+            border-radius: 20px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .employee-summary-card {
-        background-color: var(--white);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        padding: 20px;
-        transition: box-shadow 0.2s ease;
-    }
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+        }
 
-    .employee-summary-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+        /* Tabs */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid #e9ecef;
+            margin: 0;
+            background: #f8f9fa;
+            padding: 0 30px;
+        }
 
-    .employee-summary-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid var(--border-color);
-    }
+        .tab-link {
+            padding: 20px 30px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280 !important;
+            border: none;
+            background: transparent;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
 
-    .employee-summary-header img {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid var(--yellow-light);
-    }
+        .tab-link:hover {
+            color: #292828 !important;
+            background: rgba(255, 215, 0, 0.05);
+        }
 
-    .employee-summary-header .name {
-        font-weight: 600;
-        font-size: 14px;
-        color: var(--text-dark);
-        margin-bottom: 2px;
-    }
+        .tab-link.active {
+            color: #292828 !important;
+            border-bottom-color: #ffd700;
+            background: #ffffff;
+        }
 
-    .employee-summary-header small {
-        color: var(--text-muted);
-        font-size: 12px;
-    }
+        .tab-panel {
+            display: none;
+            padding: 30px;
+        }
 
-    .employee-summary-stats {
-        display: flex;
-        justify-content: space-around;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+        .tab-panel.active {
+            display: block;
+        }
 
-    .stat-item .value {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
+        /* Filter Form */
+        .filter-form {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
 
-    .stat-item .label {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-top: 5px;
-    }
+        .filter-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+        }
 
-    .employee-summary-card .btn-export {
-        width: 100%;
-        justify-content: center;
-        margin-top: 15px;
-    }
+        .filter-form h4 {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #292828 !important;
+        }
 
-    /* Report Card for Individual Employee */
-    .report-card {
-        background-color: var(--white);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        padding: 25px;
-        margin-top: 20px;
-    }
+        .filter-form .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #292828 !important;
+        }
 
-    .report-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 25px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--border-color);
-    }
+        .filter-form .form-control,
+        .filter-form .form-select {
+            height: 50px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #292828 !important;
+            background: #ffffff !important;
+        }
 
-    .report-header img {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--yellow-light);
-    }
+        .filter-form .form-control:focus,
+        .filter-form .form-select:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+            outline: none;
+        }
 
-    .report-header .info h3 {
-        margin: 0;
-        font-size: 1.375rem;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
+        .btn-tampilkan {
+            height: 50px;
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: #292828 !important;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            padding: 0 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .report-header .info p {
-        margin: 5px 0 0 0;
-        color: var(--text-muted);
-        font-size: 14px;
-    }
+        .btn-tampilkan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 25px;
-    }
+        .btn-export {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white !important;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 14px;
+        }
 
-    .stat-card {
-        background: var(--yellow-light);
-        padding: 20px;
-        border-radius: var(--border-radius);
-        text-align: center;
-        border: 1px solid var(--primary-yellow);
-    }
+        .btn-export:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            color: white !important;
+            text-decoration: none;
+        }
 
-    .stat-card .value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
 
-    .stat-card .label {
-        font-size: 14px;
-        color: var(--text-muted);
-        margin-top: 5px;
-    }
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            color: #414141 !important;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
 
-    .detail-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        font-size: 14px;
-    }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+        }
 
-    .detail-table th,
-    .detail-table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid var(--border-color);
-    }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
 
-    .detail-table th {
-        background-color: var(--gray-50);
-        font-weight: 600;
-        color: var(--text-dark);
-    }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #292828 !important;
+            margin-bottom: 8px;
+        }
 
-    .detail-table tr:hover {
-        background-color: var(--gray-50);
-    }
+        .stat-card .label {
+            font-size: 14px;
+            color: #6b7280 !important;
+            font-weight: 600;
+        }
 
-    .wrap-text {
-        max-width: 250px;
-        word-wrap: break-word;
-        white-space: normal;
-    }
+        /* Report Card */
+        .report-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            padding: 30px;
+            margin-top: 25px;
+            position: relative;
+        }
 
-    /* Alert styling */
-    .alert {
-        padding: 15px 20px;
-        border-radius: var(--border-radius);
-        border: 1px solid transparent;
-        font-size: 14px;
-    }
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+        }
 
-    .alert-warning {
-        background-color: #fef3c7;
-        border-color: #f59e0b;
-        color: #92400e;
-    }
+        .report-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #e9ecef;
+        }
 
-    /* Select2 Styling */
-    .select2-container .select2-selection--single {
-        height: 42px !important;
-        border-radius: var(--border-radius) !important;
-        border: 1px solid var(--border-color) !important;
-        display: flex;
-        align-items: center;
-    }
+        .report-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffd700;
+        }
 
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 40px !important;
-        padding-left: 15px !important;
-        color: var(--text-dark) !important;
-        font-weight: 400;
-        font-size: 14px;
-    }
+        .report-header .info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #292828 !important;
+        }
 
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 40px !important;
-        right: 10px !important;
-    }
+        .report-header .info p {
+            margin: 8px 0 0 0;
+            color: #6b7280 !important;
+            font-size: 14px;
+        }
 
-    .select2-dropdown {
-        border-radius: var(--border-radius) !important;
-        border: 1px solid var(--border-color) !important;
-        box-shadow: var(--shadow);
-    }
+        /* Employee Summary Cards */
+        .division-report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
 
-    .select2-results__option {
-        color: var(--text-dark);
-        font-size: 14px;
-    }
+        .employee-summary-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e9ecef;
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
 
-    .select2-results__option--highlighted {
-        background-color: var(--yellow-light) !important;
-        color: var(--text-dark) !important;
-    }
+        .employee-summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+        }
 
-    .select2-container--default .select2-selection--single:focus {
-        border-color: var(--primary-yellow) !important;
-    }
+        .employee-summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
 
-    /* Form table styling */
-    .filter-form table {
-        width: 100%;
-        border: 0;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-    }
+        .employee-summary-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
 
-    .filter-form table td {
-        vertical-align: middle;
-        padding: 5px 10px 5px 0;
-    }
+        .employee-summary-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffd700;
+        }
 
-    .filter-form table td:first-child {
-        width: 180px;
-        font-weight: 500;
-    }
+        .employee-summary-header .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #292828 !important;
+            margin-bottom: 4px;
+        }
 
-    /* Header actions */
-    .d-flex.justify-content-between {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
+        .employee-summary-header small {
+            color: #6b7280 !important;
+            font-size: 12px;
+        }
 
-    .d-flex.justify-content-between h5 {
-        margin: 0;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-dark);
-    }
+        .employee-summary-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    /* Division report title */
-    .mt-4 {
-        margin-top: 25px !important;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--text-dark);
-        margin-bottom: 20px;
-    }
-</style>
+        .employee-summary-stats .stat-item .value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #292828 !important;
+        }
 
-<div class="page-header">
-    <h1>Laporan Kinerja</h1>
-</div>
+        .employee-summary-stats .stat-item .label {
+            font-size: 12px;
+            color: #6b7280 !important;
+            margin-top: 5px;
+        }
 
-<div class="main-card">
-    <div class="tabs-nav">
-        <button class="tab-link <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>" data-tab="karyawan">
-            <i class="fas fa-user"></i> Per Karyawan
-        </button>
-        <button class="tab-link <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>" data-tab="divisi">
-            <i class="fas fa-building"></i> Per Divisi
-        </button>
+        .employee-summary-card .btn-export {
+            width: 100%;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        /* Table - Desktop Version */
+        .table-container {
+            position: relative;
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            margin-top: 20px;
+        }
+
+        .detail-table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+        }
+
+        .detail-table th,
+        .detail-table td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+            color: #292828 !important;
+        }
+
+        .detail-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .detail-table tr:hover {
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+
+        .date-separator td {
+            background: linear-gradient(135deg, #ffd700, #ff6b35) !important;
+            color: white !important;
+            font-weight: 700;
+            padding: 12px;
+        }
+
+        .wrap-text {
+            max-width: 250px;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        /* Mobile Card View */
+        .mobile-card-view {
+            display: none;
+        }
+
+        .mobile-table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        .mobile-table-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .mobile-date-header {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: white;
+            padding: 15px 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-table-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-table-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .mobile-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .mobile-item-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 12px;
+            min-width: 80px;
+            text-transform: uppercase;
+        }
+
+        .mobile-value {
+            color: #292828;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: right;
+            flex: 1;
+        }
+
+        .mobile-pekerjaan {
+            font-weight: 700;
+            color: #292828;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .mobile-actions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            text-align: right;
+        }
+
+        /* Alert */
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e !important;
+            border: 1px solid #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        /* Form table */
+        .filter-form table {
+            width: 100%;
+            border-spacing: 0 15px;
+        }
+
+        .filter-form table td {
+            vertical-align: middle;
+            padding: 8px 15px 8px 0;
+        }
+
+        .filter-form table td:first-child {
+            width: 180px;
+            font-weight: 600;
+            color: #292828 !important;
+        }
+
+        /* Buttons */
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white !important;
+            border: none;
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            transform: translateY(-1px);
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white !important;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-1px);
+            color: white !important;
+            text-decoration: none;
+        }
+
+        /* Header styling */
+        .d-flex.justify-content-between h5 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #292828 !important;
+        }
+
+        .mt-4 {
+            margin-top: 30px !important;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #292828 !important;
+            margin-bottom: 25px;
+        }
+
+        /* Select2 */
+        .select2-container .select2-selection--single {
+            height: 50px !important;
+            border-radius: 12px !important;
+            border: 2px solid #e9ecef !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 46px !important;
+            padding-left: 18px !important;
+            color: #292828 !important;
+            font-size: 14px;
+        }
+
+        .select2-dropdown {
+            border-radius: 12px !important;
+            border: 2px solid #e9ecef !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .select2-results__option--highlighted {
+            background: #ffd700 !important;
+            color: #292828 !important;
+        }
+
+        /* Animation */
+        .floating-element {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* @keyframes  float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        } */
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tabs-nav {
+                padding: 0 15px;
+                overflow-x: auto;
+            }
+
+            .tab-link {
+                padding: 15px 20px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+
+            .tab-panel {
+                padding: 20px 15px;
+            }
+
+            .filter-form {
+                padding: 20px 15px;
+            }
+
+            .filter-form table {
+                border-spacing: 0 10px;
+            }
+
+            .filter-form table td:first-child {
+                width: auto;
+                display: block;
+                padding-bottom: 5px;
+            }
+
+            .filter-form table td {
+                display: block;
+                width: 100%;
+                padding: 5px 0;
+            }
+
+            .report-card {
+                padding: 20px 15px;
+            }
+
+            .report-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .report-header img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px 15px;
+            }
+
+            .stat-card .value {
+                font-size: 1.5rem;
+            }
+
+            .division-report-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .employee-summary-card {
+                padding: 20px 15px;
+            }
+
+            /* Hide desktop table on mobile */
+            .desktop-table-view {
+                display: none;
+            }
+
+            /* Show mobile card view */
+            .mobile-card-view {
+                display: block;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .d-flex.justify-content-between .btn-export {
+                width: 100%;
+                justify-content: center;
+                display: flex !important;
+                align-items: center;
+                text-decoration: none;
+            }
+
+            /* Ensure export button is always visible and functional */
+            .btn-export {
+                display: inline-flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                margin: 0 -10px;
+                border-radius: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-item-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .mobile-value {
+                text-align: left;
+            }
+
+            /* Force export button to be visible on very small screens */
+            .btn-export {
+                min-height: 44px !important;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .d-flex.justify-content-between h5 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+
+    <div class="dashboard-header floating-element">
+        <h1>Laporan Kinerja</h1>
+        <p>Analisis dan evaluasi kinerja karyawan berdasarkan periode waktu tertentu.</p>
     </div>
 
-    <div class="tabs-content">
-        <div id="karyawan" class="tab-panel <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>">
-            <div class="filter-form">
-                <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
-                <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
-                    <input type="hidden" name="tab" value="karyawan">
-                    <table>
-                        <tr>
-                            <td>
-                                <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
-                            </td>
-                            <td>
-                                <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
-                                    <option value="">-- Pilih Karyawan --</option>
-                                    <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>"
-                                        <?php echo e(request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : ''); ?>>
-                                        <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?>
-
-                                    </option>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
-                            <td>
-                                <input type="date" name="start_date" id="start_date_single" class="form-control"
-                                    value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
-                            <td>
-                                <input type="date" name="end_date" id="end_date_single" class="form-control"
-                                    value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-
-            <?php if($activeTab == 'karyawan' && $reportData && $selectedKaryawan): ?>
-            <div class="report-card">
-                <div class="report-header">
-                    <img src="<?php echo e($selectedKaryawan->foto_profil ? Storage::url('karyawan/' . $selectedKaryawan->foto_profil) : 'https://via.placeholder.com/80'); ?>"
-                        alt="Foto <?php echo e($selectedKaryawan->nama_lengkap); ?>">
-                    <div class="info">
-                        <h3><?php echo e($selectedKaryawan->nama_lengkap); ?></h3>
-                        <p><?php echo e($selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia'); ?> |
-                            <?php echo e($selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia'); ?>
-
-                        </p>
-                        <p>Periode: <?php echo e($startDate->format('d/m/Y')); ?> - <?php echo e($endDate->format('d/m/Y')); ?></p>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        
-                        <div class="value"><?php echo e(number_format($reportData['skor_kinerja'], 2)); ?></div>
-                        <div class="label">Skor Kinerja</div>
-                    </div>
-                    <div class="stat-card">
-                        
-                        <div class="value"><?php echo e(number_format($reportData['beban_kerja'], 2)); ?>%</div>
-                        <div class="label">Beban Kerja</div>
-                    </div>
-                    <div class="stat-card">
-                        
-                        <div class="value"><?php echo e(number_format($reportData['total_durasi_jam'], 2)); ?></div>
-                        <div class="label">Total Jam Kerja</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value"><?php echo e($reportData['predikat_kinerja']); ?></div>
-                        <div class="label">Predikat</div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Detail Penilaian Harian</h5>
-                    <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
-                        class="btn-export">
-                        <i class="fas fa-file-pdf"></i> Ekspor ke PDF
-                    </a>
-                </div>
-
-                <table class="detail-table">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Nama Pekerjaan</th>
-                            <th>Tipe Job</th>
-                            <th>Shift</th>
-                            
-                            <th>Bobot (%)</th>
-                            <th>Durasi (%)</th>
-                            <th>Nilai (%)</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $counter = 1; ?>
-                        <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr class="date-separator">
-                            <td colspan="8">
-                                Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?>
-
-                                <form action="<?php echo e(route('penilaian.destroy.bydate')); ?>" method="POST" class="d-inline-block float-end" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('DELETE'); ?>
-                                    <input type="hidden" name="karyawan_id" value="<?php echo e($selectedKaryawan->id); ?>">
-                                    <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
-                                    <button type="submit" class="btn btn-sm btn-danger ms-2" title="Hapus semua penilaian pada hari ini">
-                                        <i class="fas fa-trash"></i> Hapus Hari Ini
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penilaian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <td><?php echo e($counter++); ?></td>
-                            <td>
-                                <div class="wrap-text">
-                                    <?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?>
-
-                                </div>
-                            </td>
-                            <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
-                            <td><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></td>
-                            
-                            
-                            <td><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
-                            
-                            <td><?php echo e(number_format($penilaian->jobList->durasi_waktu ?? 0)); ?> menit</td>
-                            
-                            <td><?php echo e(number_format($penilaian->nilai, 2)); ?></td>
-                            
-                            <td>
-                                <a href="<?php echo e(route('penilaian.edit', $penilaian->id)); ?>" class="btn btn-sm btn-info">Edit</a>
-                            </td>
-                        </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
-            </div>
-            <?php elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date'])): ?>
-            <div class="alert alert-warning mt-4">
-                <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode yang dipilih.
-            </div>
-            <?php endif; ?>
+    <div class="main-card">
+        <div class="tabs-nav">
+            <button class="tab-link <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>" data-tab="karyawan">
+                <i class="fas fa-user"></i> Per Karyawan
+            </button>
+            <button class="tab-link <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>" data-tab="divisi">
+                <i class="fas fa-building"></i> Per Divisi
+            </button>
         </div>
 
-        <div id="divisi" class="tab-panel <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>">
-            <div class="filter-form">
-                <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
-                <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
-                    <input type="hidden" name="tab" value="divisi">
-                    <table>
-                        <tr>
-                            <td>
-                                <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
-                            </td>
-                            <td>
-                                <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
-                                    <option value="">-- Pilih Divisi --</option>
-                                    <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $division): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($division->id); ?>"
-                                        <?php echo e(request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : ''); ?>>
-                                        <?php echo e($division->nama_divisi); ?>
+        <div class="tabs-content">
+            <div id="karyawan" class="tab-panel <?php echo e($activeTab == 'karyawan' ? 'active' : ''); ?>">
+                <div class="filter-form">
+                    <h4><i class="fas fa-filter"></i> Filter Laporan per Karyawan</h4>
+                    <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
+                        <input type="hidden" name="tab" value="karyawan">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="karyawan_id_single" class="form-label">Pilih Karyawan</label>
+                                </td>
+                                <td>
+                                    <select name="karyawan_id" id="karyawan_id_single" class="form-select w-100" required>
+                                        <option value="">-- Pilih Karyawan --</option>
+                                        <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($employee->id); ?>" title="<?php echo e($employee->nama_lengkap); ?>"
+                                                <?php echo e(request('karyawan_id') == $employee->id && $activeTab == 'karyawan' ? 'selected' : ''); ?>>
+                                                <?php echo e(Str::limit($employee->nama_lengkap, 30, '...')); ?>
 
-                                    </option>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
-                            <td>
-                                <input type="date" name="start_date" id="start_date_div" class="form-control"
-                                    value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
-                            <td>
-                                <input type="date" name="end_date" id="end_date_div" class="form-control"
-                                    value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <button type="submit" class="btn btn-tampilkan">Tampilkan</button>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-
-            <?php if($activeTab == 'divisi' && $reportData && $selectedDivisi): ?>
-            <h3 class="mt-4">Ringkasan Divisi: <?php echo e($selectedDivisi->nama_divisi); ?></h3>
-            <div class="division-report-grid">
-                <?php $__empty_1 = true; $__currentLoopData = $reportData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $karyawanReport): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <div class="employee-summary-card">
-                    <div class="employee-summary-header">
-                        <img src="<?php echo e($karyawanReport['karyawan']->foto_profil ? Storage::url('karyawan/' . $karyawanReport['karyawan']->foto_profil) : 'https://via.placeholder.com/50'); ?>"
-                            alt="Foto">
-                        <div>
-                            <div class="name"><?php echo e($karyawanReport['karyawan']->nama_lengkap); ?></div>
-                            <small><?php echo e($karyawanReport['data']['predikat_kinerja']); ?></small>
-                        </div>
-                    </div>
-                    <div class="employee-summary-stats">
-                        <div class="stat-item">
-                            
-                            <div class="value"><?php echo e(number_format($karyawanReport['data']['skor_kinerja'], 2)); ?></div>
-                            <div class="label">Skor</div>
-                        </div>
-                        <div class="stat-item">
-                            
-                            <div class="value"><?php echo e(number_format($karyawanReport['data']['beban_kerja'], 2)); ?>%</div>
-                            <div class="label">Beban</div>
-                        </div>
-                    </div>
-                    <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $karyawanReport['karyawan']->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
-                        class="btn-export">
-                        <i class="fas fa-file-pdf"></i> Ekspor PDF
-                    </a>
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_single" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_single" class="form-control"
+                                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_single" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_single" class="form-control"
+                                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">
+                                        <i class="fas fa-search"></i> Tampilkan Laporan
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                <p>Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.</p>
+
+                <?php if($activeTab == 'karyawan' && $reportData && $selectedKaryawan): ?>
+                    <div class="report-card">
+                        <div class="report-header">
+                            <img src="<?php echo e($selectedKaryawan->foto_profil ? Storage::url('karyawan/' . $selectedKaryawan->foto_profil) : 'https://via.placeholder.com/80'); ?>"
+                                alt="Foto <?php echo e($selectedKaryawan->nama_lengkap); ?>">
+                            <div class="info">
+                                <h3><?php echo e($selectedKaryawan->nama_lengkap); ?></h3>
+                                <p><?php echo e($selectedKaryawan->jabatan->nama_jabatan ?? 'Jabatan tidak tersedia'); ?> |
+                                    <?php echo e($selectedKaryawan->divisi->nama_divisi ?? 'Divisi tidak tersedia'); ?>
+
+                                </p>
+                                <p>Periode: <?php echo e($startDate->format('d/m/Y')); ?> - <?php echo e($endDate->format('d/m/Y')); ?></p>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="value"><?php echo e(number_format($reportData['skor_kinerja'], 2)); ?></div>
+                                <div class="label">Skor Kinerja</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="value"><?php echo e(number_format($reportData['beban_kerja'], 2)); ?>%</div>
+                                <div class="label">Beban Kerja</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="value"><?php echo e(number_format($reportData['total_durasi_jam'], 2)); ?></div>
+                                <div class="label">Total Jam Kerja</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="value"><?php echo e($reportData['predikat_kinerja']); ?></div>
+                                <div class="label">Predikat</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5><i class="fas fa-chart-line"></i> Detail Penilaian Harian</h5>
+                            <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
+                                class="btn-export" style="display: inline-flex !important;">
+                                <i class="fas fa-file-pdf"></i> Ekspor ke PDF
+                            </a>
+                        </div>
+
+                        <!-- Desktop Table View -->
+                        <div class="desktop-table-view">
+                            <div class="table-container">
+                                <table class="detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Pekerjaan</th>
+                                            <th>Tipe Job</th>
+                                            <th>Shift</th>
+                                            <th>Bobot (%)</th>
+                                            <th>Durasi</th>
+                                            <th>Nilai (%)</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $counter = 1; ?>
+                                        <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <tr class="date-separator">
+                                                <td colspan="8">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-calendar-day"></i> Penilaian Tanggal: <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?></span>
+                                                        <form action="<?php echo e(route('penilaian.destroy.bydate')); ?>" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
+                                                            <?php echo csrf_field(); ?>
+                                                            <?php echo method_field('DELETE'); ?>
+                                                            <input type="hidden" name="karyawan_id" value="<?php echo e($selectedKaryawan->id); ?>">
+                                                            <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
+                                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus semua penilaian pada hari ini">
+                                                                <i class="fas fa-trash"></i> Hapus Hari Ini
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penilaian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <tr>
+                                                    <td><?php echo e($counter++); ?></td>
+                                                    <td>
+                                                        <div class="wrap-text">
+                                                            <?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?>
+
+                                                        </div>
+                                                    </td>
+                                                    <td><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></td>
+                                                    <td><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></td>
+                                                    <td><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</td>
+                                                    <td><?php echo e(number_format($penilaian->jobList->durasi_waktu ?? 0)); ?> menit</td>
+                                                    <td><?php echo e(number_format($penilaian->nilai, 2)); ?></td>
+                                                    <td>
+                                                        <a href="<?php echo e(route('penilaian.edit', $penilaian->id)); ?>" class="btn btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Card View -->
+                        <div class="mobile-card-view">
+                            <?php $counter = 1; ?>
+                            <?php $__currentLoopData = $reportData['penilaian']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tanggal => $penilaianHarian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="mobile-table-card">
+                                    <div class="mobile-date-header">
+                                        <span><i class="fas fa-calendar-day"></i> <?php echo e(\Carbon\Carbon::parse($tanggal)->format('d F Y')); ?></span>
+                                        <form action="<?php echo e(route('penilaian.destroy.bydate')); ?>" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <input type="hidden" name="karyawan_id" value="<?php echo e($selectedKaryawan->id); ?>">
+                                            <input type="hidden" name="tanggal" value="<?php echo e($tanggal); ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus semua penilaian pada hari ini">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <?php $__currentLoopData = $penilaianHarian; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $penilaian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="mobile-table-item">
+                                            <div class="mobile-pekerjaan">
+                                                <?php echo e($counter++); ?>. <?php echo e($penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus'); ?>
+
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Tipe Job</span>
+                                                <span class="mobile-value"><?php echo e($penilaian->jobList->tipe_job ?? 'N/A'); ?></span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Shift</span>
+                                                <span class="mobile-value"><?php echo e($penilaian->jobList->shift ?? 'N/A'); ?></span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Bobot</span>
+                                                <span class="mobile-value"><?php echo e(number_format($penilaian->jobList->bobot ?? 0, 2)); ?>%</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Durasi</span>
+                                                <span class="mobile-value"><?php echo e(number_format($penilaian->jobList->durasi_waktu ?? 0)); ?> menit</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Nilai</span>
+                                                <span class="mobile-value"><?php echo e(number_format($penilaian->nilai, 2)); ?>%</span>
+                                            </div>
+
+                                            <div class="mobile-actions">
+                                                <a href="<?php echo e(route('penilaian.edit', $penilaian->id)); ?>" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+
+                    </div>
+                <?php elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date'])): ?>
+                    <div class="alert alert-warning mt-4">
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk karyawan ini pada periode yang dipilih.
+                    </div>
                 <?php endif; ?>
             </div>
-            <?php elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date'])): ?>
-            <div class="alert alert-warning mt-4">
-                <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
+
+            <div id="divisi" class="tab-panel <?php echo e($activeTab == 'divisi' ? 'active' : ''); ?>">
+                <div class="filter-form">
+                    <h4><i class="fas fa-filter"></i> Filter Laporan per Divisi</h4>
+                    <form action="<?php echo e(route('laporan.index')); ?>" method="GET">
+                        <input type="hidden" name="tab" value="divisi">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="divisi_id_div" class="form-label">Pilih Divisi</label>
+                                </td>
+                                <td>
+                                    <select name="divisi_id" id="divisi_id_div" class="form-select w-100" required>
+                                        <option value="">-- Pilih Divisi --</option>
+                                        <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $division): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($division->id); ?>"
+                                                <?php echo e(request('divisi_id') == $division->id && $activeTab == 'divisi' ? 'selected' : ''); ?>>
+                                                <?php echo e($division->nama_divisi); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="start_date_div" class="form-label">Dari Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="start_date" id="start_date_div" class="form-control"
+                                        value="<?php echo e(request('start_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="end_date_div" class="form-label">Sampai Tanggal</label></td>
+                                <td>
+                                    <input type="date" name="end_date" id="end_date_div" class="form-control"
+                                        value="<?php echo e(request('end_date', date('Y-m-d'))); ?>" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-tampilkan">
+                                        <i class="fas fa-search"></i> Tampilkan Laporan
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <?php if($activeTab == 'divisi' && $reportData && $selectedDivisi): ?>
+                    <h3 class="mt-4"><i class="fas fa-building"></i> Ringkasan Divisi: <?php echo e($selectedDivisi->nama_divisi); ?></h3>
+                    <div class="division-report-grid">
+                        <?php $__empty_1 = true; $__currentLoopData = $reportData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $karyawanReport): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <div class="employee-summary-card">
+                                <div class="employee-summary-header">
+                                    <img src="<?php echo e($karyawanReport['karyawan']->foto_profil ? Storage::url('karyawan/' . $karyawanReport['karyawan']->foto_profil) : 'https://via.placeholder.com/50'); ?>"
+                                        alt="Foto">
+                                    <div>
+                                        <div class="name"><?php echo e($karyawanReport['karyawan']->nama_lengkap); ?></div>
+                                        <small><?php echo e($karyawanReport['data']['predikat_kinerja']); ?></small>
+                                    </div>
+                                </div>
+                                <div class="employee-summary-stats">
+                                    <div class="stat-item">
+                                        <div class="value"><?php echo e(number_format($karyawanReport['data']['skor_kinerja'], 2)); ?></div>
+                                        <div class="label">Skor</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="value"><?php echo e(number_format($karyawanReport['data']['beban_kerja'], 2)); ?>%</div>
+                                        <div class="label">Beban</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="value"><?php echo e(number_format($karyawanReport['data']['total_durasi_jam'], 2)); ?></div>
+                                        <div class="label">Jam</div>
+                                    </div>
+                                </div>
+                                <a href="<?php echo e(route('laporan.exportPdf', ['karyawan_id' => $karyawanReport['karyawan']->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()])); ?>"
+                                    class="btn-export">
+                                    <i class="fas fa-file-pdf"></i> Ekspor PDF
+                                </a>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-info-circle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php elseif($activeTab == 'divisi' && request()->has(['divisi_id', 'start_date', 'end_date'])): ?>
+                    <div class="alert alert-warning mt-4">
+                        <i class="fas fa-exclamation-triangle"></i> Tidak ada data penilaian untuk divisi ini pada periode yang dipilih.
+                    </div>
+                <?php endif; ?>
             </div>
-            <?php endif; ?>
         </div>
     </div>
-</div>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabLinks = document.querySelectorAll('.tab-link');
-        const tabPanels = document.querySelectorAll('.tab-panel');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabPanels = document.querySelectorAll('.tab-panel');
 
-        tabLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                const tabId = link.getAttribute('data-tab');
+            tabLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const tabId = link.getAttribute('data-tab');
 
-                tabLinks.forEach(l => l.classList.remove('active'));
-                tabPanels.forEach(p => p.classList.remove('active'));
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    tabPanels.forEach(p => p.classList.remove('active'));
 
-                link.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
+                    link.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
             });
         });
-    });
 
-    // Inisialisasi Select2 untuk dropdown karyawan
-    $(document).ready(function() {
-        $('#karyawan_id_single').select2({
-            placeholder: "-- Pilih Karyawan --",
-            allowClear: true
+        // Inisialisasi Select2 untuk dropdown karyawan
+        $(document).ready(function() {
+            $('#karyawan_id_single').select2({
+                placeholder: "-- Pilih Karyawan --",
+                allowClear: true
+            });
+
+            $('#divisi_id_div').select2({
+                placeholder: "-- Pilih Divisi --",
+                allowClear: true
+            });
         });
-    });
-</script>
+    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\jobdesk-karyawan\resources\views/admin/laporan/index.blade.php ENDPATH**/ ?>

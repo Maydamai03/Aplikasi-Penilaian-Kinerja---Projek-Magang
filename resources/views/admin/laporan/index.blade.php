@@ -377,16 +377,21 @@
             margin-top: 15px;
         }
 
-        /* Table */
+        /* Table - Desktop Version */
+        .table-container {
+            position: relative;
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            margin-top: 20px;
+        }
+
         .detail-table {
             width: 100%;
+            min-width: 800px;
             border-collapse: collapse;
-            margin-top: 20px;
             font-size: 14px;
             background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
         }
 
         .detail-table th,
@@ -401,6 +406,9 @@
             background: #f8f9fa;
             font-weight: 700;
             font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .detail-table tr:hover {
@@ -418,6 +426,95 @@
             max-width: 250px;
             word-wrap: break-word;
             white-space: normal;
+        }
+
+        /* Mobile Card View */
+        .mobile-card-view {
+            display: none;
+        }
+
+        .mobile-table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        .mobile-table-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .mobile-date-header {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            color: white;
+            padding: 15px 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-table-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-table-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .mobile-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .mobile-item-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 12px;
+            min-width: 80px;
+            text-transform: uppercase;
+        }
+
+        .mobile-value {
+            color: #292828;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: right;
+            flex: 1;
+        }
+
+        .mobile-pekerjaan {
+            font-weight: 700;
+            color: #292828;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .mobile-actions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+            text-align: right;
         }
 
         /* Alert */
@@ -529,24 +626,150 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
+        /* @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
-        }
+        } */
 
         /* Responsive */
         @media (max-width: 768px) {
-            .stats-grid,
-            .division-report-grid {
-                grid-template-columns: 1fr;
-            }
-
             .dashboard-header h1 {
                 font-size: 1.8rem;
             }
 
             .tabs-nav {
-                padding: 0 20px;
+                padding: 0 15px;
+                overflow-x: auto;
+            }
+
+            .tab-link {
+                padding: 15px 20px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+
+            .tab-panel {
+                padding: 20px 15px;
+            }
+
+            .filter-form {
+                padding: 20px 15px;
+            }
+
+            .filter-form table {
+                border-spacing: 0 10px;
+            }
+
+            .filter-form table td:first-child {
+                width: auto;
+                display: block;
+                padding-bottom: 5px;
+            }
+
+            .filter-form table td {
+                display: block;
+                width: 100%;
+                padding: 5px 0;
+            }
+
+            .report-card {
+                padding: 20px 15px;
+            }
+
+            .report-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .report-header img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px 15px;
+            }
+
+            .stat-card .value {
+                font-size: 1.5rem;
+            }
+
+            .division-report-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .employee-summary-card {
+                padding: 20px 15px;
+            }
+
+            /* Hide desktop table on mobile */
+            .desktop-table-view {
+                display: none;
+            }
+
+            /* Show mobile card view */
+            .mobile-card-view {
+                display: block;
+            }
+
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .d-flex.justify-content-between .btn-export {
+                width: 100%;
+                justify-content: center;
+                display: flex !important;
+                align-items: center;
+                text-decoration: none;
+            }
+
+            /* Ensure export button is always visible and functional */
+            .btn-export {
+                display: inline-flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                margin: 0 -10px;
+                border-radius: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-item-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .mobile-value {
+                text-align: left;
+            }
+
+            /* Force export button to be visible on very small screens */
+            .btn-export {
+                min-height: 44px !important;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .d-flex.justify-content-between h5 {
+                font-size: 1rem;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -651,66 +874,132 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5><i class="fas fa-chart-line"></i> Detail Penilaian Harian</h5>
                             <a href="{{ route('laporan.exportPdf', ['karyawan_id' => $selectedKaryawan->id, 'start_date' => $startDate->toDateString(), 'end_date' => $endDate->toDateString()]) }}"
-                                class="btn-export">
+                                class="btn-export" style="display: inline-flex !important;">
                                 <i class="fas fa-file-pdf"></i> Ekspor ke PDF
                             </a>
                         </div>
 
-                        <table class="detail-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Pekerjaan</th>
-                                    <th>Tipe Job</th>
-                                    <th>Shift</th>
-                                    <th>Bobot (%)</th>
-                                    <th>Durasi</th>
-                                    <th>Nilai (%)</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $counter = 1; @endphp
-                                @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
-                                    <tr class="date-separator">
-                                        <td colspan="8">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span><i class="fas fa-calendar-day"></i> Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}</span>
-                                                <form action="{{ route('penilaian.destroy.bydate') }}" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden" name="karyawan_id" value="{{ $selectedKaryawan->id }}">
-                                                    <input type="hidden" name="tanggal" value="{{ $tanggal }}">
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus semua penilaian pada hari ini">
-                                                        <i class="fas fa-trash"></i> Hapus Hari Ini
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @foreach ($penilaianHarian as $penilaian)
+                        <!-- Desktop Table View -->
+                        <div class="desktop-table-view">
+                            <div class="table-container">
+                                <table class="detail-table">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $counter++ }}</td>
-                                            <td>
-                                                <div class="wrap-text">
-                                                    {{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}
-                                                </div>
-                                            </td>
-                                            <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
-                                            <td>{{ $penilaian->jobList->shift ?? 'N/A' }}</td>
-                                            <td>{{ number_format($penilaian->jobList->bobot ?? 0, 2) }}%</td>
-                                            <td>{{ number_format($penilaian->jobList->durasi_waktu ?? 0) }} menit</td>
-                                            <td>{{ number_format($penilaian->nilai, 2) }}</td>
-                                            <td>
+                                            <th>No</th>
+                                            <th>Nama Pekerjaan</th>
+                                            <th>Tipe Job</th>
+                                            <th>Shift</th>
+                                            <th>Bobot (%)</th>
+                                            <th>Durasi</th>
+                                            <th>Nilai (%)</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $counter = 1; @endphp
+                                        @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
+                                            <tr class="date-separator">
+                                                <td colspan="8">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span><i class="fas fa-calendar-day"></i> Penilaian Tanggal: {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}</span>
+                                                        <form action="{{ route('penilaian.destroy.bydate') }}" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="hidden" name="karyawan_id" value="{{ $selectedKaryawan->id }}">
+                                                            <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+                                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus semua penilaian pada hari ini">
+                                                                <i class="fas fa-trash"></i> Hapus Hari Ini
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @foreach ($penilaianHarian as $penilaian)
+                                                <tr>
+                                                    <td>{{ $counter++ }}</td>
+                                                    <td>
+                                                        <div class="wrap-text">
+                                                            {{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</td>
+                                                    <td>{{ $penilaian->jobList->shift ?? 'N/A' }}</td>
+                                                    <td>{{ number_format($penilaian->jobList->bobot ?? 0, 2) }}%</td>
+                                                    <td>{{ number_format($penilaian->jobList->durasi_waktu ?? 0) }} menit</td>
+                                                    <td>{{ number_format($penilaian->nilai, 2) }}</td>
+                                                    <td>
+                                                        <a href="{{ route('penilaian.edit', $penilaian->id) }}" class="btn btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Card View -->
+                        <div class="mobile-card-view">
+                            @php $counter = 1; @endphp
+                            @foreach ($reportData['penilaian'] as $tanggal => $penilaianHarian)
+                                <div class="mobile-table-card">
+                                    <div class="mobile-date-header">
+                                        <span><i class="fas fa-calendar-day"></i> {{ \Carbon\Carbon::parse($tanggal)->format('d F Y') }}</span>
+                                        <form action="{{ route('penilaian.destroy.bydate') }}" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua penilaian pada tanggal ini? Tindakan ini tidak bisa dibatalkan.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="karyawan_id" value="{{ $selectedKaryawan->id }}">
+                                            <input type="hidden" name="tanggal" value="{{ $tanggal }}">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus semua penilaian pada hari ini">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    @foreach ($penilaianHarian as $penilaian)
+                                        <div class="mobile-table-item">
+                                            <div class="mobile-pekerjaan">
+                                                {{ $counter++ }}. {{ $penilaian->jobList->nama_pekerjaan ?? 'Pekerjaan Dihapus' }}
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Tipe Job</span>
+                                                <span class="mobile-value">{{ $penilaian->jobList->tipe_job ?? 'N/A' }}</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Shift</span>
+                                                <span class="mobile-value">{{ $penilaian->jobList->shift ?? 'N/A' }}</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Bobot</span>
+                                                <span class="mobile-value">{{ number_format($penilaian->jobList->bobot ?? 0, 2) }}%</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Durasi</span>
+                                                <span class="mobile-value">{{ number_format($penilaian->jobList->durasi_waktu ?? 0) }} menit</span>
+                                            </div>
+
+                                            <div class="mobile-item-row">
+                                                <span class="mobile-label">Nilai</span>
+                                                <span class="mobile-value">{{ number_format($penilaian->nilai, 2) }}%</span>
+                                            </div>
+
+                                            <div class="mobile-actions">
                                                 <a href="{{ route('penilaian.edit', $penilaian->id) }}" class="btn btn-sm btn-info">
                                                     <i class="fas fa-edit"></i> Edit
                                                 </a>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </div>
+                            @endforeach
+                        </div>
+
                     </div>
                 @elseif($activeTab == 'karyawan' && request()->has(['karyawan_id', 'start_date', 'end_date']))
                     <div class="alert alert-warning mt-4">
@@ -813,6 +1102,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('scripts')

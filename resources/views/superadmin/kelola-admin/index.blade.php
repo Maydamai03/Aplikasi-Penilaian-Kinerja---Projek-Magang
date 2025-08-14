@@ -31,6 +31,37 @@
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
+    .dashboard-header {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -20px;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff6b35);
+            border-radius: 2px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            color: #292828 !important;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            color: #292828 !important;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
     /* Page Header */
     .page-header {
         display: flex;
@@ -39,12 +70,12 @@
         margin-bottom: 25px;
     }
 
-    .page-header h1 {
+    /* .page-header h1 {
         font-size: 1.875rem;
         color: var(--text-dark) !important;
         font-weight: 700;
         margin: 0;
-    }
+    } */
 
     .btn-add-admin {
         background: var(--primary-yellow);
@@ -248,7 +279,10 @@
 </style>
 
 <div class="page-header">
-    <h1>Kelola Akun Admin</h1>
+    <div class="dashboard-header floating-element">
+        <h1>Kelola Admin</h1>
+        <p>Tambahkan atau edit admin untuk keperluan akses ke sistem.</p>
+    </div>
     <a href="{{ route('kelola-admin.create') }}" class="btn-add-admin">
         <i class="fas fa-user-plus"></i> Tambah Admin
     </a>

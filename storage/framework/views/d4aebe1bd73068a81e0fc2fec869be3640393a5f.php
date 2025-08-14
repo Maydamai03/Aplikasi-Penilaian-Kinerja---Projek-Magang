@@ -50,25 +50,25 @@
         }
 
         .btn-back {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 18px;
-        background-color: var(--gray-100);
-        color: var(--gray-700);
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        border: 1px solid var(--gray-300);
-        margin-bottom: 25px;
-    }
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-300);
+            margin-bottom: 25px;
+        }
 
-    .btn-back:hover {
-        background-color: var(--gray-200);
-        color: var(--gray-800);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
+        .btn-back:hover {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
 
         .btn-save-appraisal {
             background-color: #10b981;
@@ -178,6 +178,145 @@
             font-size: 0.85rem;
             padding: 4px 8px;
         }
+
+        /* ============ RESPONSIVE STYLES ============ */
+
+        /* Tablet styles */
+        @media (max-width: 992px) {
+            .appraisal-card {
+                padding: 20px 15px;
+            }
+
+            .table td {
+                padding: 8px 4px;
+                font-size: 0.85rem;
+            }
+
+            .table th {
+                padding: 8px 4px;
+                font-size: 0.8rem;
+            }
+
+            .form-control-table,
+            .form-select {
+                font-size: 0.8rem;
+                padding: 4px 6px;
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .appraisal-card {
+                margin-top: 10px;
+                padding: 15px;
+            }
+
+            .appraisal-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .btn-back {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+
+            /* Responsive table - horizontal scroll */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                min-width: 700px;
+                font-size: 0.75rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 6px 4px;
+                white-space: nowrap;
+            }
+
+            .form-control-table,
+            .form-select {
+                font-size: 0.75rem;
+                padding: 3px 5px;
+                min-width: 80px;
+            }
+
+            .duration-input {
+                width: 60px !important;
+                font-size: 0.7rem;
+            }
+
+            .btn-add-opsional,
+            .btn-save-appraisal {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 10px;
+                font-size: 0.9rem;
+            }
+
+            .btn-delete-opsional {
+                padding: 4px 6px;
+                font-size: 0.7rem;
+            }
+
+            .job-duration-section {
+                flex-direction: column;
+                gap: 4px;
+                align-items: flex-start;
+            }
+
+            .duration-label {
+                font-size: 0.7rem;
+                min-width: auto;
+            }
+        }
+
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+            .appraisal-card {
+                padding: 10px;
+            }
+
+            .btn-back {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+
+            .table {
+                font-size: 0.7rem;
+                min-width: 600px;
+            }
+
+            .form-control-table,
+            .form-select {
+                font-size: 0.7rem;
+                padding: 2px 4px;
+                min-width: 70px;
+            }
+        }
+
+        /* Improve mobile scrolling experience */
+        @media (max-width: 768px) {
+            .table-responsive {
+                border: 1px solid #dee2e6;
+                border-radius: 0.375rem;
+            }
+
+            .table-responsive::after {
+                content: "← Geser untuk melihat selengkapnya →";
+                display: block;
+                text-align: center;
+                padding: 8px;
+                background-color: #f8f9fa;
+                color: #6c757d;
+                font-size: 0.75rem;
+                border-top: 1px solid #dee2e6;
+            }
+        }
     </style>
 
     <a href="<?php echo e(url()->previous()); ?>" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
@@ -190,7 +329,6 @@
                 <h3>Form Penilaian Kinerja (Shift <?php echo e($shift); ?>)</h3>
                 <p>Karyawan: <strong><?php echo e($karyawan->nama_lengkap); ?></strong></p>
 
-                
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label for="tanggal_penilaian" class="form-label fw-bold">Pilih Tanggal Penilaian</label>
@@ -213,14 +351,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
                         <tr class="job-type-header">
-                            <td colspan="5">Job Tetap</td>
+                            <td colspan="6">Job Tetap</td>
                         </tr>
 
                         <?php $__empty_1 = true; $__currentLoopData = $jobLists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td class="text-center"><?php echo e($loop->iteration); ?></td> 
+                                <td class="text-center"><?php echo e($loop->iteration); ?></td>
                                 <td><?php echo e($job->nama_pekerjaan); ?></td>
                                 <td>
                                     <select name="status[<?php echo e($job->id); ?>]" class="form-select form-control-table status-dropdown"
@@ -244,18 +381,17 @@
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
-                                <td colspan="5" class="empty-state">Belum ada Job Tetap untuk dinilai.</td>
+                                <td colspan="6" class="empty-state">Belum ada Job Tetap untuk dinilai.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
 
-                    
                     <tbody id="opsional-jobs-container">
                         <tr class="job-type-header">
-                            <td colspan="5">Job Opsional</td>
+                            <td colspan="6">Job Opsional</td>
                         </tr>
                         <tr id="no-opsional-jobs" class="empty-state-row">
-                            <td colspan="5" class="empty-state">Belum ada Job Opsional. Klik tombol di bawah untuk
+                            <td colspan="6" class="empty-state">Belum ada Job Opsional. Klik tombol di bawah untuk
                                 menambah.</td>
                         </tr>
                     </tbody>

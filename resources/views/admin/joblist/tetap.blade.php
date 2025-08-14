@@ -498,6 +498,7 @@
                                 <td data-label="Bobot">{{ number_format(($job->durasi_waktu / 480) * 100, 1) }}%</td>
                                 <td data-label="Durasi">{{ $job->durasi_waktu }} menit</td>
                                 <td data-label="Aksi">
+                                    <br>
                                     <div class="action-buttons">
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
@@ -563,6 +564,7 @@
                                 <td data-label="Bobot">{{ number_format(($job->durasi_waktu / 480) * 100, 1) }}%</td>
                                 <td data-label="Durasi">{{ $job->durasi_waktu }} menit</td>
                                 <td data-label="Aksi">
+                                    <br>
                                     <div class="action-buttons">
                                         <a href="{{ route('job.edit', $job->id) }}" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
