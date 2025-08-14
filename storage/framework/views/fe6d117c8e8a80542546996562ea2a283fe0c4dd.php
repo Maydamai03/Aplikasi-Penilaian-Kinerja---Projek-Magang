@@ -12,7 +12,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
     
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     
@@ -68,6 +67,26 @@
             color: var(--text-dark);
             display: flex;
             font-size: 14px;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Overlay for Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
         }
 
         /* Clean Sidebar */
@@ -83,13 +102,21 @@
             transform: translateX(0);
             transition: transform 0.3s ease;
             box-shadow: var(--shadow);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 0 25px;
+            margin-bottom: 40px;
         }
 
         .sidebar .logo {
             display: flex;
             align-items: center;
-            margin-bottom: 40px;
-            padding: 0 25px;
+            flex: 1;
         }
 
         .sidebar .logo img {
@@ -103,6 +130,25 @@
             font-weight: 700;
             font-size: 1.25rem;
             color: var(--text-dark);
+        }
+
+        /* Close Button for Mobile */
+        .sidebar-close {
+            display: none;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            color: var(--text-dark);
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+            margin-left: 10px;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(0, 0, 0, 0.15);
         }
 
         .sidebar nav ul {
@@ -149,6 +195,7 @@
             margin-left: var(--sidebar-width);
             transition: margin-left 0.3s ease;
             min-height: 100vh;
+            width: calc(100% - var(--sidebar-width));
         }
 
         /* Professional Header */
@@ -161,12 +208,17 @@
             padding: 0 30px;
             box-shadow: var(--shadow);
             border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .header-left {
             display: flex;
             align-items: center;
             gap: 15px;
+            flex: 1;
+            min-width: 0;
         }
 
         .sidebar-toggle {
@@ -182,6 +234,7 @@
             color: var(--text-dark);
             font-size: 14px;
             transition: background-color 0.2s ease;
+            flex-shrink: 0;
         }
 
         .sidebar-toggle:hover {
@@ -192,11 +245,15 @@
             color: var(--text-muted);
             font-size: 14px;
             font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .header-right {
             display: flex;
             align-items: center;
+            flex-shrink: 0;
         }
 
         /* Simple User Dropdown */
@@ -234,11 +291,13 @@
             color: var(--text-dark);
             font-size: 14px;
             font-weight: 600;
+            flex-shrink: 0;
         }
 
         .user-name {
             font-size: 14px;
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .dropdown-arrow {
@@ -327,6 +386,7 @@
 
         body.sidebar-toggled .main-content {
             margin-left: 0;
+            width: 100%;
         }
 
         /* Simple Modal */
@@ -356,6 +416,7 @@
             max-width: 380px;
             width: 90%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin: 0 15px;
         }
 
         .modal-icon {
@@ -389,6 +450,7 @@
             display: flex;
             gap: 12px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .modal-buttons .btn {
@@ -428,12 +490,24 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 280px;
+            }
+
             .header {
-                padding: 0 20px;
+                padding: 0 15px;
             }
 
             .content {
-                padding: 20px;
+                padding: 20px 15px;
+            }
+
+            .header-left {
+                gap: 10px;
+            }
+
+            .breadcrumb {
+                font-size: 13px;
             }
 
             .user-name {
@@ -442,6 +516,21 @@
 
             .dropdown-menu {
                 width: 180px;
+                right: -10px;
+            }
+
+            .modal-box {
+                padding: 25px;
+                margin: 0 10px;
+            }
+
+            .modal-buttons {
+                gap: 8px;
+            }
+
+            .modal-buttons .btn {
+                flex: 1;
+                min-width: 80px;
             }
         }
 
@@ -451,23 +540,87 @@
                 transform: translateX(-100%);
             }
 
-            body.sidebar-toggled .sidebar {
-                transform: translateX(0);
+            .sidebar-close {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
+                width: 100%;
+            }
+
+            body.sidebar-toggled .sidebar {
+                transform: translateX(0);
+            }
+
+            body.sidebar-toggled .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .header {
+                padding: 0 10px;
+            }
+
+            .content {
+                padding: 15px 10px;
+            }
+
+            .breadcrumb {
+                font-size: 12px;
+            }
+
+            .modal-box {
+                padding: 20px 15px;
+            }
+
+            .modal-box h3 {
+                font-size: 16px;
+            }
+
+            .modal-box p {
+                font-size: 13px;
+            }
+        }
+
+        /* Additional Mobile Improvements */
+        @media (max-width: 375px) {
+            .sidebar nav li a {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .sidebar nav li a i {
+                width: 16px;
+                font-size: 14px;
+            }
+
+            .user-info {
+                padding: 6px 12px;
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 
 <body>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <aside class="sidebar">
-        <div class="logo">
-            <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Logo">
-            <span>Decaa.id</span>
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Logo">
+                <span>Decaa.id</span>
+            </div>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <nav>
             <ul>
@@ -546,13 +699,55 @@
     </div>
 
     <script>
-        // Simple Sidebar Toggle
+        // Sidebar functionality
         const sidebarToggle = document.getElementById('sidebarToggle');
-        sidebarToggle.addEventListener('click', () => {
-            document.body.classList.toggle('sidebar-toggled');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const body = document.body;
+
+        function toggleSidebar() {
+            const isMobile = window.innerWidth <= 480;
+
+            if (isMobile) {
+                // Mobile: toggle sidebar dengan overlay
+                body.classList.toggle('sidebar-toggled');
+                sidebarOverlay.classList.toggle('show');
+            } else {
+                // Desktop: hanya toggle sidebar tanpa overlay
+                body.classList.toggle('sidebar-toggled');
+            }
+        }
+
+        function closeSidebar() {
+            body.classList.remove('sidebar-toggled');
+            sidebarOverlay.classList.remove('show');
+        }
+
+        function openSidebar() {
+            const isMobile = window.innerWidth <= 480;
+
+            body.classList.remove('sidebar-toggled');
+            if (isMobile) {
+                sidebarOverlay.classList.add('show');
+            }
+        }
+
+        // Event listeners for sidebar
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // Close sidebar when clicking on a nav link in mobile
+        const navLinks = document.querySelectorAll('.sidebar nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 480) {
+                    closeSidebar();
+                }
+            });
         });
 
-        // Simple Dropdown Logic
+        // Dropdown functionality
         const dropdownToggle = document.getElementById('userDropdownToggle');
         const dropdownMenu = document.getElementById('userDropdownMenu');
 
@@ -570,7 +765,7 @@
             }
         });
 
-        // Simple Modal Logic
+        // Modal functionality
         const logoutButton = document.getElementById('logoutButton');
         const logoutModal = document.getElementById('logoutModal');
         const cancelLogout = document.getElementById('cancelLogout');
@@ -599,12 +794,28 @@
             logoutForm.submit();
         });
 
-        // ESC key to close modal/dropdown
+        // ESC key to close modal/dropdown/sidebar
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 logoutModal.classList.remove('show');
                 dropdownMenu.classList.remove('show');
                 dropdownToggle.classList.remove('active');
+                closeSidebar();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const isMobile = window.innerWidth <= 480;
+
+            if (!isMobile) {
+                // Desktop: hapus overlay dan reset state jika perlu
+                sidebarOverlay.classList.remove('show');
+            } else {
+                // Mobile: jika sidebar terbuka, tampilkan overlay
+                if (!body.classList.contains('sidebar-toggled')) {
+                    sidebarOverlay.classList.remove('show');
+                }
             }
         });
     </script>

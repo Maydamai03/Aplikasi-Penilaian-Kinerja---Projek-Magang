@@ -11,22 +11,24 @@
         }
 
         .btn-back {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            padding: 10px 18px;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-300);
+            margin-bottom: 25px;
         }
 
         .btn-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .employee-header {
@@ -237,6 +239,199 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
         }
+
+        /* Responsive Table untuk Mobile */
+        @media  screen and (max-width: 768px) {
+            .table {
+                border: 0;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tbody {
+                display: block;
+            }
+
+            .table tbody tr {
+                display: block;
+                background: white;
+                border: 1px solid #dee2e6;
+                border-radius: 12px;
+                margin-bottom: 15px;
+                padding: 15px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                position: relative;
+            }
+
+            .table tbody tr:hover {
+                background-color: white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .table tbody td {
+                display: block;
+                text-align: right;
+                border: none;
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .table tbody td:last-child {
+                border-bottom: none;
+                padding-top: 15px;
+            }
+
+            .table tbody td:before {
+                content: attr(data-label) ": ";
+                float: left;
+                font-weight: 600;
+                color: #4b5563;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+            }
+
+            /* Style khusus untuk nomor urut */
+            .table tbody td:first-child {
+                background: linear-gradient(135deg, #ffd700, #ffed4e);
+                color: #1f2937;
+                font-weight: 700;
+                text-align: center;
+                border-radius: 8px;
+                padding: 8px;
+                margin-bottom: 10px;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 30px;
+                height: 30px;
+                line-height: 14px;
+                font-size: 0.9rem;
+            }
+
+            .table tbody td:first-child:before {
+                display: none;
+            }
+
+            /* Adjust margin untuk konten karena nomor sekarang floating */
+            .table tbody td:nth-child(2) {
+                margin-top: 40px;
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: #1f2937;
+            }
+
+            .table tbody td:nth-child(2):before {
+                color: #ffd700;
+            }
+
+            /* Action buttons responsive */
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .btn-table {
+                width: 100%;
+                text-align: center;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            /* Responsive untuk kontainer tabs */
+            .tabs-container {
+                padding: 15px 20px 20px 20px;
+                margin: 0 -15px;
+                border-radius: 15px;
+            }
+
+            /* Responsive untuk tabs navigation */
+            .tabs-nav {
+                flex-direction: column;
+                gap: 0;
+                border-bottom: none;
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 5px;
+                margin-bottom: 20px;
+            }
+
+            .tab-link {
+                flex: 1;
+                text-align: center;
+                border-radius: 8px;
+                margin: 2px;
+                border-bottom: none !important;
+                padding: 12px 15px;
+            }
+
+            .tab-link.active {
+                background: white;
+                color: #1f2937;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Form responsive */
+            .row.align-items-end {
+                flex-direction: column;
+                align-items: stretch !important;
+            }
+
+            .col-md-6,
+            .col-md-4,
+            .col-md-2 {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .btn-add {
+                width: 100% !important;
+            }
+
+            /* Employee header responsive */
+            .employee-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .employee-header img {
+                width: 60px;
+                height: 60px;
+            }
+
+            /* Export button responsive */
+            .btn-export-joblist {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+
+            /* Penilaian button responsive */
+            .btn-penilaian {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* Back button responsive */
+            .btn-back {
+                margin-bottom: 15px;
+                width: fit-content;
+            }
+
+            /* Adjust spacing */
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                align-items: stretch !important;
+            }
+
+            .d-flex.justify-content-end {
+                flex-direction: column;
+            }
+        }
     </style>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -298,12 +493,11 @@
                     <tbody>
                         <?php $__empty_1 = true; $__currentLoopData = $jobPagi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td><?php echo e($loop->iteration); ?></td>
-                                <td><?php echo e($job->nama_pekerjaan); ?></td>
-                                
-                                <td><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
-                                <td><?php echo e($job->durasi_waktu); ?> menit</td>
-                                <td>
+                                <td data-label="No"><?php echo e($loop->iteration); ?></td>
+                                <td data-label="Pekerjaan"><?php echo e($job->nama_pekerjaan); ?></td>
+                                <td data-label="Bobot"><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
+                                <td data-label="Durasi"><?php echo e($job->durasi_waktu); ?> menit</td>
+                                <td data-label="Aksi">
                                     <div class="action-buttons">
                                         <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
@@ -364,12 +558,11 @@
                     <tbody>
                         <?php $__empty_1 = true; $__currentLoopData = $jobSiang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td><?php echo e($loop->iteration); ?></td>
-                                <td><?php echo e($job->nama_pekerjaan); ?></td>
-                                
-                                <td><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
-                                <td><?php echo e($job->durasi_waktu); ?> menit</td>
-                                <td>
+                                <td data-label="No"><?php echo e($loop->iteration); ?></td>
+                                <td data-label="Pekerjaan"><?php echo e($job->nama_pekerjaan); ?></td>
+                                <td data-label="Bobot"><?php echo e(number_format(($job->durasi_waktu / 480) * 100, 1)); ?>%</td>
+                                <td data-label="Durasi"><?php echo e($job->durasi_waktu); ?> menit</td>
+                                <td data-label="Aksi">
                                     <div class="action-buttons">
                                         <a href="<?php echo e(route('job.edit', $job->id)); ?>" class="btn-table btn-edit">Edit</a>
                                         <button type="button" class="btn-table btn-delete"
